@@ -8,7 +8,7 @@
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Gadget Finds</title>
+<title>Tech Solutions</title>
 
 <link rel="stylesheet" href="CSS/index.css">
 <link rel="stylesheet" href="CSS/mobile.css">
@@ -26,66 +26,64 @@ NAVBAR
 
 <nav>
 
-<div class="logo">
+    <div class="logo">
+        <a href="index.html">
+            Tech<span>Solutions</span>
+        </a>
+    </div>
 
-<a href="index.html">
+    <!-- SEARCH -->
+    <div class="searchBox">
 
-Gadget<span>Finds</span>
+        <i class="fa-solid fa-magnifying-glass"></i>
 
-</a>
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search gadgets..."
+        >
 
-</div>
+    </div>
 
-<div class="searchBox">
+    <!-- RIGHT SIDE -->
+    <div class="navRight">
 
-<i class="fa-solid fa-magnifying-glass"></i>
+        <span id="welcomeUser">
+            Hi, Guest
+        </span>
 
-<input
-type="text"
-id="searchInput"
-placeholder="Search gadgets...">
+        <div class="navIcons">
 
-</div>
+            <a href="wishlist.html" title="Wishlist">
+                <i class="fa-regular fa-heart"></i>
+            </a>
 
-<div class="navRight">
+            <a href="notification.html" title="Notifications">
+                <i class="fa-solid fa-bell"></i>
+                <span class="notificationCount">0</span>
+            </a>
 
-<span id="welcomeUser">
+            <a href="orders.html" title="Orders">
+                <i class="fa-solid fa-box"></i>
+            </a>
 
-Hi, Guest
+            <a href="profile.html" title="Profile">
+                <i class="fa-solid fa-user"></i>
+            </a>
 
-</span>
+            <button id="cartBtn" title="Cart">
 
-<a href="wishlist.html">
+                <i class="fa-solid fa-cart-shopping"></i>
 
-<i class="fa-regular fa-heart"></i>
+                <span id="cartCount">
+                    0
+                </span>
 
-</a>
+            </button>
 
-<a href="orders.html">
+        </div>
 
-<i class="fa-solid fa-box"></i>
-
-</a>
-
-<a href="profile.html">
-
-<i class="fa-solid fa-user"></i>
-
-</a>
-
-<button id="cartBtn">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<span id="cartCount">
-
-0
-
-</span>
-
-</button>
-
-</div>
+    </div>
 
 </nav>
 
