@@ -81,7 +81,7 @@ if (profileError) {
 // =======================================
 
 const { error: notificationError } = await supabase
-    .from("Notification")
+    .from("notification")
     .insert({
         user_id: user.id,
         title: "Welcome 👋",
@@ -142,7 +142,7 @@ if (profileError) {
 // =======================================
 
 const { error: notificationError } = await supabase
-    .from("Notification")
+    .from("notification")
     .insert({
         user_id: profile.id,
         title: "Login Successful 👋",
