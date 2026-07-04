@@ -34,7 +34,7 @@ app.use(
 app.get("/", (req, res) => {
 
     res.json({
-        message: "Gadget Finds Backend Running"
+        message: "Tech Solutions Backend Running"
     });
 
 });
