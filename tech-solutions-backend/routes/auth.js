@@ -57,10 +57,8 @@ router.post("/register", async (req, res) => {
             });
 
         }
-
-        // Insert profile
-
-        const { data: profileData, error: profileError } = await supabase
+// Insert profile
+const { data: profileData, error: profileError } = await supabase
     .from("users")
     .insert({
         id: user.id,
@@ -68,65 +66,39 @@ router.post("/register", async (req, res) => {
         email,
         role: "customer"
     })
-    .select();
+    .select()
+    .single();
 
-console.log("PROFILE DATA:", profileData);
-console.log("PROFILE ERROR:", profileError);
+if (profileError) {
+    return res.status(400).json({
+        success: false,
+        message: profileError.message
+    });
+}
 
-        if (profileError) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: profileError.message
-
-            });
-
-        }
-        // =======================================
-// CREATE LOGIN NOTIFICATION
+// =======================================
+// CREATE WELCOME NOTIFICATION
 // =======================================
 
-await supabase
+const { error: notificationError } = await supabase
     .from("Notification")
     .insert({
-
-        user_id: profile.id,
-
-        title: "Welcome Back 👋",
-
-        message: `You signed in successfully.`,
-
-        type: "login",
-
-        is_read: true
-
+        user_id: user.id,
+        title: "Welcome 👋",
+        message: "Your account has been created successfully.",
+        type: "welcome",
+        is_read: false
     });
 
-        res.json({
+if (notificationError) {
+    console.log("Notification Error:", notificationError.message);
+}
 
-            success: true,
-            message: "Registration successful."
-
-        });
-
-    }
-
-    catch (err) {
-
-        console.log(err);
-
-        res.status(500).json({
-
-            success: false,
-            message: err.message
-
-        });
-
-    }
-
+res.json({
+    success: true,
+    message: "Registration successful."
 });
-
+       
 
 // =======================================================
 // LOGIN
@@ -149,85 +121,44 @@ router.post("/login", async (req, res) => {
             });
 
         }
+const {
+    data: profile,
+    error: profileError
+} = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", data.user.id)
+    .single();
 
-        // Login
+if (profileError) {
+    return res.status(400).json({
+        success: false,
+        message: profileError.message
+    });
+}
 
-        const { data, error } =
+// =======================================
+// CREATE LOGIN NOTIFICATION
+// =======================================
 
-            await supabase.auth.signInWithPassword({
+const { error: notificationError } = await supabase
+    .from("Notification")
+    .insert({
+        user_id: profile.id,
+        title: "Login Successful 👋",
+        message: "You signed in successfully.",
+        type: "login",
+        is_read: false
+    });
 
-                email,
-                password
+if (notificationError) {
+    console.log("Notification Error:", notificationError.message);
+}
 
-            });
-            console.log("SIGNUP DATA:", data);
-console.log("SIGNUP ERROR:", error);
-console.log("USER:", data?.user);
-
-        if (error) {
-
-            return res.status(401).json({
-
-                success: false,
-                message: error.message
-
-            });
-
-        }
-
-        // Fetch profile
-
-        const {
-
-            data: profile,
-            error: profileError
-
-        } = await supabase
-
-            .from("users")
-
-            .select("*")
-
-            .eq("id", data.user.id)
-
-            .single();
-
-        if (profileError) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: profileError.message
-
-            });
-
-        }
-
-        res.json({
-
-            success: true,
-
-            session: data.session,
-
-            user: profile
-
-        });
-
-    }
-
-    catch (err) {
-
-        console.log(err);
-
-        res.status(500).json({
-
-            success: false,
-            message: err.message
-
-        });
-
-    }
-
+res.json({
+    success: true,
+    session: data.session,
+    user: profile
 });
 
 
