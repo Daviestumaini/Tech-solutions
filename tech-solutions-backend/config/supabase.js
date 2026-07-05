@@ -7,8 +7,8 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY
 );
 console.log(
-  process.env.SUPABASE_SECRET_KEY?.startsWith("eyJhbG")
+  process.env.SUPABASE_SECRET_KEY?.startsWith("sb_secret_")
 );
-console.log("Using Service Key:", process.env.SUPABASE_SECRET_KEY?.startsWith("eyJhbG"));
+console.log("Using Service Key:", process.env.SUPABASE_SECRET_KEY?.startsWith("sb_secret_"));
 
 module.exports = supabase;
