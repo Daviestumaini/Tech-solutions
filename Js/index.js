@@ -1,3 +1,74 @@
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+(async()=>{
+
+const {
+
+    data:{
+        user
+    }
+
+}=await supabase.auth.getUser();
+
+if(user){
+
+await fetch(
+
+`${API_BASE}/auth/google-profile`,
+
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+id:user.id,
+
+name:
+user.user_metadata.full_name,
+
+email:user.email
+
+})
+
+}
+
+);
+
+localStorage.setItem(
+
+"user_id",
+
+user.id
+
+);
+
+localStorage.setItem(
+
+"name",
+
+user.user_metadata.full_name
+
+);
+
+localStorage.setItem(
+
+"email",
+
+user.email
+
+);
+
+}
+
+})();
 const API = `${API_BASE}/products`;
 
 let products = [];
