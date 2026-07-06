@@ -86,13 +86,67 @@ a{
     text-decoration:none;
 
 }
+.divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:20px 0;
+    color:#777;
+    font-size:14px;
+}
+
+.divider::before,
+.divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:#ddd;
+}
+
+.divider span{
+    margin:0 15px;
+}
+
+.google-btn{
+    width:100%;
+    height:50px;
+    border:1px solid #ddd;
+    background:#fff;
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.google-btn:hover{
+    background:#f8f8f8;
+}
+
+.google-btn img{
+    width:22px;
+}
 
 </style>
 
 </head>
 
 <body>
+<div class="divider">
+    <span>or</span>
+</div>
 
+<button id="googleRegisterBtn" class="google-btn">
+    <img
+        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+        alt="Google"
+    >
+    Continue with Google
+</button>
 <div class="container">
 
 <h2>Login</h2>
