@@ -108,7 +108,7 @@ a{
 }
 
 .google-btn{
-    width:100%;
+    width:50%;
     height:50px;
     border:1px solid #ddd;
     background:#fff;
@@ -240,6 +240,55 @@ async function login() {
         alert("Server Error");
 
     }
+
+}
+async function registerWithGoogle() {
+
+    const { error } = await supabase.auth.signInWithOAuth({
+
+        provider: "google",
+
+        options: {
+
+            redirectTo: "https://tech-solutions.vercel.app"
+
+        }
+
+    });
+
+    if (error) {
+
+        alert(error.message);
+
+    }
+
+}
+document
+.getElementById("googleRegisterBtn")
+.addEventListener("click", registerWithGoogle);
+const {
+    data: { user }
+} = await supabase.auth.getUser();
+
+if (user) {
+
+    await fetch(`${API_BASE}/auth/google-profile`, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            id: user.id,
+            email: user.email,
+            name: user.user_metadata.full_name
+
+        })
+
+    });
 
 }
 
