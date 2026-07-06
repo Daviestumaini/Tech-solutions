@@ -5,7 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login - Gadget Finds</title>
+<title>Login | Tech Solutions</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
 
 <style>
 
@@ -18,117 +20,249 @@
 
 body{
 
-    background:#f4f6f9;
+    background:#f5f7fb;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
-    height:100vh;
+
+    min-height:100vh;
+
+    padding:20px;
 
 }
 
 .container{
 
-    width:380px;
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    width:100%;
+
+    max-width:420px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:35px;
+
+    box-shadow:
+    0 10px 35px rgba(0,0,0,.08);
 
 }
 
-h2{
+.logo{
 
     text-align:center;
-    margin-bottom:25px;
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    margin-bottom:8px;
 
 }
 
-input{
+.logo span{
 
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
+    color:#2563eb;
 
 }
 
-button{
+.subtitle{
 
-    width:100%;
-    padding:12px;
+    text-align:center;
+
+    color:#666;
+
+    margin-bottom:30px;
+
+}
+
+.inputGroup{
+
+    margin-bottom:18px;
+
+}
+
+.inputGroup label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.inputBox{
+
+    display:flex;
+
+    align-items:center;
+
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+}
+
+.inputBox i{
+
+    width:50px;
+
+    text-align:center;
+
+    color:#777;
+
+}
+
+.inputBox input{
+
+    flex:1;
+
     border:none;
-    border-radius:8px;
+
+    outline:none;
+
+    padding:14px;
+
+    font-size:15px;
+
+}
+
+.loginBtn{
+
+    width:100%;
+
+    border:none;
+
     background:#2563eb;
+
     color:white;
+
+    padding:15px;
+
+    border-radius:12px;
+
     font-size:16px;
+
     cursor:pointer;
 
+    transition:.25s;
+
 }
 
-button:hover{
+.loginBtn:hover{
 
     background:#1d4ed8;
 
 }
 
-p{
-
-    margin-top:20px;
-    text-align:center;
-
-}
-
-a{
-
-    color:#2563eb;
-    text-decoration:none;
-
-}
 .divider{
+
     display:flex;
+
     align-items:center;
-    justify-content:center;
-    margin:20px 0;
-    color:#777;
-    font-size:14px;
+
+    margin:25px 0;
+
 }
 
 .divider::before,
+
 .divider::after{
+
     content:"";
+
     flex:1;
+
     height:1px;
+
     background:#ddd;
+
 }
 
 .divider span{
+
     margin:0 15px;
+
+    color:#777;
+
+    font-size:14px;
+
 }
 
 .google-btn{
-    width:50%;
-    height:50px;
+
+    width:100%;
+
+    height:52px;
+
     border:1px solid #ddd;
-    background:#fff;
+
     border-radius:12px;
+
+    background:#fff;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     gap:12px;
+
     cursor:pointer;
-    font-size:16px;
+
+    font-size:15px;
+
     font-weight:600;
-    transition:.2s;
+
+    transition:.25s;
+
 }
 
 .google-btn:hover{
-    background:#f8f8f8;
+
+    background:#f7f7f7;
+
 }
 
 .google-btn img{
+
     width:22px;
+
+}
+
+.bottomText{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    color:#666;
+
+}
+
+.bottomText a{
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.bottomText a:hover{
+
+    text-decoration:underline;
+
 }
 
 </style>
@@ -136,38 +270,82 @@ a{
 </head>
 
 <body>
-<div class="divider">
-    <span>or</span>
-</div>
 
-<button id="googleRegisterBtn" class="google-btn">
-    <img
-        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-        alt="Google"
-    >
-    Continue with Google
-</button>
 <div class="container">
 
-<h2>Login</h2>
+<div class="logo">
+
+Gadget<span>Finds</span>
+
+</div>
+
+<p class="subtitle">
+
+Sign in to continue shopping.
+
+</p>
+
+<div class="inputGroup">
+
+<label>Email</label>
+
+<div class="inputBox">
+
+<i class="fa-solid fa-envelope"></i>
 
 <input
 type="email"
 id="email"
-placeholder="Email">
+placeholder="Enter your email">
+
+</div>
+
+</div>
+
+<div class="inputGroup">
+
+<label>Password</label>
+
+<div class="inputBox">
+
+<i class="fa-solid fa-lock"></i>
 
 <input
 type="password"
 id="password"
-placeholder="Password">
+placeholder="Enter your password">
 
-<button onclick="login()">
+</div>
+
+</div>
+
+<button
+class="loginBtn"
+onclick="login()">
 
 Login
 
 </button>
 
-<p>
+<div class="divider">
+
+<span>OR</span>
+
+</div>
+
+<button
+id="googleLoginBtn"
+class="google-btn">
+
+<img
+src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+alt="Google">
+
+Continue with Google
+
+</button>
+
+<p class="bottomText">
 
 Don't have an account?
 
@@ -180,54 +358,128 @@ Register
 </p>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="Js/config.js"></script>
 
 <script>
+
+// ==========================================
+// SUPABASE CLIENT
+// ==========================================
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+// ==========================================
+// EMAIL LOGIN
+// ==========================================
+
 async function login() {
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+
+        alert("Please fill in all fields.");
+
+        return;
+
+    }
 
     try {
 
-       const response = await fetch(
-    `${API_BASE}/auth/login`,
+        const response = await fetch(
+
+            `${API_BASE}/auth/login`,
+
             {
+
                 method: "POST",
+
                 headers: {
+
                     "Content-Type": "application/json"
+
                 },
+
                 body: JSON.stringify({
+
                     email,
                     password
+
                 })
+
             }
+
         );
 
         const result = await response.json();
 
         if (!response.ok) {
 
-            alert(result.message);
+            alert(result.message || "Login failed.");
 
             return;
 
         }
 
-        localStorage.setItem("user_id", result.user.id);
-        localStorage.setItem("name", result.user.name);
-        localStorage.setItem("email", result.user.email);
-        localStorage.setItem("role", result.user.role);
+        localStorage.setItem(
+
+            "user_id",
+
+            result.user.id
+
+        );
+
+        localStorage.setItem(
+
+            "name",
+
+            result.user.name
+
+        );
+
+        localStorage.setItem(
+
+            "email",
+
+            result.user.email
+
+        );
+
+        localStorage.setItem(
+
+            "role",
+
+            result.user.role
+
+        );
 
         if (result.session) {
 
             localStorage.setItem(
+
                 "access_token",
+
                 result.session.access_token
+
+            );
+
+            localStorage.setItem(
+
+                "refresh_token",
+
+                result.session.refresh_token
+
             );
 
         }
-
-        alert("Login successful!");
 
         window.location.href = "index.html";
 
@@ -237,12 +489,17 @@ async function login() {
 
         console.error(err);
 
-        alert("Server Error");
+        alert("Server connection failed.");
 
     }
 
 }
-async function registerWithGoogle() {
+
+// ==========================================
+// GOOGLE LOGIN
+// ==========================================
+
+async function loginWithGoogle() {
 
     const { error } = await supabase.auth.signInWithOAuth({
 
@@ -250,7 +507,10 @@ async function registerWithGoogle() {
 
         options: {
 
-            redirectTo: "https://tech-solutions.vercel.app"
+            redirectTo:
+
+                window.location.origin +
+                "/index.html"
 
         }
 
@@ -263,36 +523,41 @@ async function registerWithGoogle() {
     }
 
 }
+
+// ==========================================
+// BUTTON
+// ==========================================
+
 document
-.getElementById("googleRegisterBtn")
-.addEventListener("click", registerWithGoogle);
-const {
-    data: { user }
-} = await supabase.auth.getUser();
+.getElementById("googleLoginBtn")
+.addEventListener(
+    "click",
+    loginWithGoogle
+);
 
-if (user) {
+// ==========================================
+// ENTER KEY LOGIN
+// ==========================================
 
-    await fetch(`${API_BASE}/auth/google-profile`, {
+document
+.getElementById("password")
+.addEventListener(
 
-        method: "POST",
+    "keypress",
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+    function(e){
 
-        body: JSON.stringify({
+        if(e.key==="Enter"){
 
-            id: user.id,
-            email: user.email,
-            name: user.user_metadata.full_name
+            login();
 
-        })
+        }
 
-    });
+    }
 
-}
+);
 
 </script>
-<script src="Js/config.js"></script>
+
 </body>
 </html>
