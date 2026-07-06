@@ -3,11 +3,6 @@ const router = express.Router();
 
 const supabase = require("../config/supabase");
 
-// =======================================================
-// REGISTER
-// POST /api/auth/register
-// =======================================================
-
 router.post("/register", async (req, res) => {
 
     try {
@@ -17,15 +12,13 @@ router.post("/register", async (req, res) => {
         if (!name || !email || !password) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "Please fill in all fields."
-
             });
 
         }
 
-        // Create Supabase Auth user
+        // Create Auth user
 
         const { data, error } = await supabase.auth.signUp({
 
@@ -37,10 +30,8 @@ router.post("/register", async (req, res) => {
         if (error) {
 
             return res.status(400).json({
-
                 success: false,
                 message: error.message
-
             });
 
         }
@@ -50,28 +41,35 @@ router.post("/register", async (req, res) => {
         if (!user) {
 
             return res.status(400).json({
-
                 success: false,
                 message: "User could not be created."
-
             });
 
         }
 
-        // Insert profile
+        // Create profile
 
-        const { data: profileData, error: profileError } = await supabase
-    .from("users")
-    .insert({
-        id: user.id,
-        name,
-        email,
-        role: "customer"
-    })
-    .select();
+        const {
 
-console.log("PROFILE DATA:", profileData);
-console.log("PROFILE ERROR:", profileError);
+            data: profile,
+            error: profileError
+
+        } = await supabase
+
+            .from("users")
+
+            .insert({
+
+                id: user.id,
+                name,
+                email,
+                role: "customer"
+
+            })
+
+            .select()
+
+            .single();
 
         if (profileError) {
 
@@ -83,27 +81,33 @@ console.log("PROFILE ERROR:", profileError);
             });
 
         }
-        // =======================================
-// CREATE LOGIN NOTIFICATION
-// =======================================
 
-await supabase
-    .from("Notification")
-    .insert({
+        // Welcome notification
 
-        user_id: profile.id,
+        const { error: notificationError } = await supabase
 
-        title: "Welcome Back 👋",
+            .from("notification")
 
-        message: `You signed in successfully.`,
+            .insert({
 
-        type: "login",
+                user_id: user.id,
+                title: "Welcome 👋",
+                message: "Your account has been created successfully.",
+                type: "welcome",
+                is_read: false
 
-        is_read: true
+            });
 
-    });
+        if (notificationError) {
 
-        res.json({
+            console.log(
+                "Notification Error:",
+                notificationError.message
+            );
+
+        }
+
+        return res.json({
 
             success: true,
             message: "Registration successful."
@@ -116,7 +120,7 @@ await supabase
 
         console.log(err);
 
-        res.status(500).json({
+        return res.status(500).json({
 
             success: false,
             message: err.message
@@ -126,12 +130,6 @@ await supabase
     }
 
 });
-
-
-// =======================================================
-// LOGIN
-// POST /api/auth/login
-// =======================================================
 
 router.post("/login", async (req, res) => {
 
@@ -150,19 +148,19 @@ router.post("/login", async (req, res) => {
 
         }
 
-        // Login
+        // Authenticate
 
-        const { data, error } =
+        const {
 
-            await supabase.auth.signInWithPassword({
+            data,
+            error
 
-                email,
-                password
+        } = await supabase.auth.signInWithPassword({
 
-            });
-            console.log("SIGNUP DATA:", data);
-console.log("SIGNUP ERROR:", error);
-console.log("USER:", data?.user);
+            email,
+            password
+
+        });
 
         if (error) {
 
@@ -175,7 +173,7 @@ console.log("USER:", data?.user);
 
         }
 
-        // Fetch profile
+        // Get profile
 
         const {
 
@@ -203,7 +201,36 @@ console.log("USER:", data?.user);
 
         }
 
-        res.json({
+        // Login notification
+
+        const {
+
+            error: notificationError
+
+        } = await supabase
+
+            .from("notification")
+
+            .insert({
+
+                user_id: profile.id,
+                title: "Login Successful 👋",
+                message: "You signed in successfully.",
+                type: "login",
+                is_read: false
+
+            });
+
+        if (notificationError) {
+
+            console.log(
+                "Notification Error:",
+                notificationError.message
+            );
+
+        }
+
+        return res.json({
 
             success: true,
 
@@ -219,7 +246,7 @@ console.log("USER:", data?.user);
 
         console.log(err);
 
-        res.status(500).json({
+        return res.status(500).json({
 
             success: false,
             message: err.message
@@ -231,18 +258,13 @@ console.log("USER:", data?.user);
 });
 
 
-// =======================================================
-// LOGOUT
-// POST /api/auth/logout
-// =======================================================
-
 router.post("/logout", async (req, res) => {
 
     try {
 
         await supabase.auth.signOut();
 
-        res.json({
+        return res.json({
 
             success: true,
             message: "Logged out."
@@ -253,7 +275,9 @@ router.post("/logout", async (req, res) => {
 
     catch (err) {
 
-        res.status(500).json({
+        console.log(err);
+
+        return res.status(500).json({
 
             success: false,
             message: err.message
@@ -265,18 +289,11 @@ router.post("/logout", async (req, res) => {
 });
 
 
-// =======================================================
-// CURRENT USER
-// GET /api/auth/me
-// =======================================================
-
 router.get("/me", async (req, res) => {
 
     try {
 
-        const token =
-
-            req.headers.authorization?.replace("Bearer ", "");
+        const token = req.headers.authorization?.replace("Bearer ", "");
 
         if (!token) {
 
@@ -309,7 +326,8 @@ router.get("/me", async (req, res) => {
 
         const {
 
-            data: profile
+            data: profile,
+            error: profileError
 
         } = await supabase
 
@@ -319,9 +337,31 @@ router.get("/me", async (req, res) => {
 
             .eq("id", data.user.id)
 
-            .single();
+            .maybeSingle();
 
-        res.json({
+        if (profileError) {
+
+            return res.status(400).json({
+
+                success: false,
+                message: profileError.message
+
+            });
+
+        }
+
+        if (!profile) {
+
+            return res.status(404).json({
+
+                success: false,
+                message: "User profile not found."
+
+            });
+
+        }
+
+        return res.json({
 
             success: true,
             user: profile
@@ -332,7 +372,9 @@ router.get("/me", async (req, res) => {
 
     catch (err) {
 
-        res.status(500).json({
+        console.log(err);
+
+        return res.status(500).json({
 
             success: false,
             message: err.message
