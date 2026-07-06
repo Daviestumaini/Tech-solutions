@@ -130,7 +130,135 @@ router.post("/register", async (req, res) => {
     }
 
 });
+// =======================================================
+// GOOGLE PROFILE
+// POST /api/auth/google-profile
+// =======================================================
 
+router.post("/google-profile", async (req, res) => {
+
+    try {
+
+        const { id, name, email } = req.body;
+
+        if (!id || !email) {
+
+            return res.status(400).json({
+
+                success: false,
+                message: "Missing user data."
+
+            });
+
+        }
+
+        // Check if profile already exists
+
+        const {
+
+            data: existingUser
+
+        } = await supabase
+
+            .from("users")
+
+            .select("*")
+
+            .eq("id", id)
+
+            .single();
+
+        if (existingUser) {
+
+            return res.json({
+
+                success: true,
+                user: existingUser
+
+            });
+
+        }
+
+        // Create profile
+
+        const {
+
+            data: newUser,
+            error
+
+        } = await supabase
+
+            .from("users")
+
+            .insert({
+
+                id,
+                name,
+                email,
+                role: "customer"
+
+            })
+
+            .select()
+
+            .single();
+
+        if (error) {
+
+            return res.status(400).json({
+
+                success: false,
+                message: error.message
+
+            });
+
+        }
+
+        // Welcome notification
+
+        await supabase
+
+            .from("notification")
+
+            .insert({
+
+                user_id: id,
+
+                title: "Welcome 👋",
+
+                message: "Thanks for signing in with Google.",
+
+                type: "welcome",
+
+                is_read: false
+
+            });
+
+        res.json({
+
+            success: true,
+
+            user: newUser
+
+        });
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        res.status(500).json({
+
+            success:false,
+
+            message:err.message
+
+        });
+
+    }
+
+});
 router.post("/login", async (req, res) => {
 
     try {
