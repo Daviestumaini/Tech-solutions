@@ -1,468 +1,87 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-Shopping Cart | Tech Solutions
-
-</title>
-
-<link
-rel="icon"
-href="assets/logo/favicon.png">
-
-<link
-rel="stylesheet"
-href="css/global.css">
-
-<link
-rel="stylesheet"
-href="css/cart.css">
-
-<link
-rel="stylesheet"
-href="css/mobile.css">
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Cart | Tech Solutions</title>
+<link rel="icon" href="assets/logo/favicon.png">
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/cart.css">
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
 
-<!-- ========================= -->
-<!-- NAVBAR -->
-<!-- ========================= -->
-
 <nav>
-
-<a
-href="index.html"
-class="logo">
-
-<img
-src="assets/logo/logo.png"
-alt="Logo">
-
-<span>
-
-Tech Solutions
-
-</span>
-
+<a href="index.html" class="logo">
+<img src="assets/logo/logo.png" alt="Logo">
+<span>Tech Solutions</span>
 </a>
-
 <div class="navButtons">
-
-<a
-href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-Home
-
-</a>
-
-<a
-href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-Track Order
-
-</a>
-
+<a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
 </div>
-
 </nav>
 
-<!-- ========================= -->
-<!-- PAGE HEADER -->
-<!-- ========================= -->
-
 <section class="pageHeader">
-
-<h1>
-
-Shopping Cart
-
-</h1>
-
-<p>
-
-Review your selected items before checkout.
-
-</p>
-
+<h1>Shopping Cart</h1>
+<p>Review your selected items before checkout.</p>
 </section>
-
-<!-- ========================= -->
-<!-- CART -->
-<!-- ========================= -->
 
 <section class="cartContainer">
-
-<div
-id="cartItems"
-class="cartItems">
-
-<!-- Products load here -->
-
-</div>
-
-<!-- ========================= -->
-<!-- ORDER SUMMARY -->
-<!-- ========================= -->
+<div id="cartItems" class="cartItems"></div>
 
 <div class="summaryCard">
-
-<h2>
-
-Order Summary
-
-</h2>
-
-<div class="summaryRow">
-
-<span>
-
-Items
-
-</span>
-
-<span
-id="totalItems">
-
-0
-
-</span>
-
-</div>
-
-<div class="summaryRow">
-
-<span>
-
-Subtotal
-
-</span>
-
-<span>
-
-KES
-
-<span
-id="subtotal">
-
-0
-
-</span>
-
-</span>
-
-</div>
-
-<div class="summaryRow">
-
-<span>
-
-Delivery
-
-</span>
-
-<span>
-
-Calculated at Checkout
-
-</span>
-
-</div>
-
+<h2>Order Summary</h2>
+<div class="summaryRow"><span>Items</span><span id="totalItems">0</span></div>
+<div class="summaryRow"><span>Subtotal</span><span>KES <span id="subtotal">0</span></span></div>
+<div class="summaryRow"><span>Delivery</span><span>Calculated at Checkout</span></div>
 <hr>
-
-<div class="summaryTotal">
-
-<span>
-
-Total
-
-</span>
-
-<span>
-
-KES
-
-<span
-id="grandTotal">
-
-0
-
-</span>
-
-</span>
-
+<div class="summaryTotal"><span>Total</span><span>KES <span id="grandTotal">0</span></span></div>
+<button id="checkoutBtn" class="checkoutBtn">Proceed To Checkout</button>
+<button id="continueShopping" class="continueBtn">Continue Shopping</button>
 </div>
-
-<button
-id="checkoutBtn"
-class="checkoutBtn">
-
-Proceed To Checkout
-
-</button>
-
-<button
-id="continueShopping"
-class="continueBtn">
-
-Continue Shopping
-
-</button>
-
-</div>
-
 </section>
 
-<!-- ========================= -->
-<!-- EMPTY CART -->
-<!-- ========================= -->
-
-<section
-id="emptyCart"
-class="emptyCart">
-
+<section id="emptyCart" class="emptyCart">
 <i class="fa-solid fa-cart-shopping"></i>
-
-<h2>
-
-Your Cart Is Empty
-
-</h2>
-
-<p>
-
-Looks like you haven't added anything yet.
-
-</p>
-
-<button
-id="shopNowBtn">
-
-Start Shopping
-
-</button>
-
+<h2>Your Cart Is Empty</h2>
+<p>Looks like you haven't added anything yet.</p>
+<button id="shopNowBtn">Start Shopping</button>
 </section>
-<!-- ========================= -->
-<!-- FOOTER -->
-<!-- ========================= -->
 
 <footer>
-
 <div class="footerContainer">
-
 <div class="footerBrand">
-
-<h2>
-
-Tech Solutions
-
-</h2>
-
-<p>
-
-Quality electronics delivered across Kenya.
-
-</p>
-
+<h2>Tech Solutions</h2>
+<p>Quality electronics delivered across Kenya.</p>
 </div>
-
 <div class="footerLinks">
-
-<h3>
-
-Quick Links
-
-</h3>
-
-<a href="index.html">
-
-Home
-
-</a>
-
-<a href="checkout.html">
-
-Checkout
-
-</a>
-
-<a href="payment.html">
-
-Payment
-
-</a>
-
-<a href="track.html">
-
-Track Order
-
-</a>
-
+<h3>Quick Links</h3>
+<a href="index.html">Home</a>
+<a href="checkout.html">Checkout</a>
+<a href="payment.html">Payment</a>
+<a href="track.html">Track Order</a>
 </div>
-
 <div class="footerSupport">
-
-<h3>
-
-Support
-
-</h3>
-
-<p>
-
-support@techsolutions.co.ke
-
-</p>
-
-<p>
-
-+254 700 000 000
-
-</p>
-
+<h3>Support</h3>
+<p>support@techsolutions.co.ke</p>
+<p>+254 700 000 000</p>
 </div>
-
 </div>
-
-<div class="copyright">
-
-© 2026 Tech Solutions. All Rights Reserved.
-
-</div>
-
+<div class="copyright">© 2026 Tech Solutions. All Rights Reserved.</div>
 </footer>
 
-<!-- ========================= -->
-<!-- MOBILE NAVIGATION -->
-<!-- ========================= -->
-
 <div class="mobileNav">
-
-<a
-href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-<span>
-
-Home
-
-</span>
-
-</a>
-
-<a
-href="cart.html"
-class="active">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<span>
-
-Cart
-
-</span>
-
-</a>
-
-<a
-href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-<span>
-
-Track
-
-</span>
-
-</a>
-
+<a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+<a href="cart.html" class="active"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i><span>Track</span></a>
 </div>
 
-<!-- ========================= -->
-<!-- SCRIPTS -->
-<!-- ========================= -->
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
-
 <script src="js/api.js"></script>
-
 <script src="js/cart.js"></script>
 
-<script>
-
-document
-
-.getElementById("continueShopping")
-
-.addEventListener(
-
-"click",
-
-()=>{
-
-window.location.href="index.html";
-
-}
-
-);
-
-document
-
-.getElementById("shopNowBtn")
-
-.addEventListener(
-
-"click",
-
-()=>{
-
-window.location.href="index.html";
-
-}
-
-);
-
-document
-
-.getElementById("checkoutBtn")
-
-.addEventListener(
-
-"click",
-
-()=>{
-
-window.location.href="checkout.html";
-
-}
-
-);
-
-</script>
-
 </body>
-
 </html>

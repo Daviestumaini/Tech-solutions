@@ -1314,3 +1314,10 @@ text-align:center;
 }
 
 }
+.productImage {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    min-height: 150px; /* Forces an area to be visible even if empty */
+    background-color: #f0f0f0; 
+}

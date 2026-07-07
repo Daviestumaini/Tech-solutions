@@ -2,312 +2,78 @@
 // RECEIPT.JS
 // ==========================================================
 
-let currentOrder =
-
-load(STORAGE.currentOrder);
-
-// ==========================================================
-// LOAD ORDER DETAILS
-// ==========================================================
+let currentOrder = load(STORAGE.currentOrder);
 
 function loadReceiptPage(){
-
 if(!currentOrder){
-
-window.location.href =
-
-"cart.html";
-
+window.location.href = "cart.html";
 return;
-
 }
 
-const amount =
+const amount = document.getElementById("receiptAmount");
+const account = document.getElementById("receiptAccount");
 
-document.getElementById(
-
-"receiptAmount"
-
-);
-
-const account =
-
-document.getElementById(
-
-"receiptAccount"
-
-);
-
-if(amount){
-
-amount.textContent =
-
-formatKES(
-
-currentOrder.total
-
-);
-
+if(amount) amount.textContent = formatKES(currentOrder.total);
+if(account) account.textContent = currentOrder.tracking_number;
 }
-
-if(account){
-
-account.textContent =
-
-currentOrder.tracking_number;
-
-}
-
-}
-
-// ==========================================================
-// GET FORM DATA
-// ==========================================================
 
 function getReceiptData(){
-
 return{
-
-tracking_number:
-
-currentOrder.tracking_number,
-
-receipt:
-
-document
-
-.getElementById(
-
-"receiptCode"
-
-)
-
-.value
-
-.trim()
-
-.toUpperCase(),
-
-phone:
-
-document
-
-.getElementById(
-
-"receiptPhone"
-
-)
-
-.value
-
-.trim()
-
+tracking_number: currentOrder.tracking_number,
+receipt: document.getElementById("receiptCode").value.trim().toUpperCase(),
+phone: document.getElementById("receiptPhone").value.trim()
 };
-
 }
-
-// ==========================================================
-// VALIDATE
-// ==========================================================
 
 function validateReceipt(data){
-
-if(
-
-!data.receipt ||
-
-!data.phone
-
-){
-
-showError(
-
-"Please fill in all fields."
-
-);
-
+if(!data.receipt || !data.phone){
+showError("Please fill in all fields.");
 return false;
-
 }
-
 return true;
-
 }
-// ==========================================================
-// SUBMIT RECEIPT
-// ==========================================================
 
-async function submitReceipt(){
+async function handleReceiptSubmit(){
+const data = getReceiptData();
 
-const data =
-
-getReceiptData();
-
-if(
-
-!validateReceipt(data)
-
-){
-
-return;
-
-}
+if(!validateReceipt(data)) return;
 
 try{
+showLoader("receiptLoader");
 
-showLoader(
+const result = await submitReceiptApi(data);
 
-"receiptLoader"
+hideLoader("receiptLoader");
 
-);
+save(STORAGE.currentOrder, result.order);
+save(STORAGE.trackingNumber, result.order.tracking_number);
 
-// Verify receipt with backend
+const success = document.getElementById("receiptSuccess");
+if(success) success.style.display="block";
 
-const result =
-
-await submitReceipt(
-
-data
-
-);
-
-hideLoader(
-
-"receiptLoader"
-
-);
-
-// Save latest order
-
-save(
-
-STORAGE.currentOrder,
-
-result.order
-
-);
-
-// Save tracking number
-
-save(
-
-STORAGE.trackingNumber,
-
-result.order.tracking_number
-
-);
-
-// Show success
-
-const success =
-
-document.getElementById(
-
-"receiptSuccess"
-
-);
-
-if(success){
-
-success.style.display="block";
-
-}
-
-const form =
-
-document.querySelector(
-
-".receiptContainer"
-
-);
-
-if(form){
-
-form.style.display="none";
-
-}
-
+const form = document.querySelector(".receiptContainer");
+if(form) form.style.display="none";
 }
 catch(error){
-
-hideLoader(
-
-"receiptLoader"
-
-);
-
-showError(
-
-error.message
-
-);
-
+hideLoader("receiptLoader");
+showError(error.message);
 }
-
 }
-
-// ==========================================================
-// TRACK BUTTON
-// ==========================================================
 
 function goToTracking(){
-
-window.location.href=
-
-"track.html";
-
+window.location.href = "track.html";
 }
 
-// ==========================================================
-// PAGE INIT
-// ==========================================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
+document.addEventListener("DOMContentLoaded", ()=>{
 loadReceiptPage();
 
-const submitBtn =
-
-document.getElementById(
-
-"submitReceiptBtn"
-
-);
-
+const submitBtn = document.getElementById("submitReceiptBtn");
 if(submitBtn){
-
-submitBtn.addEventListener(
-
-"click",
-
-submitReceipt
-
-);
-
+submitBtn.addEventListener("click", handleReceiptSubmit);
 }
 
-const trackBtn =
-
-document.getElementById(
-
-"trackOrderBtn"
-
-);
-
+const trackBtn = document.getElementById("trackOrderBtn");
 if(trackBtn){
-
-trackBtn.addEventListener(
-
-"click",
-
-goToTracking
-
-);
-
+trackBtn.addEventListener("click", goToTracking);
 }
-
 });

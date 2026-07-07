@@ -2,453 +2,112 @@
 // CHECKOUT.JS
 // ==========================================================
 
-let checkoutItems = JSON.parse(
-
-localStorage.getItem("checkout")
-
-) || [];
-
-// ==========================================================
-// TOTAL
-// ==========================================================
+let checkoutItems = JSON.parse(localStorage.getItem(STORAGE.cart)) || [];
 
 function calculateTotal(){
-
-return checkoutItems.reduce(
-
-(total,item)=>
-
-total+
-
-(item.price*item.quantity),
-
-0
-
-);
-
+return checkoutItems.reduce((total,item)=> total + (item.price*item.quantity), 0);
 }
 
-// ==========================================================
-// RENDER ITEMS
-// ==========================================================
-
 function renderCheckoutItems(){
-
-const container =
-
-document.getElementById(
-
-"checkoutItems"
-
-);
-
-const total =
-
-document.getElementById(
-
-"checkoutTotal"
-
-);
+const container = document.getElementById("checkoutItems");
+const total = document.getElementById("checkoutTotal");
+const count = document.getElementById("checkoutItemsCount");
+const subtotal = document.getElementById("checkoutSubtotal");
 
 if(!container) return;
 
 container.innerHTML="";
 
 checkoutItems.forEach(item=>{
-
 container.innerHTML+=`
-
 <div class="checkoutItem">
-
-<img
-
-src="${item.image}"
-
-alt="${item.name}">
-
+<img src="${item.image}" alt="${item.name}">
 <div class="checkoutItemInfo">
-
-<div class="checkoutItemName">
-
-${item.name}
-
+<div class="checkoutItemName">${item.name}</div>
+<div>Qty: ${item.quantity}</div>
+<div class="checkoutItemPrice">KES ${formatKES(item.price)}</div>
 </div>
-
-<div>
-
-Qty:
-
-${item.quantity}
-
 </div>
-
-<div class="checkoutItemPrice">
-
-KES
-
-${formatKES(item.price)}
-
-</div>
-
-</div>
-
-</div>
-
 `;
-
 });
 
-if(total){
-
-total.textContent=
-
-formatKES(
-
-calculateTotal()
-
-);
-
+if(total) total.textContent = formatKES(calculateTotal());
+if(subtotal) subtotal.textContent = formatKES(calculateTotal());
+if(count) count.textContent = checkoutItems.reduce((t,i)=>t+i.quantity,0);
 }
-
-}
-
-// ==========================================================
-// GET FORM
-// ==========================================================
 
 function getCheckoutData(){
-
 return{
-
-customer_name:
-
-document
-
-.getElementById("customerName")
-
-.value
-
-.trim(),
-
-phone:
-
-document
-
-.getElementById("phone")
-
-.value
-
-.trim(),
-
-county:
-
-document
-
-.getElementById("county")
-
-.value
-
-.trim(),
-
-town:
-
-document
-
-.getElementById("town")
-
-.value
-
-.trim(),
-
-landmark:
-
-document
-
-.getElementById("landmark")
-
-.value
-
-.trim(),
-
-items:
-
-checkoutItems,
-
-total:
-
-calculateTotal()
-
+customer_name: document.getElementById("customerName").value.trim(),
+phone: document.getElementById("customerPhone").value.trim(),
+county: document.getElementById("county").value.trim(),
+town: document.getElementById("town").value.trim(),
+landmark: document.getElementById("landmark").value.trim(),
+items: checkoutItems,
+total: calculateTotal()
 };
-
 }
-
-// ==========================================================
-// VALIDATION
-// ==========================================================
 
 function validateCheckout(data){
-
-if(
-
-!data.customer_name||
-
-!data.phone||
-
-!data.county||
-
-!data.town||
-
-!data.landmark
-
-){
-
-showError(
-
-"Please fill in all fields."
-
-);
-
+if(!data.customer_name || !data.phone || !data.county || !data.town || !data.landmark){
+showError("Please fill in all fields.");
 return false;
-
 }
-
 return true;
-
 }
-// ==========================================================
-// CONTINUE TO PAYMENT
-// ==========================================================
 
 async function continuePayment(){
+const data = getCheckoutData();
 
-const data =
-
-getCheckoutData();
-
-if(
-
-!validateCheckout(data)
-
-){
-
-return;
-
-}
+if(!validateCheckout(data)) return;
 
 try{
+showLoader("checkoutLoader");
 
-showLoader(
+const order = await createOrder(data);
 
-"checkoutLoader"
+localStorage.setItem(STORAGE.currentOrder, JSON.stringify(order));
+localStorage.setItem(STORAGE.trackingNumber, order.tracking_number);
+localStorage.setItem(STORAGE.paymentAmount, data.total);
 
-);
+hideLoader("checkoutLoader");
 
-// Create order
-
-const order =
-
-await createOrder(
-
-data
-
-);
-
-// Save order
-
-localStorage.setItem(
-
-"currentOrder",
-
-JSON.stringify(order)
-
-);
-
-// Save tracking number
-
-localStorage.setItem(
-
-"trackingNumber",
-
-order.tracking_number
-
-);
-
-// Save payment amount
-
-localStorage.setItem(
-
-"paymentAmount",
-
-data.total
-
-);
-
-hideLoader(
-
-"checkoutLoader"
-
-);
-
-// Go to payment
-
-window.location.href=
-
-"payment.html";
+window.location.href="payment.html";
 
 }
-
 catch(error){
-
-hideLoader(
-
-"checkoutLoader"
-
-);
-
-showError(
-
-error.message
-
-);
-
+hideLoader("checkoutLoader");
+showError(error.message);
 }
-
 }
-
-// ==========================================================
-// RESTORE FORM
-// ==========================================================
 
 function restoreCheckout(){
-
-const saved =
-
-JSON.parse(
-
-localStorage.getItem(
-
-"checkoutForm"
-
-)
-
-);
-
+const saved = JSON.parse(localStorage.getItem(STORAGE.checkoutForm));
 if(!saved) return;
 
-document.getElementById(
-
-"customerName"
-
-).value=
-
-saved.customer_name||"";
-
-document.getElementById(
-
-"phone"
-
-).value=
-
-saved.phone||"";
-
-document.getElementById(
-
-"county"
-
-).value=
-
-saved.county||"";
-
-document.getElementById(
-
-"town"
-
-).value=
-
-saved.town||"";
-
-document.getElementById(
-
-"landmark"
-
-).value=
-
-saved.landmark||"";
-
+document.getElementById("customerName").value = saved.customer_name || "";
+document.getElementById("customerPhone").value = saved.phone || "";
+document.getElementById("county").value = saved.county || "";
+document.getElementById("town").value = saved.town || "";
+document.getElementById("landmark").value = saved.landmark || "";
 }
-
-// ==========================================================
-// SAVE FORM
-// ==========================================================
 
 function saveCheckoutForm(){
-
-const data =
-
-getCheckoutData();
-
-localStorage.setItem(
-
-"checkoutForm",
-
-JSON.stringify(data)
-
-);
-
+const data = getCheckoutData();
+localStorage.setItem(STORAGE.checkoutForm, JSON.stringify(data));
 }
 
-// ==========================================================
-// PAGE LOAD
-// ==========================================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
+document.addEventListener("DOMContentLoaded", ()=>{
 renderCheckoutItems();
-
 restoreCheckout();
 
-const formInputs =
-
-document.querySelectorAll(
-
-"input, textarea, select"
-
-);
-
+const formInputs = document.querySelectorAll("input, textarea, select");
 formInputs.forEach(input=>{
-
-input.addEventListener(
-
-"input",
-
-saveCheckoutForm
-
-);
-
+input.addEventListener("input", saveCheckoutForm);
 });
 
-const paymentBtn =
-
-document.getElementById(
-
-"continuePayment"
-
-);
-
+const paymentBtn = document.getElementById("continuePayment");
 if(paymentBtn){
-
-paymentBtn.addEventListener(
-
-"click",
-
-continuePayment
-
-);
-
+paymentBtn.addEventListener("click", continuePayment);
 }
-
 });

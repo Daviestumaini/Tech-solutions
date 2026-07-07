@@ -2,449 +2,104 @@
 // TRACK.JS
 // ==========================================================
 
-let trackingNumber =
+async function handleTrackOrder(){
 
-load(STORAGE.trackingNumber);
-
-// ==========================================================
-// LOAD TRACKING
-// ==========================================================
-
-async function loadTracking(){
-
-const input =
-
-document.getElementById(
-
-"trackingNumber"
-
-);
-
-let code = "";
-
-if(input){
-
-code =
-
-input.value.trim();
-
-}
+const input = document.getElementById("trackingInput");
+const code = input ? input.value.trim() : "";
 
 if(!code){
-
-code = trackingNumber;
-
-}
-
-if(!code){
-
-showError(
-
-"Enter your tracking number."
-
-);
-
+showError("Enter your tracking number.");
 return;
-
 }
 
 try{
-
-showLoader(
-
-"trackingLoader"
-
-);
-
-const order =
-
-await trackOrder(code);
-
-hideLoader(
-
-"trackingLoader"
-
-);
-
+const order = await trackOrder(code);
 renderTracking(order);
-
 }
-
 catch(error){
-
-hideLoader(
-
-"trackingLoader"
-
-);
-
-showError(
-
-error.message
-
-);
-
+showError(error.message);
 }
 
 }
-
-// ==========================================================
-// RENDER TRACKING
-// ==========================================================
 
 function renderTracking(order){
 
-document.getElementById(
+document.getElementById("trackingResult").style.display = "block";
+document.getElementById("trackingNumber").textContent = order.tracking_number;
+document.getElementById("customerName").textContent = order.customer_name || "-";
+document.getElementById("orderDate").textContent = formatDate(order.created_at);
+document.getElementById("paymentStatus").textContent = order.status;
 
-"trackingResult"
+document.getElementById("deliveryCard").style.display = "block";
+document.getElementById("deliveryCounty").textContent = order.county || "-";
+document.getElementById("deliveryTown").textContent = order.town || "-";
+document.getElementById("deliveryLandmark").textContent = order.landmark || "-";
+document.getElementById("estimatedDelivery").textContent = order.estimated_delivery || "-";
 
-).style.display="block";
-
-document.getElementById(
-
-"orderNumber"
-
-).textContent=
-
-order.tracking_number;
-
-document.getElementById(
-
-"orderStatus"
-
-).textContent=
-
-order.status;
-
-document.getElementById(
-
-"orderDate"
-
-).textContent=
-
-formatDate(
-
-order.created_at
-
-);
-
-document.getElementById(
-
-"deliveryLocation"
-
-).textContent=
-
-order.town;
-
-renderTimeline(
-
-order.status
-
-);
-
-renderOrderedItems(
-
-order.items
-
-);
+renderTimeline(order.status);
+renderOrderedItems(order.items || []);
 
 }
-
-// ==========================================================
-// RENDER ITEMS
-// ==========================================================
 
 function renderOrderedItems(items){
 
-const container =
-
-document.getElementById(
-
-"orderedItems"
-
-);
-
+const container = document.getElementById("orderedItems");
 if(!container) return;
 
-container.innerHTML="";
+container.innerHTML = "";
 
 items.forEach(item=>{
-
-container.innerHTML+=`
-
+container.innerHTML += `
 <div class="orderedItem">
-
-<img
-
-src="${item.image}"
-
-alt="${item.name}">
-
+<img src="${item.image}" alt="${item.name}" onerror="imageFallback(this)">
 <div class="orderedItemInfo">
-
-<div class="orderedItemName">
-
-${item.name}
-
+<div class="orderedItemName">${item.name}</div>
+<div>Qty: ${item.quantity}</div>
+<div class="orderedItemPrice">KES ${formatKES(item.price)}</div>
 </div>
-
-<div>
-
-Qty: ${item.quantity}
-
 </div>
-
-<div class="orderedItemPrice">
-
-KES ${formatKES(item.price)}
-
-</div>
-
-</div>
-
-</div>
-
 `;
-
 });
 
 }
-// ==========================================================
-// TIMELINE
-// ==========================================================
 
 function renderTimeline(status){
 
-const ordered =
+const steps = ["step1","step2","step3","step4","step5"];
+const order = ["Paid","Preparing","In Transit","Out For Delivery","Delivered"];
 
-document.getElementById(
+const currentIndex = order.indexOf(status);
 
-"stepOrdered"
-
-);
-
-const paid =
-
-document.getElementById(
-
-"stepPaid"
-
-);
-
-const transit =
-
-document.getElementById(
-
-"stepTransit"
-
-);
-
-const delivered =
-
-document.getElementById(
-
-"stepDelivered"
-
-);
-
-[
-
-ordered,
-
-paid,
-
-transit,
-
-delivered
-
-].forEach(step=>{
-
-if(step){
-
-step.classList.remove(
-
-"active",
-
-"completed"
-
-);
-
-}
-
+steps.forEach((id, i)=>{
+const el = document.getElementById(id);
+if(!el) return;
+el.classList.remove("active","completed");
+if(i < currentIndex) el.classList.add("completed");
+if(i === currentIndex) el.classList.add("active");
 });
 
-if(ordered){
-
-ordered.classList.add(
-
-"completed"
-
-);
-
 }
 
-if(status==="Paid"){
+document.addEventListener("DOMContentLoaded", ()=>{
 
-paid.classList.add(
-
-"completed"
-
-);
-
+const trackBtn = document.getElementById("trackBtn");
+if(trackBtn){
+trackBtn.addEventListener("click", handleTrackOrder);
 }
 
-if(status==="In Transit"){
-
-paid.classList.add(
-
-"completed"
-
-);
-
-transit.classList.add(
-
-"active"
-
-);
-
-}
-
-if(status==="Delivered"){
-
-paid.classList.add(
-
-"completed"
-
-);
-
-transit.classList.add(
-
-"completed"
-
-);
-
-delivered.classList.add(
-
-"completed"
-
-);
-
-}
-
-}
-
-// ==========================================================
-// REFRESH
-// ==========================================================
-
-async function refreshTracking(){
-
-await loadTracking();
-
-}
-
-// ==========================================================
-// SEARCH BUTTON
-// ==========================================================
-
-function searchTracking(){
-
-loadTracking();
-
-}
-
-// ==========================================================
-// AUTO REFRESH
-// ==========================================================
-
-let refreshInterval = null;
-
-function startAutoRefresh(){
-
-if(refreshInterval){
-
-clearInterval(refreshInterval);
-
-}
-
-refreshInterval = setInterval(
-
-refreshTracking,
-
-30000
-
-);
-
-}
-
-// ==========================================================
-// PAGE INIT
-// ==========================================================
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
-const searchBtn =
-
-document.getElementById(
-
-"trackBtn"
-
-);
-
-if(searchBtn){
-
-searchBtn.addEventListener(
-
-"click",
-
-searchTracking
-
-);
-
-}
-
-const input =
-
-document.getElementById(
-
-"trackingNumber"
-
-);
-
+const input = document.getElementById("trackingInput");
 if(input){
-
-input.addEventListener(
-
-"keypress",
-
-function(e){
-
+input.addEventListener("keypress", function(e){
 if(e.key==="Enter"){
-
-searchTracking();
-
+handleTrackOrder();
+}
+});
 }
 
-}
-
-);
-
-if(trackingNumber){
-
-input.value =
-
-trackingNumber;
-
-loadTracking();
-
-startAutoRefresh();
-
-}
-
+const saved = load(STORAGE.trackingNumber);
+if(saved && input){
+input.value = saved;
+handleTrackOrder();
 }
 
 });

@@ -1,522 +1,124 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-
-Checkout | Tech Solutions
-
-</title>
-
-<link
-rel="icon"
-href="assets/logo/favicon.png">
-
-<link
-rel="stylesheet"
-href="css/global.css">
-
-<link
-rel="stylesheet"
-href="css/checkout.css">
-
-<link
-rel="stylesheet"
-href="css/mobile.css">
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout | Tech Solutions</title>
+<link rel="icon" href="assets/logo/favicon.png">
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/checkout.css">
+<link rel="stylesheet" href="css/mobile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
 
-<!-- ========================= -->
-<!-- NAVBAR -->
-<!-- ========================= -->
-
 <nav>
-
-<a
-href="index.html"
-class="logo">
-
-<img
-src="assets/logo/logo.png"
-alt="Logo">
-
-<span>
-
-Tech Solutions
-
-</span>
-
+<a href="index.html" class="logo">
+<img src="assets/logo/logo.png" alt="Logo">
+<span>Tech Solutions</span>
 </a>
-
 <div class="navButtons">
-
-<a href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-Cart
-
-</a>
-
-<a href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-Track
-
-</a>
-
+<a href="cart.html"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i> Track</a>
 </div>
-
 </nav>
 
-<!-- ========================= -->
-<!-- HEADER -->
-<!-- ========================= -->
-
 <section class="pageHeader">
-
-<h1>
-
-Checkout
-
-</h1>
-
-<p>
-
-Enter your delivery details below.
-
-</p>
-
+<h1>Checkout</h1>
+<p>Enter your delivery details below.</p>
 </section>
-
-<!-- ========================= -->
-<!-- CHECKOUT -->
-<!-- ========================= -->
 
 <section class="checkoutContainer">
-
 <div class="checkoutForm">
-
-<h2>
-
-Delivery Information
-
-</h2>
+<h2>Delivery Information</h2>
 
 <div class="inputGroup">
-
-<label>
-
-Full Name
-
-</label>
-
-<input
-type="text"
-id="customerName"
-placeholder="John Doe">
-
+<label>Full Name</label>
+<input type="text" id="customerName" placeholder="John Doe">
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Phone Number
-
-</label>
-
-<input
-type="tel"
-id="customerPhone"
-placeholder="07XXXXXXXX">
-
+<label>Phone Number</label>
+<input type="tel" id="customerPhone" placeholder="07XXXXXXXX">
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Email (Optional)
-
-</label>
-
-<input
-type="email"
-id="customerEmail"
-placeholder="example@email.com">
-
+<label>Email (Optional)</label>
+<input type="email" id="customerEmail" placeholder="example@email.com">
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-County
-
-</label>
-
+<label>County</label>
 <select id="county">
-
-<option value="">
-
-Select County
-
-</option>
-
+<option value="">Select County</option>
 <option>Nairobi</option>
-
 <option>Kiambu</option>
-
 <option>Nakuru</option>
-
 <option>Mombasa</option>
-
 <option>Kisumu</option>
-
 <option>Machakos</option>
-
 <option>Uasin Gishu</option>
-
 <option>Nyeri</option>
-
 </select>
-
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Town / Estate
-
-</label>
-
-<input
-type="text"
-id="town"
-placeholder="Westlands">
-
+<label>Town / Estate</label>
+<input type="text" id="town" placeholder="Westlands">
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Nearest Landmark
-
-</label>
-
-<textarea
-
-id="landmark"
-
-rows="4"
-
-placeholder="Near ABC Mall...">
-
-</textarea>
-
+<label>Nearest Landmark</label>
+<textarea id="landmark" rows="4" placeholder="Near ABC Mall..."></textarea>
 </div>
-
 </div>
-
-<!-- ========================= -->
-<!-- ORDER SUMMARY -->
-<!-- ========================= -->
 
 <div class="summaryCard">
-
-<h2>
-
-Your Order
-
-</h2>
-
-<div
-id="checkoutItems">
-
-<!-- JS -->
-
-</div>
-
+<h2>Your Order</h2>
+<div id="checkoutItems"></div>
 <hr>
-
-<div class="summaryRow">
-
-<span>
-
-Items
-
-</span>
-
-<span
-id="checkoutItemsCount">
-
-0
-
-</span>
-
-</div>
-
-<div class="summaryRow">
-
-<span>
-
-Subtotal
-
-</span>
-
-<span>
-
-KES
-
-<span
-id="checkoutSubtotal">
-
-0
-
-</span>
-
-</span>
-
-</div>
-
-<div class="summaryRow">
-
-<span>
-
-Delivery
-
-</span>
-
-<span>
-
-Calculated Later
-
-</span>
-
-</div>
-
+<div class="summaryRow"><span>Items</span><span id="checkoutItemsCount">0</span></div>
+<div class="summaryRow"><span>Subtotal</span><span>KES <span id="checkoutSubtotal">0</span></span></div>
+<div class="summaryRow"><span>Delivery</span><span>Calculated Later</span></div>
 <hr>
-
-<div class="summaryTotal">
-
-<span>
-
-Total
-
-</span>
-
-<span>
-
-KES
-
-<span
-id="checkoutTotal">
-
-0
-
-</span>
-
-</span>
-
+<div class="summaryTotal"><span>Total</span><span>KES <span id="checkoutTotal">0</span></span></div>
+<button id="continuePayment">Continue To Payment</button>
 </div>
-
-<button
-id="continuePayment">
-
-Continue To Payment
-
-</button>
-
-</div>
-
 </section>
-<!-- ========================= -->
-<!-- FOOTER -->
-<!-- ========================= -->
 
 <footer>
-
 <div class="footerContainer">
-
 <div class="footerBrand">
-
-<h2>
-
-Tech Solutions
-
-</h2>
-
-<p>
-
-Premium electronics delivered safely across Kenya.
-
-</p>
-
+<h2>Tech Solutions</h2>
+<p>Premium electronics delivered safely across Kenya.</p>
 </div>
-
 <div class="footerLinks">
-
-<h3>
-
-Quick Links
-
-</h3>
-
-<a href="index.html">
-
-Home
-
-</a>
-
-<a href="cart.html">
-
-Cart
-
-</a>
-
-<a href="payment.html">
-
-Payment
-
-</a>
-
-<a href="track.html">
-
-Track Order
-
-</a>
-
+<h3>Quick Links</h3>
+<a href="index.html">Home</a>
+<a href="cart.html">Cart</a>
+<a href="payment.html">Payment</a>
+<a href="track.html">Track Order</a>
 </div>
-
 <div class="footerSupport">
-
-<h3>
-
-Support
-
-</h3>
-
-<p>
-
-support@techsolutions.co.ke
-
-</p>
-
-<p>
-
-+254 700 000 000
-
-</p>
-
+<h3>Support</h3>
+<p>support@techsolutions.co.ke</p>
+<p>+254 700 000 000</p>
 </div>
-
 </div>
-
-<div class="copyright">
-
-© 2026 Tech Solutions. All Rights Reserved.
-
-</div>
-
+<div class="copyright">© 2026 Tech Solutions. All Rights Reserved.</div>
 </footer>
 
-<!-- ========================= -->
-<!-- MOBILE NAVIGATION -->
-<!-- ========================= -->
-
 <div class="mobileNav">
-
-<a
-href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-<span>
-
-Home
-
-</span>
-
-</a>
-
-<a
-href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<span>
-
-Cart
-
-</span>
-
-</a>
-
-<a
-href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-<span>
-
-Track
-
-</span>
-
-</a>
-
+<a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+<a href="cart.html"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i><span>Track</span></a>
 </div>
 
-<!-- ========================= -->
-<!-- SCRIPTS -->
-<!-- ========================= -->
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
-
 <script src="js/api.js"></script>
-
 <script src="js/cart.js"></script>
-
 <script src="js/checkout.js"></script>
 
-<script>
-
-document
-
-.getElementById("continuePayment")
-
-.addEventListener(
-
-"click",
-
-()=>{
-
-window.location.href="payment.html";
-
-}
-
-);
-
-</script>
-
 </body>
-
 </html>

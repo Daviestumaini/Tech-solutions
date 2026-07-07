@@ -9,26 +9,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use(
-"/api/auth",
-require("./routes/auth")
-);
-
-app.use(
-  "/api/orders",
-  require("./routes/orders")
-);
-
-app.use(
     "/api/products",
     require("./routes/products")
-);
-app.use(
-    "/api/admin",
-    require("./routes/admin")
-);
-app.use(
-    "/api/notifications",
-    require("./routes/notification")
 );
 
 app.get("/", (req, res) => {
@@ -52,7 +34,7 @@ data,
 error
 }=
 await supabase
-.from("Orders")
+.from("orders")
 .update({
 
 shipment_status:
@@ -85,25 +67,6 @@ app.get("/debug-users", async (req, res) => {
     const { data, error } = await supabase
         .from("users")
         .select("*");
-
-    res.json({
-        data,
-        error
-    });
-
-});
-app.get("/debug-service", async (req, res) => {
-
-    const supabase = require("./config/supabase");
-
-    const { data, error } = await supabase
-        .from("users")
-        .insert({
-            name: "Debug User",
-            email: "debug@test.com",
-            role: "customer"
-        })
-        .select();
 
     res.json({
         data,
