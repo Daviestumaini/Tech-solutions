@@ -498,64 +498,50 @@ async function login() {
 // ==========================================
 // GOOGLE LOGIN
 // ==========================================
+document.addEventListener("DOMContentLoaded", () => {
 
-async function loginWithGoogle() {
+    const googleBtn =
+        document.getElementById("googleRegisterBtn");
 
-    const { error } = await supabase.auth.signInWithOAuth({
+    googleBtn.addEventListener("click", async () => {
 
-        provider: "google",
+        try {
 
-        options: {
+            const { error } =
+            await supabase.auth.signInWithOAuth({
 
-            redirectTo:
+                provider: "google",
 
-                window.location.origin +
-                "/index.html"
+                options: {
+
+                    redirectTo:
+                        window.location.origin + "/index.html"
+
+                }
+
+            });
+
+            if (error) {
+
+                console.error(error);
+
+                alert(error.message);
+
+            }
+
+        }
+
+        catch(err){
+
+            console.error(err);
+
+            alert("Google Sign-In failed.");
 
         }
 
     });
 
-    if (error) {
-
-        alert(error.message);
-
-    }
-
-}
-
-// ==========================================
-// BUTTON
-// ==========================================
-
-document
-.getElementById("googleLoginBtn")
-.addEventListener(
-    "click",
-    loginWithGoogle
-);
-
-// ==========================================
-// ENTER KEY LOGIN
-// ==========================================
-
-document
-.getElementById("password")
-.addEventListener(
-
-    "keypress",
-
-    function(e){
-
-        if(e.key==="Enter"){
-
-            login();
-
-        }
-
-    }
-
-);
+});
 
 </script>
 
