@@ -1,3 +1,68 @@
+(async () => {
+
+    const {
+
+        data: {
+
+            session
+
+        }
+
+    } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const user = session.user;
+
+    localStorage.setItem(
+        "access_token",
+        session.access_token
+    );
+
+    localStorage.setItem(
+        "user_id",
+        user.id
+    );
+
+    localStorage.setItem(
+        "name",
+        user.user_metadata.full_name || "Guest"
+    );
+
+    localStorage.setItem(
+        "email",
+        user.email
+    );
+
+    await fetch(
+        `${API_BASE}/auth/google-profile`,
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                id: user.id,
+
+                name:
+                user.user_metadata.full_name,
+
+                email:
+                user.email
+
+            })
+
+        }
+
+    );
+
+})();
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
