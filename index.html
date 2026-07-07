@@ -1,126 +1,142 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>Tech Solutions</title>
 
-<link rel="stylesheet" href="CSS/index.css">
-<link rel="stylesheet" href="CSS/mobile.css">
 <link
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-rel="stylesheet">
+rel="icon"
+href="assets/logo/favicon.png">
+
+<link
+rel="stylesheet"
+href="css/global.css">
+
+<link
+rel="stylesheet"
+href="css/index.css">
+
+<link
+rel="stylesheet"
+href="css/mobile.css">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- ===========================
-NAVBAR
-=========================== -->
+<!-- ========================= -->
+<!-- LOADING SCREEN -->
+<!-- ========================= -->
+
+<div
+id="loadingScreen"
+class="loadingScreen">
+
+<div class="loader"></div>
+
+<p>
+
+Loading Products...
+
+</p>
+
+</div>
+
+<!-- ========================= -->
+<!-- NAVBAR -->
+<!-- ========================= -->
 
 <nav>
 
-    <div class="logo">
-        <a href="index.html">
-            Tech<span>Solutions</span>
-        </a>
-    </div>
+<div class="logo">
 
-    <!-- SEARCH -->
-    <div class="searchBox">
+<img
+src="assets/logo/logo.png"
+alt="Logo">
 
-        <i class="fa-solid fa-magnifying-glass"></i>
+<span>
 
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search gadgets..."
-        >
+Tech Solutions
 
-    </div>
+</span>
 
-    <!-- RIGHT SIDE -->
-    <div class="navRight">
+</div>
 
-        <span id="welcomeUser">
-            Hi, Guest
-        </span>
+<div class="searchBox">
 
-        <div class="navIcons">
+<i class="fa-solid fa-magnifying-glass"></i>
 
-            <a href="wishlist.html" title="Wishlist">
-                <i class="fa-regular fa-heart"></i>
-            </a>
+<input
 
-            <a href="notification.html" title="Notifications">
-                <i class="fa-solid fa-bell"></i>
-                <span class="notificationCount">0</span>
-            </a>
+id="searchInput"
 
-            <a href="orders.html" title="Orders">
-                <i class="fa-solid fa-box"></i>
-            </a>
+type="text"
 
-            <a href="profile.html" title="Profile">
-                <i class="fa-solid fa-user"></i>
-            </a>
+placeholder="Search products...">
 
-            <a href="cart.html" title="Cart">
+</div>
 
-                <i class="fa-solid fa-cart-shopping"></i>
+<button
+id="cartBtn"
+class="cartBtn">
 
-                <span id="cartCount">
-                    0
-                </span>
+<i class="fa-solid fa-cart-shopping"></i>
 
-            </a>
+<span
+id="cartCount">
 
-        </div>
+0
 
-    </div>
+</span>
+
+</button>
 
 </nav>
 
-<!-- ===========================
-HERO
-=========================== -->
+<!-- ========================= -->
+<!-- HERO -->
+<!-- ========================= -->
 
 <section class="hero">
 
-<div class="heroContent">
-
 <h1>
 
-Find Your Next Gadget.
+Technology.
+Delivered.
 
 </h1>
 
 <p>
 
-Premium phones, laptops,
-gaming gear and accessories.
+Phones, Laptops, Gaming, Accessories
+and more.
 
 </p>
 
-<button id="shopNow">
+<button
+id="shopNow">
 
 Shop Now
 
 </button>
 
-</div>
-
 </section>
 
-<!-- ===========================
-CATEGORIES
-=========================== -->
+<!-- ========================= -->
+<!-- CATEGORIES -->
+<!-- ========================= -->
 
 <section class="categories">
 
@@ -150,14 +166,6 @@ Laptops
 
 <button
 class="category"
-data-category="Audio">
-
-Audio
-
-</button>
-
-<button
-class="category"
 data-category="Gaming">
 
 Gaming
@@ -174,25 +182,27 @@ Accessories
 
 </section>
 
-<!-- ===========================
-PRODUCT GRID
-=========================== -->
+<!-- ========================= -->
+<!-- PRODUCTS -->
+<!-- ========================= -->
 
 <section
-class="products"
-id="products">
+id="products"
+class="products">
+
+<!-- JS Loads Products -->
 
 </section>
 
-<!-- ===========================
-CART DRAWER
-=========================== -->
+<!-- ========================= -->
+<!-- CART DRAWER -->
+<!-- ========================= -->
 
 <div
-class="cartDrawer"
-id="drawer">
+id="drawer"
+class="drawer">
 
-<div class="cartHeader">
+<div class="drawerHeader">
 
 <h2>
 
@@ -200,20 +210,22 @@ Shopping Cart
 
 </h2>
 
-<button id="closeCart">
+<button
+id="closeCart">
 
-×
+<i class="fa-solid fa-xmark"></i>
 
 </button>
 
 </div>
 
 <div
-id="cartItems">
+id="cartItems"
+class="cartItems">
 
 </div>
 
-<div class="cartFooter">
+<div class="drawerFooter">
 
 <h3>
 
@@ -221,7 +233,8 @@ Total
 
 KES
 
-<span id="totalPrice">
+<span
+id="totalPrice">
 
 0
 
@@ -230,10 +243,9 @@ KES
 </h3>
 
 <button
-class="checkoutBtn"
 id="checkoutBtn">
 
-Proceed to Checkout
+Proceed To Checkout
 
 </button>
 
@@ -241,121 +253,260 @@ Proceed to Checkout
 
 </div>
 
-<!-- ===========================
-TOAST
-=========================== -->
+<!-- ========================= -->
+<!-- TOAST -->
+<!-- ========================= -->
 
 <div
-class="toast"
-id="toast">
+id="toast"
+class="toast">
 
-Added to cart
+Added To Cart
 
 </div>
+<!-- ========================= -->
+<!-- FOOTER -->
+<!-- ========================= -->
 
 <footer>
 
-    <div class="footerContainer">
+<div class="footerContainer">
 
-        <div class="footerBrand">
+<div class="footerBrand">
 
-            <h2>Gadget<span>Finds</span></h2>
+<h2>
 
-            <p>
+Tech Solutions
 
-                Premium gadgets delivered across Kenya.
+</h2>
 
-            </p>
+<p>
 
-        </div>
+Quality electronics at competitive prices.
 
-        <div class="footerLinks">
+Fast delivery across Kenya.
 
-            <a href="index.html">Home</a>
+</p>
 
-            <a href="orders.html">Orders</a>
+</div>
 
-            <a href="track.html">Track Order</a>
+<div class="footerLinks">
 
-            <a href="profile.html">Profile</a>
+<h3>
 
-        </div>
+Quick Links
 
-        <div class="footerContact">
+</h3>
 
-            <p>
+<a href="index.html">
 
-                <i class="fa-solid fa-phone"></i>
+Home
 
-                0722994584
+</a>
 
-            </p>
+<a href="cart.html">
 
-            <p>
+Cart
 
-                <i class="fa-solid fa-envelope"></i>
+</a>
 
-                youngtony1000000@gmail.com
+<a href="checkout.html">
 
-            </p>
+Checkout
 
-        </div>
+</a>
 
-    </div>
+<a href="track.html">
 
-    <hr>
+Track Order
 
-    <p class="copyright">
+</a>
 
-        © 2026 Tech Solutions. All Rights Reserved.
+</div>
 
-    </p>
+<div class="footerContact">
+
+<h3>
+
+Support
+
+</h3>
+
+<p>
+
+support@techsolutions.co.ke
+
+</p>
+
+<p>
+
++254 700 000 000
+
+</p>
+
+</div>
+
+</div>
+
+<div class="copyright">
+
+© 2026 Tech Solutions. All Rights Reserved.
+
+</div>
 
 </footer>
 
-<div class="bottomNav">
+<!-- ========================= -->
+<!-- MOBILE NAVIGATION -->
+<!-- ========================= -->
 
-    <a href="index.html">
+<div class="mobileNav">
 
-        <i class="fa-solid fa-house"></i>
+<a
+href="index.html"
+class="active">
 
-    </a>
+<i class="fa-solid fa-house"></i>
 
-    <button id="mobileSearch">
+<span>
 
-        <i class="fa-solid fa-magnifying-glass"></i>
+Home
 
-    </button>
+</span>
 
-    <button id="mobileCart">
+</a>
 
-        <i class="fa-solid fa-cart-shopping"></i>
+<a
+href="cart.html">
 
-    </button>
+<i class="fa-solid fa-cart-shopping"></i>
 
-    <a href="orders.html">
+<span>
 
-        <i class="fa-solid fa-box"></i>
+Cart
 
-    </a>
+</span>
 
-    <a href="profile.html">
+</a>
 
-        <i class="fa-solid fa-user"></i>
+<a
+href="track.html">
 
-    </a>
+<i class="fa-solid fa-truck-fast"></i>
+
+<span>
+
+Track
+
+</span>
+
+</a>
 
 </div>
 
-<div id="loadingScreen" class="loadingScreen">
+<!-- ========================= -->
+<!-- CONFIG -->
+<!-- ========================= -->
 
-    <div class="loader"></div>
+<script src="js/config.js"></script>
 
-    <p>Loading products...</p>
+<!-- ========================= -->
+<!-- API -->
+<!-- ========================= -->
 
-</div>
+<script src="js/api.js"></script>
 
-<script src="Js/index.js"></script>
+<!-- ========================= -->
+<!-- CART -->
+<!-- ========================= -->
+
+<script src="js/cart.js"></script>
+
+<!-- ========================= -->
+<!-- INDEX -->
+<!-- ========================= -->
+
+<script src="js/index.js"></script>
+
+<script>
+
+// Open Cart
+
+document
+.getElementById("cartBtn")
+.addEventListener(
+
+"click",
+
+()=>{
+
+document
+.getElementById("drawer")
+.classList
+.add("show");
+
+}
+
+);
+
+// Close Cart
+
+document
+.getElementById("closeCart")
+.addEventListener(
+
+"click",
+
+()=>{
+
+document
+.getElementById("drawer")
+.classList
+.remove("show");
+
+}
+
+);
+
+// Checkout Button
+
+document
+.getElementById("checkoutBtn")
+.addEventListener(
+
+"click",
+
+()=>{
+
+window.location.href="checkout.html";
+
+}
+
+);
+
+// Shop Now
+
+document
+.getElementById("shopNow")
+.addEventListener(
+
+"click",
+
+()=>{
+
+document
+.getElementById("products")
+.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+);
+
+</script>
 
 </body>
 
