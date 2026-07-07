@@ -1,144 +1,450 @@
-const API = `${API_BASE}/orders`;
+// ==========================================================
+// TRACK.JS
+// ==========================================================
 
-// =========================================
-// GET QUERY PARAMETER
-// =========================================
+let trackingNumber =
 
-const params = new URLSearchParams(window.location.search);
+load(STORAGE.trackingNumber);
 
-const trackingFromURL = params.get("tracking");
+// ==========================================================
+// LOAD TRACKING
+// ==========================================================
 
-const trackingInput = document.getElementById("trackingInput");
+async function loadTracking(){
 
-if (trackingFromURL) {
+const input =
 
-    trackingInput.value = trackingFromURL;
+document.getElementById(
 
-    trackOrder();
+"trackingNumber"
+
+);
+
+let code = "";
+
+if(input){
+
+code =
+
+input.value.trim();
 
 }
 
-// =========================================
-// TRACK BUTTON
-// =========================================
+if(!code){
 
-document.getElementById("trackBtn").onclick = () => {
+code = trackingNumber;
 
-    trackOrder();
+}
 
-};
+if(!code){
 
-// =========================================
-// TRACK ORDER
-// =========================================
+showError(
 
-async function trackOrder() {
+"Enter your tracking number."
 
-    const trackingID = trackingInput.value.trim().toUpperCase();
+);
 
-    if (!trackingID) {
+return;
 
-        alert("Please enter a Tracking ID.");
+}
 
-        return;
+try{
 
-    }
+showLoader(
 
-    try {
+"trackingLoader"
 
-        const response = await fetch(
+);
 
-            `${API}/${trackingID}`
+const order =
 
-        );
+await trackOrder(code);
 
-        const result = await response.json();
+hideLoader(
 
-        if (!response.ok) {
+"trackingLoader"
 
-            alert(result.message);
+);
 
-            document.getElementById("result").style.display = "none";
+renderTracking(order);
 
-            return;
+}
 
-        }
+catch(error){
 
-        const order = result.order;
+hideLoader(
 
-        document.getElementById("result").style.display = "block";
+"trackingLoader"
 
-        document.getElementById("trackingID").innerHTML =
-            order.tracking_id;
+);
 
-        document.getElementById("paymentStatus").innerHTML =
-            order.payment_status;
+showError(
 
-        document.getElementById("shipmentStatus").innerHTML =
-            order.shipment_status;
+error.message
 
-        document.getElementById("amount").innerHTML =
-            Number(order.amount).toLocaleString();
+);
 
-        document.getElementById("customerEmail").innerHTML =
-            order.customer_email;
+}
 
-        // Optional status colors
+}
 
-        const paymentStatus =
-            document.getElementById("paymentStatus");
+// ==========================================================
+// RENDER TRACKING
+// ==========================================================
 
-        switch (order.payment_status) {
+function renderTracking(order){
 
-            case "Verified":
+document.getElementById(
 
-                paymentStatus.style.color = "green";
+"trackingResult"
 
-                break;
+).style.display="block";
 
-            case "Rejected":
+document.getElementById(
 
-                paymentStatus.style.color = "red";
+"orderNumber"
 
-                break;
+).textContent=
 
-            default:
+order.tracking_number;
 
-                paymentStatus.style.color = "orange";
+document.getElementById(
 
-        }
+"orderStatus"
 
-        const shipment =
-            document.getElementById("shipmentStatus");
+).textContent=
 
-        switch (order.shipment_status) {
+order.status;
 
-            case "Delivered":
+document.getElementById(
 
-                shipment.style.color = "green";
+"orderDate"
 
-                break;
+).textContent=
 
-            case "Cancelled":
+formatDate(
 
-                shipment.style.color = "red";
+order.created_at
 
-                break;
+);
 
-            default:
+document.getElementById(
 
-                shipment.style.color = "#2563eb";
+"deliveryLocation"
 
-        }
+).textContent=
 
-    }
+order.town;
 
-    catch (err) {
+renderTimeline(
 
-        console.log(err);
+order.status
 
-        alert("Server Error.");
+);
 
-    }
+renderOrderedItems(
 
-};
+order.items
+
+);
+
+}
+
+// ==========================================================
+// RENDER ITEMS
+// ==========================================================
+
+function renderOrderedItems(items){
+
+const container =
+
+document.getElementById(
+
+"orderedItems"
+
+);
+
+if(!container) return;
+
+container.innerHTML="";
+
+items.forEach(item=>{
+
+container.innerHTML+=`
+
+<div class="orderedItem">
+
+<img
+
+src="${item.image}"
+
+alt="${item.name}">
+
+<div class="orderedItemInfo">
+
+<div class="orderedItemName">
+
+${item.name}
+
+</div>
+
+<div>
+
+Qty: ${item.quantity}
+
+</div>
+
+<div class="orderedItemPrice">
+
+KES ${formatKES(item.price)}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+// ==========================================================
+// TIMELINE
+// ==========================================================
+
+function renderTimeline(status){
+
+const ordered =
+
+document.getElementById(
+
+"stepOrdered"
+
+);
+
+const paid =
+
+document.getElementById(
+
+"stepPaid"
+
+);
+
+const transit =
+
+document.getElementById(
+
+"stepTransit"
+
+);
+
+const delivered =
+
+document.getElementById(
+
+"stepDelivered"
+
+);
+
+[
+
+ordered,
+
+paid,
+
+transit,
+
+delivered
+
+].forEach(step=>{
+
+if(step){
+
+step.classList.remove(
+
+"active",
+
+"completed"
+
+);
+
+}
+
+});
+
+if(ordered){
+
+ordered.classList.add(
+
+"completed"
+
+);
+
+}
+
+if(status==="Paid"){
+
+paid.classList.add(
+
+"completed"
+
+);
+
+}
+
+if(status==="In Transit"){
+
+paid.classList.add(
+
+"completed"
+
+);
+
+transit.classList.add(
+
+"active"
+
+);
+
+}
+
+if(status==="Delivered"){
+
+paid.classList.add(
+
+"completed"
+
+);
+
+transit.classList.add(
+
+"completed"
+
+);
+
+delivered.classList.add(
+
+"completed"
+
+);
+
+}
+
+}
+
+// ==========================================================
+// REFRESH
+// ==========================================================
+
+async function refreshTracking(){
+
+await loadTracking();
+
+}
+
+// ==========================================================
+// SEARCH BUTTON
+// ==========================================================
+
+function searchTracking(){
+
+loadTracking();
+
+}
+
+// ==========================================================
+// AUTO REFRESH
+// ==========================================================
+
+let refreshInterval = null;
+
+function startAutoRefresh(){
+
+if(refreshInterval){
+
+clearInterval(refreshInterval);
+
+}
+
+refreshInterval = setInterval(
+
+refreshTracking,
+
+30000
+
+);
+
+}
+
+// ==========================================================
+// PAGE INIT
+// ==========================================================
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+const searchBtn =
+
+document.getElementById(
+
+"trackBtn"
+
+);
+
+if(searchBtn){
+
+searchBtn.addEventListener(
+
+"click",
+
+searchTracking
+
+);
+
+}
+
+const input =
+
+document.getElementById(
+
+"trackingNumber"
+
+);
+
+if(input){
+
+input.addEventListener(
+
+"keypress",
+
+function(e){
+
+if(e.key==="Enter"){
+
+searchTracking();
+
+}
+
+}
+
+);
+
+if(trackingNumber){
+
+input.value =
+
+trackingNumber;
+
+loadTracking();
+
+startAutoRefresh();
+
+}
+
+}
+
+});

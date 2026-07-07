@@ -1,0 +1,436 @@
+/* ==========================================================
+   CHECKOUT LAYOUT
+========================================================== */
+
+.checkoutContainer{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:35px;
+
+align-items:start;
+
+margin-bottom:70px;
+
+}
+
+/* ==========================================================
+   CHECKOUT FORM
+========================================================== */
+
+.checkoutForm{
+
+background:white;
+
+padding:35px;
+
+border-radius:18px;
+
+box-shadow:var(--shadow);
+
+}
+
+.checkoutForm h2{
+
+margin-bottom:30px;
+
+font-size:28px;
+
+color:var(--dark);
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+.checkoutForm .inputGroup{
+
+margin-bottom:22px;
+
+}
+
+.checkoutForm label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-size:15px;
+
+font-weight:600;
+
+color:var(--dark);
+
+}
+
+.checkoutForm input,
+.checkoutForm textarea,
+.checkoutForm select{
+
+width:100%;
+
+padding:15px;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+font-size:15px;
+
+transition:.25s;
+
+background:white;
+
+}
+
+.checkoutForm textarea{
+
+min-height:120px;
+
+resize:vertical;
+
+}
+
+.checkoutForm input:focus,
+.checkoutForm textarea:focus,
+.checkoutForm select:focus{
+
+border-color:var(--primary);
+
+box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+outline:none;
+
+}
+
+/* ==========================================================
+   SUMMARY
+========================================================== */
+
+.summaryCard{
+
+position:sticky;
+
+top:100px;
+
+}
+
+.summaryCard h2{
+
+margin-bottom:25px;
+
+}
+
+#checkoutItems{
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+margin-bottom:25px;
+
+}
+
+/* ==========================================================
+   PRODUCT ROW
+========================================================== */
+
+.checkoutItem{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+padding-bottom:15px;
+
+border-bottom:1px solid var(--border);
+
+}
+
+.checkoutItem:last-child{
+
+border-bottom:none;
+
+padding-bottom:0;
+
+}
+
+.checkoutItem img{
+
+width:70px;
+
+height:70px;
+
+border-radius:12px;
+
+object-fit:cover;
+
+background:#fafafa;
+
+}
+
+.checkoutItemInfo{
+
+flex:1;
+
+}
+
+.checkoutItemName{
+
+font-weight:700;
+
+margin-bottom:6px;
+
+}
+
+.checkoutItemPrice{
+
+font-size:15px;
+
+color:var(--primary);
+
+font-weight:600;
+
+}
+/* ==========================================================
+   CONTINUE BUTTON
+========================================================== */
+
+#continuePayment{
+
+margin-top:25px;
+
+width:100%;
+
+}
+
+/* ==========================================================
+   DELIVERY NOTICE
+========================================================== */
+
+.deliveryNotice{
+
+margin-top:25px;
+
+padding:18px;
+
+background:#eff6ff;
+
+border-left:5px solid var(--primary);
+
+border-radius:12px;
+
+font-size:14px;
+
+line-height:1.6;
+
+color:#444;
+
+}
+
+.deliveryNotice i{
+
+color:var(--primary);
+
+margin-right:8px;
+
+}
+
+/* ==========================================================
+   VALIDATION
+========================================================== */
+
+.inputError{
+
+border:2px solid #ef4444 !important;
+
+background:#fef2f2;
+
+}
+
+.errorText{
+
+margin-top:6px;
+
+font-size:13px;
+
+color:#dc2626;
+
+}
+
+/* ==========================================================
+   ORDER TOTAL
+========================================================== */
+
+.summaryTotal{
+
+margin-top:25px;
+
+padding-top:20px;
+
+border-top:1px solid var(--border);
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+font-size:24px;
+
+font-weight:700;
+
+}
+
+/* ==========================================================
+   LOADING STATE
+========================================================== */
+
+.checkoutLoading{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:60px;
+
+}
+
+/* ==========================================================
+   SUCCESS MESSAGE
+========================================================== */
+
+.checkoutSuccess{
+
+display:none;
+
+text-align:center;
+
+padding:50px;
+
+background:white;
+
+border-radius:18px;
+
+box-shadow:var(--shadow);
+
+}
+
+.checkoutSuccess i{
+
+font-size:70px;
+
+color:var(--success);
+
+margin-bottom:20px;
+
+}
+
+.checkoutSuccess h2{
+
+margin-bottom:15px;
+
+}
+
+.checkoutSuccess p{
+
+color:#666;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+.checkoutContainer{
+
+grid-template-columns:1fr;
+
+}
+
+.summaryCard{
+
+position:relative;
+
+top:0;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.checkoutForm{
+
+padding:25px;
+
+}
+
+.checkoutForm h2{
+
+font-size:24px;
+
+}
+
+.checkoutItem{
+
+align-items:flex-start;
+
+}
+
+.checkoutItem img{
+
+width:60px;
+
+height:60px;
+
+}
+
+.summaryCard{
+
+margin-bottom:90px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.checkoutForm{
+
+padding:18px;
+
+}
+
+.checkoutForm input,
+.checkoutForm textarea,
+.checkoutForm select{
+
+padding:13px;
+
+}
+
+.summaryCard{
+
+padding:20px;
+
+}
+
+.summaryTotal{
+
+font-size:20px;
+
+}
+
+}

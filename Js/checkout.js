@@ -1,240 +1,454 @@
-const API = `${API_BASE}/orders`;
+// ==========================================================
+// CHECKOUT.JS
+// ==========================================================
 
-// ======================================
-// LOAD USER + CART
-// ======================================
+let checkoutItems = JSON.parse(
 
-const user_id = localStorage.getItem("user_id");
-const customer_email = localStorage.getItem("email");
+localStorage.getItem("checkout")
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+) || [];
 
-if (!user_id) {
+// ==========================================================
+// TOTAL
+// ==========================================================
 
-    alert("Please login first.");
+function calculateTotal(){
 
-    window.location.href = "login.html";
+return checkoutItems.reduce(
+
+(total,item)=>
+
+total+
+
+(item.price*item.quantity),
+
+0
+
+);
 
 }
 
-if (cart.length === 0) {
+// ==========================================================
+// RENDER ITEMS
+// ==========================================================
 
-    alert("Your cart is empty.");
+function renderCheckoutItems(){
 
-    window.location.href = "index.html";
+const container =
 
-}
+document.getElementById(
 
-document.getElementById("customerEmail").value =
-customer_email;
+"checkoutItems"
 
-// ======================================
-// RENDER ORDER
-// ======================================
+);
 
-const orderItems =
-document.getElementById("orderItems");
+const total =
 
-let total = 0;
+document.getElementById(
 
-function renderOrder() {
+"checkoutTotal"
 
-    orderItems.innerHTML = "";
+);
 
-    total = 0;
+if(!container) return;
 
-    cart.forEach(item => {
+container.innerHTML="";
 
-        const quantity = item.quantity || 1;
+checkoutItems.forEach(item=>{
 
-        const subtotal =
-            Number(item.price) * quantity;
+container.innerHTML+=`
 
-        total += subtotal;
+<div class="checkoutItem">
 
-        orderItems.innerHTML += `
+<img
 
-<div class="orderItem">
+src="${item.image}"
 
-    <img
-    src="${item.image}"
-    alt="${item.name}">
+alt="${item.name}">
 
-    <div class="orderInfo">
+<div class="checkoutItemInfo">
 
-        <h4>${item.name}</h4>
+<div class="checkoutItemName">
 
-        <p>
+${item.name}
 
-        Qty:
-        ${quantity}
+</div>
 
-        </p>
+<div>
 
-    </div>
+Qty:
 
-    <strong>
+${item.quantity}
 
-    KES
-    ${subtotal.toLocaleString()}
+</div>
 
-    </strong>
+<div class="checkoutItemPrice">
+
+KES
+
+${formatKES(item.price)}
+
+</div>
+
+</div>
 
 </div>
 
 `;
 
-    });
+});
 
-    document.getElementById("totalPrice").innerHTML =
-    total.toLocaleString();
+if(total){
+
+total.textContent=
+
+formatKES(
+
+calculateTotal()
+
+);
 
 }
 
-renderOrder();
+}
 
-// ======================================
-// COPY BUSINESS NUMBER
-// ======================================
+// ==========================================================
+// GET FORM
+// ==========================================================
+
+function getCheckoutData(){
+
+return{
+
+customer_name:
 
 document
-.getElementById("copyBtn")
-.onclick = async () => {
 
-    try {
+.getElementById("customerName")
 
-        await navigator.clipboard.writeText(
+.value
 
-            document
-            .getElementById("businessNumber")
-            .innerText
+.trim(),
 
-        );
+phone:
 
-        alert("Business number copied.");
+document
 
-    }
+.getElementById("phone")
 
-    catch {
+.value
 
-        alert("Couldn't copy.");
+.trim(),
 
-    }
+county:
+
+document
+
+.getElementById("county")
+
+.value
+
+.trim(),
+
+town:
+
+document
+
+.getElementById("town")
+
+.value
+
+.trim(),
+
+landmark:
+
+document
+
+.getElementById("landmark")
+
+.value
+
+.trim(),
+
+items:
+
+checkoutItems,
+
+total:
+
+calculateTotal()
 
 };
 
-// ======================================
-// PLACE ORDER
-// ======================================
+}
 
-document
-.getElementById("checkoutBtn")
-.onclick = async () => {
+// ==========================================================
+// VALIDATION
+// ==========================================================
 
-    const payment_phone =
-    document
-    .getElementById("paymentPhone")
-    .value
-    .trim();
+function validateCheckout(data){
 
-    const mpesa_code =
-    document
-    .getElementById("mpesaCode")
-    .value
-    .trim()
-    .toUpperCase();
+if(
 
-    if (!payment_phone || !mpesa_code) {
+!data.customer_name||
 
-        alert("Please fill all payment details.");
+!data.phone||
 
-        return;
+!data.county||
 
-    }
+!data.town||
 
-    document
-    .getElementById("loadingScreen")
-    .style.display = "flex";
+!data.landmark
 
-    try {
+){
 
-        const response = await fetch(API, {
+showError(
 
-            method: "POST",
+"Please fill in all fields."
 
-            headers: {
+);
 
-                "Content-Type": "application/json"
+return false;
 
-            },
+}
 
-            body: JSON.stringify({
+return true;
 
-                user_id,
+}
+// ==========================================================
+// CONTINUE TO PAYMENT
+// ==========================================================
 
-                amount: total,
+async function continuePayment(){
 
-                payment_phone,
+const data =
 
-                mpesa_code,
+getCheckoutData();
 
-                customer_email,
+if(
 
-                items: cart
+!validateCheckout(data)
 
-            })
+){
 
-        });
+return;
 
-        const result =
-        await response.json();
+}
 
-        document
-        .getElementById("loadingScreen")
-        .style.display = "none";
+try{
 
-        if (!response.ok) {
+showLoader(
 
-            alert(result.message);
+"checkoutLoader"
 
-            return;
+);
 
-        }
+// Create order
 
-        localStorage.removeItem("cart");
+const order =
 
-        alert(
+await createOrder(
 
-`Order placed successfully!
+data
 
-Tracking ID:
+);
 
-${result.order.tracking_id}
+// Save order
 
-Payment Status:
+localStorage.setItem(
 
-Pending Verification`
+"currentOrder",
 
-        );
+JSON.stringify(order)
 
-        window.location.href =
+);
 
-        "tracking.html?tracking=" +
+// Save tracking number
 
-        result.order.tracking_id;
+localStorage.setItem(
 
-    }
+"trackingNumber",
 
-    catch (err) {
+order.tracking_number
 
-        console.log(err);
+);
 
-        document
-        .getElementById("loadingScreen")
-        .style.display = "none";
+// Save payment amount
 
-        alert("Server Error.");
+localStorage.setItem(
 
-    }
+"paymentAmount",
 
-};
+data.total
+
+);
+
+hideLoader(
+
+"checkoutLoader"
+
+);
+
+// Go to payment
+
+window.location.href=
+
+"payment.html";
+
+}
+
+catch(error){
+
+hideLoader(
+
+"checkoutLoader"
+
+);
+
+showError(
+
+error.message
+
+);
+
+}
+
+}
+
+// ==========================================================
+// RESTORE FORM
+// ==========================================================
+
+function restoreCheckout(){
+
+const saved =
+
+JSON.parse(
+
+localStorage.getItem(
+
+"checkoutForm"
+
+)
+
+);
+
+if(!saved) return;
+
+document.getElementById(
+
+"customerName"
+
+).value=
+
+saved.customer_name||"";
+
+document.getElementById(
+
+"phone"
+
+).value=
+
+saved.phone||"";
+
+document.getElementById(
+
+"county"
+
+).value=
+
+saved.county||"";
+
+document.getElementById(
+
+"town"
+
+).value=
+
+saved.town||"";
+
+document.getElementById(
+
+"landmark"
+
+).value=
+
+saved.landmark||"";
+
+}
+
+// ==========================================================
+// SAVE FORM
+// ==========================================================
+
+function saveCheckoutForm(){
+
+const data =
+
+getCheckoutData();
+
+localStorage.setItem(
+
+"checkoutForm",
+
+JSON.stringify(data)
+
+);
+
+}
+
+// ==========================================================
+// PAGE LOAD
+// ==========================================================
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+renderCheckoutItems();
+
+restoreCheckout();
+
+const formInputs =
+
+document.querySelectorAll(
+
+"input, textarea, select"
+
+);
+
+formInputs.forEach(input=>{
+
+input.addEventListener(
+
+"input",
+
+saveCheckoutForm
+
+);
+
+});
+
+const paymentBtn =
+
+document.getElementById(
+
+"continuePayment"
+
+);
+
+if(paymentBtn){
+
+paymentBtn.addEventListener(
+
+"click",
+
+continuePayment
+
+);
+
+}
+
+});

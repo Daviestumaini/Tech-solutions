@@ -1,0 +1,434 @@
+/* ==========================================================
+   RECEIPT LAYOUT
+========================================================== */
+
+.receiptContainer{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:35px;
+
+align-items:start;
+
+margin-bottom:70px;
+
+}
+
+/* ==========================================================
+   RECEIPT CARD
+========================================================== */
+
+.receiptCard{
+
+background:white;
+
+padding:35px;
+
+border-radius:18px;
+
+box-shadow:var(--shadow);
+
+text-align:center;
+
+}
+
+.receiptCard h2{
+
+margin:20px 0 10px;
+
+font-size:28px;
+
+color:var(--dark);
+
+}
+
+.receiptCard p{
+
+color:#666;
+
+margin-bottom:30px;
+
+line-height:1.7;
+
+}
+
+/* ==========================================================
+   RECEIPT ICON
+========================================================== */
+
+.receiptIcon{
+
+font-size:75px;
+
+color:var(--primary);
+
+margin-bottom:10px;
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+.receiptCard .inputGroup{
+
+text-align:left;
+
+margin-bottom:22px;
+
+}
+
+.receiptCard label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-size:15px;
+
+font-weight:600;
+
+}
+
+.receiptCard input{
+
+width:100%;
+
+padding:15px;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+font-size:15px;
+
+transition:.25s;
+
+}
+
+.receiptCard input:focus{
+
+outline:none;
+
+border-color:var(--primary);
+
+box-shadow:0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+/* ==========================================================
+   PAYMENT REMINDER
+========================================================== */
+
+.paymentReminder{
+
+background:white;
+
+padding:30px;
+
+border-radius:18px;
+
+box-shadow:var(--shadow);
+
+position:sticky;
+
+top:100px;
+
+}
+
+.paymentReminder h3{
+
+margin-bottom:25px;
+
+font-size:24px;
+
+}
+
+.reminderRow{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:15px 0;
+
+border-bottom:1px solid var(--border);
+
+}
+
+.reminderRow:last-child{
+
+border-bottom:none;
+
+}
+
+.reminderRow strong{
+
+color:var(--primary);
+
+font-size:18px;
+
+font-weight:700;
+
+}
+/* ==========================================================
+   SUBMIT BUTTON
+========================================================== */
+
+#submitReceiptBtn{
+
+width:100%;
+
+margin-top:10px;
+
+}
+
+/* ==========================================================
+   VALIDATION
+========================================================== */
+
+.inputError{
+
+border:2px solid #ef4444 !important;
+
+background:#fef2f2;
+
+}
+
+.errorMessage{
+
+margin-top:8px;
+
+font-size:13px;
+
+color:#dc2626;
+
+font-weight:600;
+
+}
+
+/* ==========================================================
+   SUCCESS SCREEN
+========================================================== */
+
+.receiptSuccess{
+
+display:none;
+
+width:min(650px,95%);
+
+margin:50px auto;
+
+padding:50px;
+
+background:white;
+
+border-radius:20px;
+
+box-shadow:var(--shadow);
+
+text-align:center;
+
+}
+
+.receiptSuccess i{
+
+font-size:85px;
+
+color:var(--success);
+
+margin-bottom:20px;
+
+}
+
+.receiptSuccess h2{
+
+font-size:30px;
+
+margin-bottom:15px;
+
+}
+
+.receiptSuccess p{
+
+color:#666;
+
+margin-bottom:30px;
+
+line-height:1.7;
+
+}
+
+/* ==========================================================
+   LOADER
+========================================================== */
+
+.receiptLoader{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+flex-direction:column;
+
+background:rgba(255,255,255,.94);
+
+z-index:9999;
+
+}
+
+.receiptLoader p{
+
+margin-top:18px;
+
+font-size:16px;
+
+font-weight:600;
+
+color:#555;
+
+}
+
+/* ==========================================================
+   STATUS MESSAGE
+========================================================== */
+
+.receiptStatus{
+
+margin-top:20px;
+
+padding:15px;
+
+border-radius:12px;
+
+font-size:14px;
+
+font-weight:600;
+
+display:none;
+
+}
+
+.receiptStatus.success{
+
+background:#dcfce7;
+
+color:#15803d;
+
+}
+
+.receiptStatus.error{
+
+background:#fee2e2;
+
+color:#dc2626;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:992px){
+
+.receiptContainer{
+
+grid-template-columns:1fr;
+
+}
+
+.paymentReminder{
+
+position:relative;
+
+top:0;
+
+}
+
+}
+
+@media(max-width:768px){
+
+.receiptCard{
+
+padding:25px;
+
+}
+
+.paymentReminder{
+
+padding:25px;
+
+margin-bottom:90px;
+
+}
+
+.receiptIcon{
+
+font-size:60px;
+
+}
+
+.receiptSuccess{
+
+padding:35px 25px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.receiptCard{
+
+padding:18px;
+
+}
+
+.paymentReminder{
+
+padding:18px;
+
+}
+
+.receiptCard h2{
+
+font-size:24px;
+
+}
+
+.receiptSuccess h2{
+
+font-size:24px;
+
+}
+
+.receiptSuccess i{
+
+font-size:70px;
+
+}
+
+.receiptCard input{
+
+padding:13px;
+
+}
+
+}

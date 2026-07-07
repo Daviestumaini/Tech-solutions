@@ -1,58 +1,313 @@
-"use strict";
+// ==========================================================
+// RECEIPT.JS
+// ==========================================================
 
-// ========================================
-// Gadget Finds - Receipt
-// ========================================
+let currentOrder =
 
-const order = JSON.parse(
-    localStorage.getItem("latest_order")
-);
+load(STORAGE.currentOrder);
 
-const receipt = document.getElementById("receiptInfo");
+// ==========================================================
+// LOAD ORDER DETAILS
+// ==========================================================
 
-if (!order) {
+function loadReceiptPage(){
 
-    receipt.innerHTML = `
-        <h3>No recent order found.</h3>
-        <p>Please complete a purchase first.</p>
-    `;
+if(!currentOrder){
 
-} else {
+window.location.href =
 
-    receipt.innerHTML = `
+"cart.html";
 
-        <h2>✅ Payment Successful</h2>
-
-        <p>
-            <strong>Order ID:</strong><br>
-            ${order.order_id || order.id}
-        </p>
-
-        <p>
-            <strong>Tracking ID:</strong><br>
-            ${order.tracking_id || order.tracking}
-        </p>
-
-        <p>
-            <strong>Payment Status:</strong><br>
-            ${order.payment_status || "Paid"}
-        </p>
-
-        <p>
-            <strong>Shipment Status:</strong><br>
-            ${order.shipment_status || "Processing"}
-        </p>
-
-        <p>
-            <strong>Total Paid:</strong><br>
-            KES ${Number(order.total).toLocaleString()}
-        </p>
-
-        <p>
-            <strong>M-Pesa Code:</strong><br>
-            ${order.mpesa_code}
-        </p>
-
-    `;
+return;
 
 }
+
+const amount =
+
+document.getElementById(
+
+"receiptAmount"
+
+);
+
+const account =
+
+document.getElementById(
+
+"receiptAccount"
+
+);
+
+if(amount){
+
+amount.textContent =
+
+formatKES(
+
+currentOrder.total
+
+);
+
+}
+
+if(account){
+
+account.textContent =
+
+currentOrder.tracking_number;
+
+}
+
+}
+
+// ==========================================================
+// GET FORM DATA
+// ==========================================================
+
+function getReceiptData(){
+
+return{
+
+tracking_number:
+
+currentOrder.tracking_number,
+
+receipt:
+
+document
+
+.getElementById(
+
+"receiptCode"
+
+)
+
+.value
+
+.trim()
+
+.toUpperCase(),
+
+phone:
+
+document
+
+.getElementById(
+
+"receiptPhone"
+
+)
+
+.value
+
+.trim()
+
+};
+
+}
+
+// ==========================================================
+// VALIDATE
+// ==========================================================
+
+function validateReceipt(data){
+
+if(
+
+!data.receipt ||
+
+!data.phone
+
+){
+
+showError(
+
+"Please fill in all fields."
+
+);
+
+return false;
+
+}
+
+return true;
+
+}
+// ==========================================================
+// SUBMIT RECEIPT
+// ==========================================================
+
+async function submitReceipt(){
+
+const data =
+
+getReceiptData();
+
+if(
+
+!validateReceipt(data)
+
+){
+
+return;
+
+}
+
+try{
+
+showLoader(
+
+"receiptLoader"
+
+);
+
+// Verify receipt with backend
+
+const result =
+
+await submitReceipt(
+
+data
+
+);
+
+hideLoader(
+
+"receiptLoader"
+
+);
+
+// Save latest order
+
+save(
+
+STORAGE.currentOrder,
+
+result.order
+
+);
+
+// Save tracking number
+
+save(
+
+STORAGE.trackingNumber,
+
+result.order.tracking_number
+
+);
+
+// Show success
+
+const success =
+
+document.getElementById(
+
+"receiptSuccess"
+
+);
+
+if(success){
+
+success.style.display="block";
+
+}
+
+const form =
+
+document.querySelector(
+
+".receiptContainer"
+
+);
+
+if(form){
+
+form.style.display="none";
+
+}
+
+}
+catch(error){
+
+hideLoader(
+
+"receiptLoader"
+
+);
+
+showError(
+
+error.message
+
+);
+
+}
+
+}
+
+// ==========================================================
+// TRACK BUTTON
+// ==========================================================
+
+function goToTracking(){
+
+window.location.href=
+
+"track.html";
+
+}
+
+// ==========================================================
+// PAGE INIT
+// ==========================================================
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+loadReceiptPage();
+
+const submitBtn =
+
+document.getElementById(
+
+"submitReceiptBtn"
+
+);
+
+if(submitBtn){
+
+submitBtn.addEventListener(
+
+"click",
+
+submitReceipt
+
+);
+
+}
+
+const trackBtn =
+
+document.getElementById(
+
+"trackOrderBtn"
+
+);
+
+if(trackBtn){
+
+trackBtn.addEventListener(
+
+"click",
+
+goToTracking
+
+);
+
+}
+
+});

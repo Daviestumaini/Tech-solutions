@@ -1,0 +1,826 @@
+/* ==========================================================
+   RESET
+========================================================== */
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+
+}
+
+html{
+
+scroll-behavior:smooth;
+
+}
+
+body{
+
+font-family:Arial,Helvetica,sans-serif;
+
+background:#f5f7fb;
+
+color:#222;
+
+line-height:1.5;
+
+overflow-x:hidden;
+
+}
+
+/* ==========================================================
+   VARIABLES
+========================================================== */
+
+:root{
+
+--primary:#2563eb;
+
+--primaryDark:#1d4ed8;
+
+--secondary:#f5f7fb;
+
+--success:#16a34a;
+
+--danger:#dc2626;
+
+--warning:#f59e0b;
+
+--dark:#111827;
+
+--text:#374151;
+
+--border:#e5e7eb;
+
+--white:#ffffff;
+
+--shadow:
+
+0 10px 30px rgba(0,0,0,.08);
+
+}
+
+/* ==========================================================
+   LINKS
+========================================================== */
+
+a{
+
+text-decoration:none;
+
+color:inherit;
+
+}
+
+/* ==========================================================
+   IMAGES
+========================================================== */
+
+img{
+
+max-width:100%;
+
+display:block;
+
+}
+
+/* ==========================================================
+   BUTTONS
+========================================================== */
+
+button{
+
+cursor:pointer;
+
+border:none;
+
+outline:none;
+
+transition:.25s;
+
+font-size:15px;
+
+font-weight:600;
+
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+}
+
+/* ==========================================================
+   NAVBAR
+========================================================== */
+
+nav{
+
+position:sticky;
+
+top:0;
+
+z-index:999;
+
+height:75px;
+
+background:white;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 60px;
+
+box-shadow:
+
+0 2px 15px rgba(0,0,0,.05);
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+font-size:22px;
+
+font-weight:700;
+
+color:var(--dark);
+
+}
+
+.logo img{
+
+width:42px;
+
+height:42px;
+
+object-fit:contain;
+
+}
+
+.navButtons{
+
+display:flex;
+
+align-items:center;
+
+gap:25px;
+
+}
+
+.navButtons a{
+
+font-weight:600;
+
+color:var(--text);
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+transition:.25s;
+
+}
+
+.navButtons a:hover{
+
+color:var(--primary);
+
+}
+
+/* ==========================================================
+   PAGE HEADER
+========================================================== */
+
+.pageHeader{
+
+padding:60px 25px;
+
+text-align:center;
+
+}
+
+.pageHeader h1{
+
+font-size:42px;
+
+margin-bottom:12px;
+
+}
+
+.pageHeader p{
+
+color:#666;
+
+font-size:17px;
+
+max-width:650px;
+
+margin:auto;
+
+}
+
+/* ==========================================================
+   SECTION
+========================================================== */
+
+section{
+
+width:min(1300px,95%);
+
+margin:auto;
+
+}
+
+/* ==========================================================
+   CARDS
+========================================================== */
+
+.summaryCard,
+.paymentCard,
+.receiptCard,
+.trackingCard,
+.deliveryCard{
+
+background:white;
+
+border-radius:18px;
+
+padding:30px;
+
+box-shadow:var(--shadow);
+
+}
+
+.summaryCard h2,
+.paymentCard h2,
+.receiptCard h2,
+.trackingCard h2,
+.deliveryCard h2{
+
+margin-bottom:20px;
+
+font-size:24px;
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+.inputGroup{
+
+margin-bottom:20px;
+
+}
+
+.inputGroup label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-size:14px;
+
+font-weight:600;
+
+}
+
+.inputGroup input,
+.inputGroup textarea,
+.inputGroup select{
+
+width:100%;
+
+padding:14px;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+font-size:15px;
+
+background:white;
+
+transition:.2s;
+
+}
+
+.inputGroup textarea{
+
+resize:none;
+
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus,
+.inputGroup select:focus{
+
+border-color:var(--primary);
+
+outline:none;
+
+}
+/* ==========================================================
+   PRIMARY BUTTONS
+========================================================== */
+
+.primaryBtn,
+.checkoutBtn,
+.loginBtn,
+.registerBtn,
+#continuePayment,
+#verifyPaymentBtn,
+#submitReceiptBtn,
+#trackBtn,
+#shopNowBtn,
+#trackOrderBtn{
+
+width:100%;
+
+padding:15px;
+
+background:var(--primary);
+
+color:white;
+
+border-radius:12px;
+
+font-size:16px;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+.primaryBtn:hover,
+.checkoutBtn:hover,
+.loginBtn:hover,
+.registerBtn:hover,
+#continuePayment:hover,
+#verifyPaymentBtn:hover,
+#submitReceiptBtn:hover,
+#trackBtn:hover,
+#shopNowBtn:hover,
+#trackOrderBtn:hover{
+
+background:var(--primaryDark);
+
+}
+
+.continueBtn{
+
+width:100%;
+
+margin-top:15px;
+
+padding:15px;
+
+background:white;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+font-size:15px;
+
+font-weight:600;
+
+}
+
+.continueBtn:hover{
+
+background:#f4f4f4;
+
+}
+
+/* ==========================================================
+   SUMMARY
+========================================================== */
+
+.summaryRow{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin:16px 0;
+
+font-size:15px;
+
+}
+
+.summaryTotal{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+font-size:22px;
+
+font-weight:bold;
+
+margin-top:20px;
+
+}
+
+hr{
+
+margin:20px 0;
+
+border:none;
+
+border-top:1px solid var(--border);
+
+}
+
+/* ==========================================================
+   EMPTY STATES
+========================================================== */
+
+.emptyCart{
+
+display:none;
+
+text-align:center;
+
+padding:80px 20px;
+
+}
+
+.emptyCart i{
+
+font-size:70px;
+
+color:#cbd5e1;
+
+margin-bottom:20px;
+
+}
+
+.emptyCart h2{
+
+margin-bottom:15px;
+
+}
+
+.emptyCart p{
+
+margin-bottom:25px;
+
+color:#666;
+
+}
+
+/* ==========================================================
+   LOADERS
+========================================================== */
+
+.paymentLoader,
+.receiptLoader{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+right:0;
+
+bottom:0;
+
+background:rgba(255,255,255,.92);
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+flex-direction:column;
+
+z-index:9999;
+
+}
+
+.loader{
+
+width:65px;
+
+height:65px;
+
+border:6px solid #ddd;
+
+border-top:6px solid var(--primary);
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+margin-bottom:20px;
+
+}
+
+@keyframes spin{
+
+to{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/* ==========================================================
+   SUCCESS MESSAGE
+========================================================== */
+
+.paymentSuccess,
+.receiptSuccess{
+
+display:none;
+
+text-align:center;
+
+padding:70px 30px;
+
+background:white;
+
+border-radius:18px;
+
+box-shadow:var(--shadow);
+
+width:min(600px,92%);
+
+margin:40px auto;
+
+}
+
+.paymentSuccess i,
+.receiptSuccess i{
+
+font-size:80px;
+
+color:var(--success);
+
+margin-bottom:20px;
+
+}
+
+.paymentSuccess h2,
+.receiptSuccess h2{
+
+margin-bottom:15px;
+
+}
+
+.paymentSuccess p,
+.receiptSuccess p{
+
+color:#666;
+
+margin-bottom:30px;
+
+}
+
+/* ==========================================================
+   TIMELINE
+========================================================== */
+
+.timeline{
+
+display:flex;
+
+justify-content:space-between;
+
+gap:15px;
+
+flex-wrap:wrap;
+
+margin:40px 0;
+
+}
+
+.timelineStep{
+
+flex:1;
+
+min-width:120px;
+
+text-align:center;
+
+opacity:.4;
+
+transition:.3s;
+
+}
+
+.timelineStep.active{
+
+opacity:1;
+
+}
+
+.circle{
+
+width:70px;
+
+height:70px;
+
+margin:auto;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:var(--primary);
+
+color:white;
+
+font-size:28px;
+
+margin-bottom:15px;
+
+}
+
+/* ==========================================================
+   FOOTER
+========================================================== */
+
+footer{
+
+margin-top:80px;
+
+background:#111827;
+
+color:white;
+
+padding:50px 8% 25px;
+
+}
+
+.footerContainer{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:40px;
+
+}
+
+.footerContainer h2,
+.footerContainer h3{
+
+margin-bottom:15px;
+
+}
+
+.footerContainer a{
+
+display:block;
+
+margin-bottom:10px;
+
+color:#d1d5db;
+
+}
+
+.footerContainer a:hover{
+
+color:white;
+
+}
+
+.copyright{
+
+margin-top:35px;
+
+text-align:center;
+
+font-size:14px;
+
+color:#9ca3af;
+
+}
+
+/* ==========================================================
+   MOBILE NAV
+========================================================== */
+
+.mobileNav{
+
+display:none;
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+
+right:0;
+
+height:70px;
+
+background:white;
+
+box-shadow:0 -3px 15px rgba(0,0,0,.08);
+
+justify-content:space-around;
+
+align-items:center;
+
+z-index:999;
+
+}
+
+.mobileNav a{
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+gap:5px;
+
+font-size:13px;
+
+color:#555;
+
+}
+
+.mobileNav a.active{
+
+color:var(--primary);
+
+}
+
+/* ==========================================================
+   UTILITIES
+========================================================== */
+
+.hidden{
+
+display:none !important;
+
+}
+
+.textCenter{
+
+text-align:center;
+
+}
+
+.mt20{
+
+margin-top:20px;
+
+}
+
+.mt40{
+
+margin-top:40px;
+
+}
+
+.mb20{
+
+margin-bottom:20px;
+
+}
+
+.shadow{
+
+box-shadow:var(--shadow);
+
+}
+
+.rounded{
+
+border-radius:18px;
+
+}

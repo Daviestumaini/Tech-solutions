@@ -1,218 +1,70 @@
-(async () => {
-
-    const {
-
-        data: {
-
-            session
-
-        }
-
-    } = await supabase.auth.getSession();
-
-    if (!session) return;
-
-    const user = session.user;
-
-    localStorage.setItem(
-        "access_token",
-        session.access_token
-    );
-
-    localStorage.setItem(
-        "user_id",
-        user.id
-    );
-
-    localStorage.setItem(
-        "name",
-        user.user_metadata.full_name || "Guest"
-    );
-
-    localStorage.setItem(
-        "email",
-        user.email
-    );
-
-    await fetch(
-        `${API_BASE}/auth/google-profile`,
-        {
-
-            method: "POST",
-
-            headers: {
-
-                "Content-Type": "application/json"
-
-            },
-
-            body: JSON.stringify({
-
-                id: user.id,
-
-                name:
-                user.user_metadata.full_name,
-
-                email:
-                user.email
-
-            })
-
-        }
-
-    );
-
-})();
-const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
-(async()=>{
-
-const {
-
-    data:{
-        user
-    }
-
-}=await supabase.auth.getUser();
-
-if(user){
-
-await fetch(
-
-`${API_BASE}/auth/google-profile`,
-
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-id:user.id,
-
-name:
-user.user_metadata.full_name,
-
-email:user.email
-
-})
-
-}
-
-);
-
-localStorage.setItem(
-
-"user_id",
-
-user.id
-
-);
-
-localStorage.setItem(
-
-"name",
-
-user.user_metadata.full_name
-
-);
-
-localStorage.setItem(
-
-"email",
-
-user.email
-
-);
-
-}
-
-})();
-const API = `${API_BASE}/products`;
+// ==========================================================
+// INDEX.JS
+// ==========================================================
 
 let products = [];
+
 let filteredProducts = [];
 
-let cart =
-JSON.parse(localStorage.getItem("cart")) || [];
-
-// ==========================================
-// LOAD USER
-// ==========================================
-
-const username =
-localStorage.getItem("name");
-
-if(username){
-
-document.getElementById("welcomeUser").innerHTML =
-`Hi, ${username.split(" ")[0]}`;
-
-}
-
-// ==========================================
+// ==========================================================
 // LOAD PRODUCTS
-// ==========================================
+// ==========================================================
 
 async function loadProducts(){
 
 try{
 
-document.getElementById("loadingScreen").style.display="flex";
+showLoader("pageLoader");
 
-const response =
-await fetch(API);
+products = await getProducts();
 
-products =
-await response.json();
-
-filteredProducts =
-products;
+filteredProducts = [...products];
 
 renderProducts();
 
-updateCart();
+hideLoader("pageLoader");
 
-document.getElementById("loadingScreen").style.display="none";
+}
 
-}catch(err){
+catch(error){
 
-console.log(err);
+hideLoader("pageLoader");
 
-document.getElementById("loadingScreen").style.display="none";
-
-alert("Unable to load products.");
+showError(error.message);
 
 }
 
 }
 
-loadProducts();
-
-// ==========================================
+// ==========================================================
 // RENDER PRODUCTS
-// ==========================================
+// ==========================================================
 
 function renderProducts(){
 
-const container =
-document.getElementById("products");
+const grid =
 
-container.innerHTML="";
+document.getElementById(
+
+"productGrid"
+
+);
+
+if(!grid) return;
+
+grid.innerHTML="";
 
 if(filteredProducts.length===0){
 
-container.innerHTML=`
+grid.innerHTML=`
 
-<div class="emptyProducts">
+<div class="noProducts">
 
-<h2>No products found.</h2>
+<h2>
+
+No products found
+
+</h2>
 
 </div>
 
@@ -224,13 +76,19 @@ return;
 
 filteredProducts.forEach(product=>{
 
-container.innerHTML += `
+grid.innerHTML+=`
 
 <div class="productCard">
 
 <img
+
 src="${product.image}"
-alt="${product.name}">
+
+alt="${product.name}"
+
+class="productImage">
+
+<div class="productBody">
 
 <h3>
 
@@ -238,30 +96,29 @@ ${product.name}
 
 </h3>
 
-<div class="rating">
+<p>
 
-⭐ ${product.rating}
-
-</div>
-
-<p class="delivery">
-
-${product.delivery}
+${product.description || ""}
 
 </p>
 
-<h2>
+<div class="price">
 
-KES ${Number(product.price).toLocaleString()}
+KES ${formatKES(product.price)}
 
-</h2>
+</div>
 
 <button
-onclick="addToCart('${product.id}')">
+
+onclick="addProductToCart('${product.id}')"
+
+class="primaryBtn">
 
 Add To Cart
 
 </button>
+
+</div>
 
 </div>
 
@@ -271,58 +128,120 @@ Add To Cart
 
 }
 
-// ==========================================
-// SEARCH
-// ==========================================
+// ==========================================================
+// ADD PRODUCT
+// ==========================================================
 
-document
-.getElementById("searchInput")
-.addEventListener("input",e=>{
+function addProductToCart(id){
 
-const value =
-e.target.value.toLowerCase();
+const product =
 
-filteredProducts =
-products.filter(product=>
+products.find(
 
-product.name
-.toLowerCase()
-.includes(value)
+p=>p.id===id
 
 );
 
-renderProducts();
+if(!product){
+
+return;
+
+}
+
+addToCart(product);
+
+showSuccess(
+
+`${product.name} added to cart.`
+
+);
+
+updateCartBadge();
+
+}
+// ==========================================================
+// SEARCH
+// ==========================================================
+
+function searchProducts(){
+
+const input =
+
+document.getElementById(
+
+"searchInput"
+
+);
+
+if(!input) return;
+
+const search =
+
+input.value
+
+.toLowerCase()
+
+.trim();
+
+filteredProducts =
+
+products.filter(product=>{
+
+return(
+
+product.name
+
+.toLowerCase()
+
+.includes(search)
+
+||
+
+(product.description||"")
+
+.toLowerCase()
+
+.includes(search)
+
+||
+
+(product.category||"")
+
+.toLowerCase()
+
+.includes(search)
+
+);
 
 });
 
-// ==========================================
-// CATEGORIES
-// ==========================================
+renderProducts();
 
-document
-.querySelectorAll(".category")
-.forEach(button=>{
+}
 
-button.onclick=()=>{
+// ==========================================================
+// CATEGORY FILTER
+// ==========================================================
 
-document
-.querySelector(".active")
-.classList.remove("active");
+function filterCategory(category){
 
-button.classList.add("active");
+if(
 
-const category=
-button.dataset.category;
+category==="All"
 
-if(category==="All"){
+){
 
-filteredProducts=
-products;
+filteredProducts=[...products];
 
-}else{
+}
+
+else{
 
 filteredProducts=
-products.filter(product=>
+
+products.filter(
+
+product=>
 
 product.category===category
 
@@ -332,247 +251,140 @@ product.category===category
 
 renderProducts();
 
-};
-
-});
-
-// ==========================================
-// ADD TO CART
-// ==========================================
-
-function addToCart(id){
-
-const product=
-products.find(p=>p.id==id);
-
-const existing=
-cart.find(item=>item.id==id);
-
-if(existing){
-
-existing.quantity++;
-
-}else{
-
-cart.push({
-
-...product,
-
-quantity:1
-
-});
-
 }
 
-localStorage.setItem(
+// ==========================================================
+// CART BADGE
+// ==========================================================
 
-"cart",
+function refreshCartBadge(){
 
-JSON.stringify(cart)
+const badge =
+
+document.getElementById(
+
+"cartBadge"
 
 );
 
-updateCart();
+if(!badge) return;
 
-showToast();
+const cart =
 
-}
-// ==========================================
-// UPDATE CART
-// ==========================================
+load(STORAGE.cart)
 
-function updateCart() {
+|| [];
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+const totalItems =
 
-    document.getElementById("cartCount").innerHTML = cart.length;
+cart.reduce(
 
-    const cartItems =
-        document.getElementById("cartItems");
+(total,item)=>
 
-    cartItems.innerHTML = "";
+total+
 
-    let total = 0;
+item.quantity,
 
-    cart.forEach(item => {
+0
 
-        total += item.price * item.quantity;
+);
 
-        cartItems.innerHTML += `
+badge.textContent=
 
-<div class="cartItem">
+totalItems;
 
-<img
-src="${item.image}"
-alt="${item.name}">
+badge.style.display=
 
-<div class="cartInfo">
+totalItems>0
 
-<h4>${item.name}</h4>
+? "flex"
 
-<p>KES ${Number(item.price).toLocaleString()}</p>
-
-<div class="qtyControls">
-
-<button onclick="decreaseQty('${item.id}')">−</button>
-
-<span>${item.quantity}</span>
-
-<button onclick="increaseQty('${item.id}')">+</button>
-
-</div>
-
-</div>
-
-<button
-class="removeBtn"
-onclick="removeItem('${item.id}')">
-
-<i class="fa-solid fa-trash"></i>
-
-</button>
-
-</div>
-
-`;
-
-    });
-
-    document.getElementById("totalPrice").innerHTML =
-        total.toLocaleString();
+: "none";
 
 }
 
-// ==========================================
-// QUANTITY
-// ==========================================
+// ==========================================================
+// CATEGORY BUTTONS
+// ==========================================================
 
-function increaseQty(id){
+function setupCategoryButtons(){
 
-const item=
-cart.find(p=>p.id==id);
+const buttons =
 
-item.quantity++;
+document.querySelectorAll(
 
-updateCart();
+".categoryBtn"
 
-}
+);
 
-function decreaseQty(id){
+buttons.forEach(button=>{
 
-const item=
-cart.find(p=>p.id==id);
+button.addEventListener(
 
-item.quantity--;
+"click",
 
-if(item.quantity<=0){
+()=>{
 
-cart=
-cart.filter(p=>p.id!=id);
+buttons.forEach(
 
-}
+b=>b.classList.remove("active")
 
-updateCart();
+);
 
-}
+button.classList.add(
 
-function removeItem(id){
+"active"
 
-cart=
-cart.filter(p=>p.id!=id);
+);
 
-updateCart();
+filterCategory(
 
-}
+button.dataset.category
 
-// ==========================================
-// CART DRAWER
-// ==========================================
-
-document.getElementById("cartBtn").onclick=()=>{
-
-document
-.getElementById("drawer")
-.classList.add("open");
-
-};
-
-document.getElementById("mobileCart").onclick=()=>{
-
-document
-.getElementById("drawer")
-.classList.add("open");
-
-};
-
-document.getElementById("closeCart").onclick=()=>{
-
-document
-.getElementById("drawer")
-.classList.remove("open");
-
-};
-
-// ==========================================
-// CHECKOUT
-// ==========================================
-
-document
-.getElementById("checkoutBtn")
-.onclick=()=>{
-
-if(cart.length===0){
-
-alert("Your cart is empty.");
-
-return;
+);
 
 }
 
-window.location.href=
-"checkout.html";
-
-};
-
-// ==========================================
-// TOAST
-// ==========================================
-
-function showToast(){
-
-const toast=
-document.getElementById("toast");
-
-toast.classList.add("show");
-
-setTimeout(()=>{
-
-toast.classList.remove("show");
-
-},2000);
-
-}
-
-// ==========================================
-// HERO BUTTON
-// ==========================================
-
-document
-.getElementById("shopNow")
-.onclick=()=>{
-
-document
-.getElementById("products")
-.scrollIntoView({
-
-behavior:"smooth"
+);
 
 });
 
-};
+}
 
-// ==========================================
-// INITIAL CART
-// ==========================================
+// ==========================================================
+// PAGE INIT
+// ==========================================================
 
-updateCart();
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+loadProducts();
+
+refreshCartBadge();
+
+setupCategoryButtons();
+
+const search =
+
+document.getElementById(
+
+"searchInput"
+
+);
+
+if(search){
+
+search.addEventListener(
+
+"input",
+
+searchProducts
+
+);
+
+}
+
+});
