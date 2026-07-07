@@ -1,267 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login | Tech Solutions</title>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+<title>Login | Gadget Finds</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+rel="stylesheet">
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+
 }
 
 body{
 
-    background:#f5f7fb;
+min-height:100vh;
 
-    display:flex;
+display:flex;
 
-    justify-content:center;
+justify-content:center;
 
-    align-items:center;
+align-items:center;
 
-    min-height:100vh;
+padding:25px;
 
-    padding:20px;
+background:
+linear-gradient(
+135deg,
+#eef4ff,
+#dbeafe
+);
 
 }
 
 .container{
 
-    width:100%;
+width:100%;
+max-width:430px;
 
-    max-width:420px;
+background:#fff;
 
-    background:#fff;
+border-radius:24px;
 
-    border-radius:18px;
+padding:40px;
 
-    padding:35px;
-
-    box-shadow:
-    0 10px 35px rgba(0,0,0,.08);
+box-shadow:
+0 15px 45px rgba(0,0,0,.08);
 
 }
 
 .logo{
 
-    text-align:center;
+text-align:center;
 
-    font-size:2rem;
+font-size:2rem;
 
-    font-weight:700;
+font-weight:700;
 
-    margin-bottom:8px;
+margin-bottom:10px;
 
 }
 
 .logo span{
 
-    color:#2563eb;
+color:#2563eb;
 
 }
 
 .subtitle{
 
-    text-align:center;
+text-align:center;
 
-    color:#666;
+color:#777;
 
-    margin-bottom:30px;
+margin-bottom:35px;
 
 }
 
 .inputGroup{
 
-    margin-bottom:18px;
+margin-bottom:20px;
 
 }
 
 .inputGroup label{
 
-    display:block;
+display:block;
 
-    margin-bottom:8px;
+margin-bottom:8px;
 
-    font-size:14px;
+font-size:.9rem;
 
-    font-weight:600;
+font-weight:600;
 
 }
 
 .inputBox{
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    border:1px solid #ddd;
+border:1px solid #ddd;
 
-    border-radius:12px;
+border-radius:14px;
 
-    overflow:hidden;
+overflow:hidden;
+
+transition:.25s;
+
+}
+
+.inputBox:focus-within{
+
+border-color:#2563eb;
+
+box-shadow:
+0 0 0 3px rgba(37,99,235,.15);
 
 }
 
 .inputBox i{
 
-    width:50px;
+width:55px;
 
-    text-align:center;
+text-align:center;
 
-    color:#777;
+color:#777;
 
 }
 
 .inputBox input{
 
-    flex:1;
+flex:1;
 
-    border:none;
+border:none;
 
-    outline:none;
+outline:none;
 
-    padding:14px;
+padding:15px;
 
-    font-size:15px;
+font-size:15px;
 
 }
 
 .loginBtn{
 
-    width:100%;
+width:100%;
 
-    border:none;
+padding:15px;
 
-    background:#2563eb;
+border:none;
 
-    color:white;
+border-radius:14px;
 
-    padding:15px;
+background:#2563eb;
 
-    border-radius:12px;
+color:#fff;
 
-    font-size:16px;
+font-size:16px;
 
-    cursor:pointer;
+font-weight:600;
 
-    transition:.25s;
+cursor:pointer;
+
+transition:.25s;
 
 }
 
 .loginBtn:hover{
 
-    background:#1d4ed8;
+background:#1d4ed8;
+
+transform:translateY(-2px);
 
 }
 
 .divider{
 
-    display:flex;
+display:flex;
 
-    align-items:center;
+align-items:center;
 
-    margin:25px 0;
+margin:28px 0;
 
 }
 
 .divider::before,
-
 .divider::after{
 
-    content:"";
+content:"";
 
-    flex:1;
+flex:1;
 
-    height:1px;
+height:1px;
 
-    background:#ddd;
+background:#ddd;
 
 }
 
 .divider span{
 
-    margin:0 15px;
+margin:0 15px;
 
-    color:#777;
+font-size:.9rem;
 
-    font-size:14px;
-
-}
-
-.google-btn{
-
-    width:100%;
-
-    height:52px;
-
-    border:1px solid #ddd;
-
-    border-radius:12px;
-
-    background:#fff;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:12px;
-
-    cursor:pointer;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:.25s;
+color:#777;
 
 }
 
-.google-btn:hover{
+.googleBtn{
 
-    background:#f7f7f7;
+width:100%;
+
+height:54px;
+
+border:1px solid #ddd;
+
+border-radius:14px;
+
+background:#fff;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:12px;
+
+cursor:pointer;
+
+font-size:15px;
+
+font-weight:600;
+
+transition:.25s;
 
 }
 
-.google-btn img{
+.googleBtn:hover{
 
-    width:22px;
+background:#f8f8f8;
+
+}
+
+.googleBtn img{
+
+width:22px;
 
 }
 
 .bottomText{
 
-    margin-top:25px;
+margin-top:28px;
 
-    text-align:center;
+text-align:center;
 
-    color:#666;
+color:#666;
 
 }
 
 .bottomText a{
 
-    color:#2563eb;
+text-decoration:none;
 
-    text-decoration:none;
+color:#2563eb;
 
-    font-weight:600;
+font-weight:600;
 
 }
 
 .bottomText a:hover{
 
-    text-decoration:underline;
+text-decoration:underline;
+
+}
+
+@media(max-width:500px){
+
+.container{
+
+padding:30px 24px;
+
+}
 
 }
 
@@ -287,7 +327,7 @@ Sign in to continue shopping.
 
 <div class="inputGroup">
 
-<label>Email</label>
+<label>Email Address</label>
 
 <div class="inputBox">
 
@@ -335,7 +375,7 @@ Login
 
 <button
 id="googleLoginBtn"
-class="google-btn">
+class="googleBtn">
 
 <img
 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -358,13 +398,13 @@ Register
 </p>
 
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="Js/config.js"></script>
 
 <script>
-
-// ==========================================
-// SUPABASE CLIENT
+    // ==========================================
+// CREATE SUPABASE CLIENT
 // ==========================================
 
 const supabase = window.supabase.createClient(
@@ -376,7 +416,7 @@ const supabase = window.supabase.createClient(
 // EMAIL LOGIN
 // ==========================================
 
-async function login() {
+async function login(){
 
     const email =
         document.getElementById("email").value.trim();
@@ -384,15 +424,15 @@ async function login() {
     const password =
         document.getElementById("password").value;
 
-    if (!email || !password) {
+    if(!email || !password){
 
-        alert("Please fill in all fields.");
+        alert("Please enter your email and password.");
 
         return;
 
     }
 
-    try {
+    try{
 
         const response = await fetch(
 
@@ -400,15 +440,13 @@ async function login() {
 
             {
 
-                method: "POST",
+                method:"POST",
 
-                headers: {
-
-                    "Content-Type": "application/json"
-
+                headers:{
+                    "Content-Type":"application/json"
                 },
 
-                body: JSON.stringify({
+                body:JSON.stringify({
 
                     email,
                     password
@@ -419,77 +457,64 @@ async function login() {
 
         );
 
-        const result = await response.json();
+        const result =
+        await response.json();
 
-        if (!response.ok) {
+        if(!response.ok){
 
-            alert(result.message || "Login failed.");
+            alert(
+                result.message ||
+                "Login failed."
+            );
 
             return;
 
         }
 
         localStorage.setItem(
-
             "user_id",
-
             result.user.id
-
         );
 
         localStorage.setItem(
-
             "name",
-
             result.user.name
-
         );
 
         localStorage.setItem(
-
             "email",
-
             result.user.email
-
         );
 
         localStorage.setItem(
-
             "role",
-
             result.user.role
-
         );
 
-        if (result.session) {
+        if(result.session){
 
             localStorage.setItem(
-
                 "access_token",
-
                 result.session.access_token
-
             );
 
             localStorage.setItem(
-
                 "refresh_token",
-
                 result.session.refresh_token
-
             );
 
         }
 
-        window.location.href = "index.html";
+        window.location.href =
+        "index.html";
 
     }
 
-    catch (err) {
+    catch(err){
 
         console.error(err);
 
-        alert("Server connection failed.");
+        alert("Unable to connect to the server.");
 
     }
 
@@ -498,52 +523,162 @@ async function login() {
 // ==========================================
 // GOOGLE LOGIN
 // ==========================================
-document.addEventListener("DOMContentLoaded", () => {
 
-    const googleBtn =
-        document.getElementById("googleRegisterBtn");
+async function googleLogin(){
 
-    googleBtn.addEventListener("click", async () => {
+    try{
 
-        try {
+        const { error } =
+        await supabase.auth.signInWithOAuth({
 
-            const { error } =
-            await supabase.auth.signInWithOAuth({
+            provider:"google",
 
-                provider: "google",
+            options:{
 
-                options: {
-
-                    redirectTo:
-                        window.location.origin + "/index.html"
-
-                }
-
-            });
-
-            if (error) {
-
-                console.error(error);
-
-                alert(error.message);
+                redirectTo:
+                window.location.origin +
+                "/index.html"
 
             }
 
-        }
+        });
 
-        catch(err){
+        if(error){
 
-            console.error(err);
-
-            alert("Google Sign-In failed.");
+            alert(error.message);
 
         }
 
-    });
+    }
 
-});
+    catch(err){
+
+        console.error(err);
+
+        alert("Google login failed.");
+
+    }
+
+}
+
+document
+.getElementById("googleLoginBtn")
+.addEventListener(
+    "click",
+    googleLogin
+);
+
+// ==========================================
+// HANDLE GOOGLE REDIRECT
+// ==========================================
+
+(async()=>{
+
+    const {
+
+        data:{ session }
+
+    } = await supabase.auth.getSession();
+
+    if(!session){
+
+        return;
+
+    }
+
+    const user = session.user;
+
+    try{
+
+        await fetch(
+
+            `${API_BASE}/auth/google-profile`,
+
+            {
+
+                method:"POST",
+
+                headers:{
+
+                    "Content-Type":"application/json"
+
+                },
+
+                body:JSON.stringify({
+
+                    id:user.id,
+
+                    email:user.email,
+
+                    name:
+                    user.user_metadata.full_name ||
+                    user.user_metadata.name ||
+                    "Google User"
+
+                })
+
+            }
+
+        );
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
+
+    localStorage.setItem(
+        "user_id",
+        user.id
+    );
+
+    localStorage.setItem(
+        "name",
+        user.user_metadata.full_name ||
+        "Google User"
+    );
+
+    localStorage.setItem(
+        "email",
+        user.email
+    );
+
+    localStorage.setItem(
+        "access_token",
+        session.access_token
+    );
+
+    window.location.href =
+    "index.html";
+
+})();
+
+// ==========================================
+// ENTER KEY SUPPORT
+// ==========================================
+
+document
+.getElementById("password")
+.addEventListener(
+
+    "keypress",
+
+    function(e){
+
+        if(e.key==="Enter"){
+
+            login();
+
+        }
+
+    }
+
+);
 
 </script>
 
 </body>
+
 </html>
