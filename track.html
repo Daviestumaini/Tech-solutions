@@ -1,148 +1,603 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Track Order | Gadget Finds</title>
+<title>
 
-<style>
+Track Order | Tech Solutions
 
-body{
+</title>
 
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f5f5;
-margin:0;
+<link
+rel="icon"
+href="assets/logo/favicon.png">
 
-}
+<link
+rel="stylesheet"
+href="css/global.css">
 
-.container{
+<link
+rel="stylesheet"
+href="css/track.css">
 
-max-width:700px;
-margin:50px auto;
-background:white;
-padding:30px;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,.1);
+<link
+rel="stylesheet"
+href="css/mobile.css">
 
-}
-
-input{
-
-width:100%;
-padding:12px;
-margin:15px 0;
-border-radius:8px;
-border:1px solid #ccc;
-
-}
-
-button{
-
-width:100%;
-padding:14px;
-border:none;
-background:#2563eb;
-color:white;
-font-size:16px;
-border-radius:8px;
-cursor:pointer;
-
-}
-
-.card{
-
-margin-top:30px;
-padding:20px;
-background:#f8fafc;
-border-radius:8px;
-
-}
-
-.status{
-
-font-weight:bold;
-
-}
-
-</style>
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div class="container">
+<!-- ========================= -->
+<!-- NAVBAR -->
+<!-- ========================= -->
 
-<h1>Track Your Order</h1>
+<nav>
+
+<a
+href="index.html"
+class="logo">
+
+<img
+src="assets/logo/logo.png"
+alt="Logo">
+
+<span>
+
+Tech Solutions
+
+</span>
+
+</a>
+
+<div class="navButtons">
+
+<a href="index.html">
+
+<i class="fa-solid fa-house"></i>
+
+Home
+
+</a>
+
+<a href="cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Cart
+
+</a>
+
+</div>
+
+</nav>
+
+<!-- ========================= -->
+<!-- HEADER -->
+<!-- ========================= -->
+
+<section class="pageHeader">
+
+<h1>
+
+Track Your Order
+
+</h1>
+
+<p>
+
+Enter your Tracking Number or M-Pesa Receipt Code.
+
+</p>
+
+</section>
+
+<!-- ========================= -->
+<!-- SEARCH -->
+<!-- ========================= -->
+
+<section class="trackingSearch">
+
+<div class="searchCard">
+
+<label>
+
+Tracking Number / M-Pesa Code
+
+</label>
 
 <input
-id="trackingInput"
-placeholder="Enter Tracking ID">
 
-<button id="trackBtn">
+type="text"
+
+id="trackingInput"
+
+placeholder="TS-000001 or QJD8A6P4KX">
+
+<button
+id="trackBtn">
 
 Track Order
 
 </button>
 
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- ORDER DETAILS -->
+<!-- ========================= -->
+
+<section
+id="trackingResult"
+class="trackingResult">
+
+<div class="trackingCard">
+
+<h2>
+
+Order Information
+
+</h2>
+
+<div class="orderRow">
+
+<span>
+
+Tracking Number
+
+</span>
+
+<strong
+id="trackingNumber">
+
+-
+
+</strong>
+
+</div>
+
+<div class="orderRow">
+
+<span>
+
+Customer
+
+</span>
+
+<strong
+id="customerName">
+
+-
+
+</strong>
+
+</div>
+
+<div class="orderRow">
+
+<span>
+
+Order Date
+
+</span>
+
+<strong
+id="orderDate">
+
+-
+
+</strong>
+
+</div>
+
+<div class="orderRow">
+
+<span>
+
+Payment Status
+
+</span>
+
+<strong
+id="paymentStatus">
+
+Pending
+
+</strong>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- TIMELINE -->
+<!-- ========================= -->
+
+<div class="timeline">
+
 <div
-id="result"
-class="card"
-style="display:none;">
+id="step1"
+class="timelineStep active">
 
-<h2 id="trackingID"></h2>
+<div class="circle">
+
+<i class="fa-solid fa-money-bill-wave"></i>
+
+</div>
 
 <p>
 
-Payment Status:
-
-<span
-id="paymentStatus"
-class="status">
-
-</span>
+Payment Received
 
 </p>
 
+</div>
+
+<div
+id="step2"
+class="timelineStep">
+
+<div class="circle">
+
+<i class="fa-solid fa-box"></i>
+
+</div>
+
 <p>
 
-Shipment Status:
-
-<span
-id="shipmentStatus"
-class="status">
-
-</span>
+Preparing Order
 
 </p>
 
+</div>
+
+<div
+id="step3"
+class="timelineStep">
+
+<div class="circle">
+
+<i class="fa-solid fa-truck"></i>
+
+</div>
+
 <p>
 
-Amount:
-
-KES
-
-<span id="amount"></span>
+In Transit
 
 </p>
 
+</div>
+
+<div
+id="step4"
+class="timelineStep">
+
+<div class="circle">
+
+<i class="fa-solid fa-location-dot"></i>
+
+</div>
+
 <p>
 
-Customer:
+Out For Delivery
 
-<span id="customerEmail"></span>
+</p>
+
+</div>
+
+<div
+id="step5"
+class="timelineStep">
+
+<div class="circle">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<p>
+
+Delivered
 
 </p>
 
 </div>
 
 </div>
-<script src="Js/config.js"></script>
-<script src="Js/track.js"></script>
+
+</section>
+<!-- ========================= -->
+<!-- DELIVERY DETAILS -->
+<!-- ========================= -->
+
+<section
+id="deliveryCard"
+class="deliveryCard">
+
+<h2>
+
+Delivery Information
+
+</h2>
+
+<div class="deliveryRow">
+
+<span>
+
+County
+
+</span>
+
+<strong id="deliveryCounty">
+
+-
+
+</strong>
+
+</div>
+
+<div class="deliveryRow">
+
+<span>
+
+Town
+
+</span>
+
+<strong id="deliveryTown">
+
+-
+
+</strong>
+
+</div>
+
+<div class="deliveryRow">
+
+<span>
+
+Landmark
+
+</span>
+
+<strong id="deliveryLandmark">
+
+-
+
+</strong>
+
+</div>
+
+<div class="deliveryRow">
+
+<span>
+
+Estimated Delivery
+
+</span>
+
+<strong id="estimatedDelivery">
+
+-
+
+</strong>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- ORDER ITEMS -->
+<!-- ========================= -->
+
+<section class="orderedProducts">
+
+<h2>
+
+Ordered Products
+
+</h2>
+
+<div
+id="orderedItems">
+
+<!-- Loaded by JS -->
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- FOOTER -->
+<!-- ========================= -->
+
+<footer>
+
+<div class="footerContainer">
+
+<div>
+
+<h2>
+
+Tech Solutions
+
+</h2>
+
+<p>
+
+Fast. Reliable. Affordable.
+
+</p>
+
+</div>
+
+<div>
+
+<h3>
+
+Quick Links
+
+</h3>
+
+<a href="index.html">
+
+Home
+
+</a>
+
+<a href="cart.html">
+
+Cart
+
+</a>
+
+<a href="checkout.html">
+
+Checkout
+
+</a>
+
+</div>
+
+<div>
+
+<h3>
+
+Support
+
+</h3>
+
+<p>
+
+support@techsolutions.co.ke
+
+</p>
+
+<p>
+
++254 700 000 000
+
+</p>
+
+</div>
+
+</div>
+
+<div class="copyright">
+
+© 2026 Tech Solutions
+
+</div>
+
+</footer>
+
+<!-- ========================= -->
+<!-- MOBILE NAV -->
+<!-- ========================= -->
+
+<div class="mobileNav">
+
+<a href="index.html">
+
+<i class="fa-solid fa-house"></i>
+
+<span>
+
+Home
+
+</span>
+
+</a>
+
+<a href="cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+<span>
+
+Cart
+
+</span>
+
+</a>
+
+<a
+href="track.html"
+class="active">
+
+<i class="fa-solid fa-truck-fast"></i>
+
+<span>
+
+Track
+
+</span>
+
+</a>
+
+</div>
+
+<!-- ========================= -->
+<!-- SCRIPTS -->
+<!-- ========================= -->
+
+<script src="js/config.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/track.js"></script>
+
+<script>
+
+document
+
+.getElementById("trackBtn")
+
+.addEventListener(
+
+"click",
+
+trackOrder
+
+);
+
+document
+
+.getElementById("trackingInput")
+
+.addEventListener(
+
+"keypress",
+
+function(e){
+
+if(e.key==="Enter"){
+
+trackOrder();
+
+}
+
+}
+
+);
+
+</script>
 
 </body>
 

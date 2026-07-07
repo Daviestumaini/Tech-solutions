@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -9,63 +10,248 @@
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Checkout | Gadget Finds</title>
+<title>
+
+Checkout | Tech Solutions
+
+</title>
+
+<link
+rel="icon"
+href="assets/logo/favicon.png">
 
 <link
 rel="stylesheet"
-href="CSS/checkout.css">
+href="css/global.css">
 
 <link
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-rel="stylesheet">
+rel="stylesheet"
+href="css/checkout.css">
+
+<link
+rel="stylesheet"
+href="css/mobile.css">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- ===========================
-HEADER
-=========================== -->
+<!-- ========================= -->
+<!-- NAVBAR -->
+<!-- ========================= -->
 
-<header>
+<nav>
 
-<a href="index.html" class="backBtn">
+<a
+href="index.html"
+class="logo">
 
-<i class="fa-solid fa-arrow-left"></i>
+<img
+src="assets/logo/logo.png"
+alt="Logo">
 
-Continue Shopping
+<span>
+
+Tech Solutions
+
+</span>
 
 </a>
 
+<div class="navButtons">
+
+<a href="cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Cart
+
+</a>
+
+<a href="track.html">
+
+<i class="fa-solid fa-truck-fast"></i>
+
+Track
+
+</a>
+
+</div>
+
+</nav>
+
+<!-- ========================= -->
+<!-- HEADER -->
+<!-- ========================= -->
+
+<section class="pageHeader">
+
 <h1>
 
-Secure Checkout
+Checkout
 
 </h1>
 
-</header>
+<p>
 
-<!-- ===========================
-MAIN
-=========================== -->
+Enter your delivery details below.
 
-<div class="checkoutContainer">
+</p>
 
-<!-- ===========================
-LEFT SIDE
-=========================== -->
+</section>
 
-<div class="checkoutLeft">
+<!-- ========================= -->
+<!-- CHECKOUT -->
+<!-- ========================= -->
 
-<div class="card">
+<section class="checkoutContainer">
+
+<div class="checkoutForm">
 
 <h2>
 
-Order Summary
+Delivery Information
 
 </h2>
 
-<div id="orderItems">
+<div class="inputGroup">
+
+<label>
+
+Full Name
+
+</label>
+
+<input
+type="text"
+id="customerName"
+placeholder="John Doe">
+
+</div>
+
+<div class="inputGroup">
+
+<label>
+
+Phone Number
+
+</label>
+
+<input
+type="tel"
+id="customerPhone"
+placeholder="07XXXXXXXX">
+
+</div>
+
+<div class="inputGroup">
+
+<label>
+
+Email (Optional)
+
+</label>
+
+<input
+type="email"
+id="customerEmail"
+placeholder="example@email.com">
+
+</div>
+
+<div class="inputGroup">
+
+<label>
+
+County
+
+</label>
+
+<select id="county">
+
+<option value="">
+
+Select County
+
+</option>
+
+<option>Nairobi</option>
+
+<option>Kiambu</option>
+
+<option>Nakuru</option>
+
+<option>Mombasa</option>
+
+<option>Kisumu</option>
+
+<option>Machakos</option>
+
+<option>Uasin Gishu</option>
+
+<option>Nyeri</option>
+
+</select>
+
+</div>
+
+<div class="inputGroup">
+
+<label>
+
+Town / Estate
+
+</label>
+
+<input
+type="text"
+id="town"
+placeholder="Westlands">
+
+</div>
+
+<div class="inputGroup">
+
+<label>
+
+Nearest Landmark
+
+</label>
+
+<textarea
+
+id="landmark"
+
+rows="4"
+
+placeholder="Near ABC Mall...">
+
+</textarea>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- ORDER SUMMARY -->
+<!-- ========================= -->
+
+<div class="summaryCard">
+
+<h2>
+
+Your Order
+
+</h2>
+
+<div
+id="checkoutItems">
+
+<!-- JS -->
 
 </div>
 
@@ -73,193 +259,263 @@ Order Summary
 
 <div class="summaryRow">
 
-<span>Total</span>
+<span>
 
-<strong>
+Items
 
-KES
-<span id="totalPrice">
+</span>
+
+<span
+id="checkoutItemsCount">
 
 0
 
 </span>
 
-</strong>
+</div>
+
+<div class="summaryRow">
+
+<span>
+
+Subtotal
+
+</span>
+
+<span>
+
+KES
+
+<span
+id="checkoutSubtotal">
+
+0
+
+</span>
+
+</span>
 
 </div>
 
+<div class="summaryRow">
+
+<span>
+
+Delivery
+
+</span>
+
+<span>
+
+Calculated Later
+
+</span>
+
 </div>
 
-<div class="card">
+<hr>
+
+<div class="summaryTotal">
+
+<span>
+
+Total
+
+</span>
+
+<span>
+
+KES
+
+<span
+id="checkoutTotal">
+
+0
+
+</span>
+
+</span>
+
+</div>
+
+<button
+id="continuePayment">
+
+Continue To Payment
+
+</button>
+
+</div>
+
+</section>
+<!-- ========================= -->
+<!-- FOOTER -->
+<!-- ========================= -->
+
+<footer>
+
+<div class="footerContainer">
+
+<div class="footerBrand">
 
 <h2>
 
-Delivery Details
-
-</h2>
-
-<input
-type="email"
-id="customerEmail"
-placeholder="Email"
-readonly>
-
-</div>
-
-</div>
-
-<!-- ===========================
-RIGHT SIDE
-=========================== -->
-
-<div class="checkoutRight">
-
-<div class="card paymentCard">
-
-<h2>
-
-🇰🇪 Pay via M-Pesa
+Tech Solutions
 
 </h2>
 
 <p>
 
-Use
-<b>Send Money</b>
-to:
+Premium electronics delivered safely across Kenya.
 
 </p>
 
-<div class="businessCard">
+</div>
+
+<div class="footerLinks">
 
 <h3>
 
-Gadget Finds
+Quick Links
 
 </h3>
 
-<h1
-id="businessNumber">
+<a href="index.html">
 
-0704402183
+Home
 
-</h1>
+</a>
 
-<button
-id="copyBtn">
+<a href="cart.html">
 
-Copy Number
+Cart
 
-</button>
+</a>
+
+<a href="payment.html">
+
+Payment
+
+</a>
+
+<a href="track.html">
+
+Track Order
+
+</a>
 
 </div>
 
-<p class="steps">
+<div class="footerSupport">
 
-1. Open M-Pesa<br>
+<h3>
 
-2. Select Send Money<br>
+Support
 
-3. Send the exact amount<br>
+</h3>
 
-4. Return here
+<p>
+
+support@techsolutions.co.ke
 
 </p>
 
-<input
-type="tel"
-id="paymentPhone"
-placeholder="Phone used to pay">
+<p>
 
-<input
-type="text"
-id="mpesaCode"
-placeholder="M-Pesa Transaction Code">
++254 700 000 000
 
-<button
-id="checkoutBtn">
-
-Place Order
-
-</button>
+</p>
 
 </div>
 
 </div>
 
-</div>
+<div class="copyright">
 
-<div class="securityNotice">
-
-    <i class="fa-solid fa-shield-halved"></i>
-
-    <span>
-
-        Your payment is verified manually by the Gadget Finds team.
-        You will receive email updates after verification.
-
-    </span>
+© 2026 Tech Solutions. All Rights Reserved.
 
 </div>
-
-<div class="helpCard">
-
-    <h3>
-
-        Need Help?
-
-    </h3>
-
-    <p>
-
-        If you've already paid but encounter any issues,
-        contact Gadget Finds support.
-
-    </p>
-
-    <p>
-
-        <i class="fa-solid fa-phone"></i>
-
-        0704402183
-
-    </p>
-
-    <p>
-
-        <i class="fa-solid fa-envelope"></i>
-
-        support@gadgetfinds.co.ke
-
-    </p>
-
-</div>
-
-<div
-id="loadingScreen"
-class="loadingScreen">
-
-    <div class="loader"></div>
-
-    <p>
-
-        Creating your order...
-
-    </p>
-
-</div>
-
-<footer>
-
-    <p>
-
-        © 2026 Gadget Finds
-
-    </p>
 
 </footer>
 
-<script src="Js/checkout.js"></script>
+<!-- ========================= -->
+<!-- MOBILE NAVIGATION -->
+<!-- ========================= -->
+
+<div class="mobileNav">
+
+<a
+href="index.html">
+
+<i class="fa-solid fa-house"></i>
+
+<span>
+
+Home
+
+</span>
+
+</a>
+
+<a
+href="cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+<span>
+
+Cart
+
+</span>
+
+</a>
+
+<a
+href="track.html">
+
+<i class="fa-solid fa-truck-fast"></i>
+
+<span>
+
+Track
+
+</span>
+
+</a>
+
+</div>
+
+<!-- ========================= -->
+<!-- SCRIPTS -->
+<!-- ========================= -->
+
+<script src="js/config.js"></script>
+
+<script src="js/api.js"></script>
+
+<script src="js/cart.js"></script>
+
+<script src="js/checkout.js"></script>
+
+<script>
+
+document
+
+.getElementById("continuePayment")
+
+.addEventListener(
+
+"click",
+
+()=>{
+
+window.location.href="payment.html";
+
+}
+
+);
+
+</script>
 
 </body>
 

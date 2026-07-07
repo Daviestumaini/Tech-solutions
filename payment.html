@@ -12,7 +12,7 @@ content="width=device-width, initial-scale=1.0">
 
 <title>
 
-Submit Receipt | Tech Solutions
+Payment | Tech Solutions
 
 </title>
 
@@ -26,7 +26,7 @@ href="css/global.css">
 
 <link
 rel="stylesheet"
-href="css/receipt.css">
+href="css/payment.css">
 
 <link
 rel="stylesheet"
@@ -62,49 +62,125 @@ Tech Solutions
 
 </a>
 
+<div class="navButtons">
+
+<a href="cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Cart
+
+</a>
+
+<a href="track.html">
+
+<i class="fa-solid fa-truck-fast"></i>
+
+Track
+
+</a>
+
+</div>
+
 </nav>
 
 <!-- ========================= -->
-<!-- HEADER -->
+<!-- PAGE HEADER -->
 <!-- ========================= -->
 
 <section class="pageHeader">
 
 <h1>
 
-Submit Payment Receipt
+Complete Payment
 
 </h1>
 
 <p>
 
-Enter your M-Pesa confirmation code below.
+Finish your M-Pesa payment to confirm your order.
 
 </p>
 
 </section>
 
 <!-- ========================= -->
-<!-- RECEIPT CARD -->
+<!-- PAYMENT -->
 <!-- ========================= -->
 
-<section class="receiptContainer">
+<section class="paymentContainer">
 
-<div class="receiptCard">
-
-<i class="fa-solid fa-receipt receiptIcon"></i>
+<div class="paymentCard">
 
 <h2>
 
-Payment Confirmation
+M-Pesa Payment
 
 </h2>
 
-<p>
+<div class="paymentInfo">
 
-After completing your M-Pesa payment,
-enter the confirmation code exactly
-as received.
+<div class="infoRow">
+
+<span>
+
+Paybill
+
+</span>
+
+<strong
+id="paybillNumber">
+
+123456
+
+</strong>
+
+</div>
+
+<div class="infoRow">
+
+<span>
+
+Account Number
+
+</span>
+
+<strong
+id="accountNumber">
+
+ORDER-0001
+
+</strong>
+
+</div>
+
+<div class="infoRow">
+
+<span>
+
+Amount
+
+</span>
+
+<strong>
+
+KES
+
+<span id="paymentAmount">
+
+0
+
+</span>
+
+</strong>
+
+</div>
+
+</div>
+
+<p class="instructions">
+
+Open your M-Pesa app, make the payment using the details above, then enter the confirmation code below.
 
 </p>
 
@@ -122,104 +198,79 @@ type="text"
 
 id="receiptCode"
 
-placeholder="Example: QJD8A6P4KX"
+placeholder="e.g. QJD8A6P4KX"
 
 autocomplete="off">
 
 </div>
 
-<div class="inputGroup">
-
-<label>
-
-Phone Number Used
-
-</label>
-
-<input
-
-type="tel"
-
-id="receiptPhone"
-
-placeholder="07XXXXXXXX">
-
-</div>
-
 <button
-id="submitReceiptBtn">
+id="verifyPaymentBtn">
 
-Submit Receipt
+Verify Payment
 
 </button>
 
 </div>
 
 <!-- ========================= -->
-<!-- PAYMENT REMINDER -->
+<!-- ORDER SUMMARY -->
 <!-- ========================= -->
 
-<div class="paymentReminder">
+<div class="summaryCard">
 
-<h3>
+<h2>
 
-Payment Details
+Order Summary
 
-</h3>
+</h2>
 
-<div class="reminderRow">
+<div
+id="paymentItems">
 
-<span>
-
-Paybill
-
-</span>
-
-<strong>
-
-247247
-
-</strong>
+<!-- Loaded by JS -->
 
 </div>
 
-<div class="reminderRow">
+<hr>
+
+<div class="summaryRow">
 
 <span>
 
-Account
+Items
 
 </span>
-
-<strong
-id="receiptAccount">
-
-ORDER-00001
-
-</strong>
-
-</div>
-
-<div class="reminderRow">
-
-<span>
-
-Amount
-
-</span>
-
-<strong>
-
-KES
 
 <span
-id="receiptAmount">
+id="paymentItemsCount">
 
 0
 
 </span>
 
-</strong>
+</div>
+
+<div class="summaryTotal">
+
+<span>
+
+Total
+
+</span>
+
+<span>
+
+KES
+
+<span
+id="paymentTotal">
+
+0
+
+</span>
+
+</span>
 
 </div>
 
@@ -228,12 +279,12 @@ id="receiptAmount">
 </section>
 
 <!-- ========================= -->
-<!-- LOADER -->
+<!-- LOADING OVERLAY -->
 <!-- ========================= -->
 
 <div
-id="receiptLoader"
-class="receiptLoader">
+id="paymentLoader"
+class="paymentLoader">
 
 <div class="loader"></div>
 
@@ -245,26 +296,24 @@ Verifying your payment...
 
 </div>
 <!-- ========================= -->
-<!-- SUCCESS MESSAGE -->
+<!-- PAYMENT SUCCESS -->
 <!-- ========================= -->
 
 <div
-id="receiptSuccess"
-class="receiptSuccess">
+id="paymentSuccess"
+class="paymentSuccess">
 
 <i class="fa-solid fa-circle-check"></i>
 
 <h2>
 
-Payment Confirmed
+Payment Verified
 
 </h2>
 
 <p>
 
-Thank you!
-
-Your payment has been verified successfully.
+Your order has been received successfully.
 
 </p>
 
@@ -285,7 +334,7 @@ Track My Order
 
 <div class="footerContainer">
 
-<div>
+<div class="footerBrand">
 
 <h2>
 
@@ -295,13 +344,13 @@ Tech Solutions
 
 <p>
 
-Reliable electronics delivered nationwide.
+Trusted electronics store in Kenya.
 
 </p>
 
 </div>
 
-<div>
+<div class="footerLinks">
 
 <h3>
 
@@ -335,7 +384,7 @@ Track Order
 
 </div>
 
-<div>
+<div class="footerSupport">
 
 <h3>
 
@@ -361,7 +410,7 @@ support@techsolutions.co.ke
 
 <div class="copyright">
 
-© 2026 Tech Solutions
+© 2026 Tech Solutions. All Rights Reserved.
 
 </div>
 
@@ -412,28 +461,16 @@ Track
 </div>
 
 <!-- ========================= -->
-<!-- JAVASCRIPT -->
+<!-- SCRIPTS -->
 <!-- ========================= -->
 
 <script src="js/config.js"></script>
 
 <script src="js/api.js"></script>
 
-<script src="js/receipt.js"></script>
+<script src="js/payment.js"></script>
 
 <script>
-
-document
-
-.getElementById("submitReceiptBtn")
-
-.addEventListener(
-
-"click",
-
-submitReceipt
-
-);
 
 document
 
@@ -453,21 +490,13 @@ window.location.href="track.html";
 
 document
 
-.getElementById("receiptCode")
+.getElementById("verifyPaymentBtn")
 
 .addEventListener(
 
-"keypress",
+"click",
 
-function(e){
-
-if(e.key==="Enter"){
-
-submitReceipt();
-
-}
-
-}
+verifyPayment
 
 );
 
