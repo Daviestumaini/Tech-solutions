@@ -31,25 +31,6 @@ nav{
     column-gap:40px;
 }
 
-/* LOGO */
-
-.logo a{
-
-    text-decoration:none;
-
-    font-size:2rem;
-
-    font-weight:700;
-
-    color:#111;
-
-}
-
-.logo span{
-
-    color:#2563eb;
-
-}
 
 /* SEARCH */
 
