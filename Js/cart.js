@@ -163,7 +163,22 @@ case "decrease": decreaseQuantity(id); break;
 case "remove": removeFromCart(id); break;
 }
 });
+function updateCartUI(items) {
+  const cartContainer = document.querySelector('.cartContainer');
+  const emptyCartSection = document.getElementById('emptyCart');
 
+  if (!items || items.length === 0) {
+    // Hide order grid, show empty messaging
+    cartContainer.style.display = 'none';
+    emptyCartSection.style.display = 'flex';
+  } else {
+    // Show order grid, hide empty messaging
+    cartContainer.style.display = 'grid';
+    emptyCartSection.style.display = 'none';
+    
+    // ... rest of your code rendering items into #cartItems
+  }
+}
 function proceedToCheckout() {
 if (cart.length === 0) {
 alert("Your cart is empty.");

@@ -1,117 +1,486 @@
 // ==========================================================
 // INDEX.JS
+// PART 1
 // ==========================================================
 
 let products = [];
 let filteredProducts = [];
 
-// Safely handle missing local images gracefully
-window.imageFallback = function(imgElement) {
-    imgElement.onerror = null; // Prevents infinite loops if fallback is missing
-    imgElement.src = "assets/images/no-image.png"; 
+// ==========================================================
+// IMAGE FALLBACK
+// ==========================================================
+
+window.imageFallback = function (img) {
+
+    img.onerror = null;
+
+    img.src = "assets/images/no-image.png";
+
 };
 
-async function loadProducts(){
+// ==========================================================
+// LOAD PRODUCTS
+// ==========================================================
+
+async function loadProducts() {
+
     try {
+
         showLoader("loadingScreen");
-        products = await getProducts();
+
+        const response = await getProducts();
+
+        products = Array.isArray(response)
+            ? response
+            : [];
+
         filteredProducts = [...products];
+
         renderProducts();
-        hideLoader("loadingScreen");
+
     }
-    catch(error){
-        hideLoader("loadingScreen");
-        showError(error.message);
+
+    catch (error) {
+
+        console.error(error);
+
+        showError(
+
+            error.message ||
+
+            "Unable to load products."
+
+        );
+
     }
+
+    finally {
+
+        hideLoader("loadingScreen");
+
+    }
+
 }
 
-function renderProducts(){
-    const grid = document.getElementById("products");
-    if(!grid) return;
+// ==========================================================
+// RENDER PRODUCTS
+// ==========================================================
+
+function renderProducts() {
+
+    const grid =
+
+        document.getElementById("products");
+
+    if (!grid) return;
 
     grid.innerHTML = "";
 
-    if(filteredProducts.length === 0){
-        grid.innerHTML = `<div class="noProducts"><h2>No products found</h2></div>`;
+    if (filteredProducts.length === 0) {
+
+        grid.innerHTML = `
+
+        <div class="noProducts">
+
+            <h2>
+
+                No products found
+
+            </h2>
+
+        </div>
+
+        `;
+
         return;
+
     }
+
+    const fragment =
+
+        document.createDocumentFragment();
 
     filteredProducts.forEach(product => {
-        // Generate our path using the config helper
-        const finalImageUrl = getProductImage(product.image);
 
-        grid.innerHTML += `
-            <div class="productCard">
-                <img src="${finalImageUrl}" alt="${product.name}" class="productImage" onerror="imageFallback(this)">
-                <div class="productBody">
-                    <h3>${product.name}</h3>
-                    <p>${product.description || ""}</p>
-                    <div class="price">KES ${formatKES(product.price)}</div>
-                    <button onclick="addProductToCart('${product.id}')" class="primaryBtn">Add To Cart</button>
+        const card =
+
+            document.createElement("div");
+
+        card.className = "productCard";
+
+        card.innerHTML = `
+
+            <img
+
+                src="${getProductImage(product.image)}"
+
+                alt="${product.name}"
+
+                class="productImage"
+
+                onerror="imageFallback(this)"
+
+            >
+
+            <div class="productBody">
+
+                <h3>
+
+                    ${product.name}
+
+                </h3>
+
+                <p>
+
+                    ${product.description || ""}
+
+                </p>
+
+                <div class="price">
+
+                    KES ${formatKES(product.price)}
+
                 </div>
+
+                <button
+
+                    class="primaryBtn"
+
+                    data-id="${product.id}"
+
+                >
+
+                    Add To Cart
+
+                </button>
+
             </div>
+
         `;
+
+        fragment.appendChild(card);
+
     });
+
+    grid.appendChild(fragment);
+
 }
 
-function addProductToCart(id){
-    const product = products.find(p => p.id === id);
-    if(!product) return;
-    addToCart(product);
-    showSuccess(`${product.name} added to cart.`);
-    updateCartBadge();
-}
+// ==========================================================
+// ADD PRODUCT TO CART
+// ==========================================================
 
-function searchProducts(){
-    const input = document.getElementById("searchInput");
-    if(!input) return;
+function addProductToCart(id) {
 
-    const search = input.value.toLowerCase().trim();
+    const product =
 
-    filteredProducts = products.filter(product => {
-        return (
-            product.name.toLowerCase().includes(search) ||
-            (product.description || "").toLowerCase().includes(search) ||
-            (product.category || "").toLowerCase().includes(search)
+        products.find(
+
+            p => p.id === id
+
         );
-    });
 
-    renderProducts();
-}
+    if (!product) return;
 
-function filterCategory(category){
-    if(category === "All"){
-        filteredProducts = [...products];
-    }
-    else {
-        filteredProducts = products.filter(product => product.category === category);
-    }
-    renderProducts();
-}
+    addToCart(product);
 
-function refreshCartBadge(){
-    loadCart();
     updateCartBadge();
+
+    showSuccess(
+
+        `${product.name} added to cart.`
+
+    );
+
 }
 
-function setupCategoryButtons(){
-    const buttons = document.querySelectorAll(".category");
-    buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            buttons.forEach(b => b.classList.remove("active"));
-            button.classList.add("active");
-            filterCategory(button.dataset.category);
+// ==========================================================
+// SEARCH
+// ==========================================================
+
+function searchProducts() {
+
+    const input =
+
+        document.getElementById("searchInput");
+
+    if (!input) return;
+
+    const query =
+
+        input.value
+
+        .trim()
+
+        .toLowerCase();
+
+    filteredProducts =
+
+        products.filter(product => {
+
+            return (
+
+                product.name
+
+                    .toLowerCase()
+
+                    .includes(query)
+
+                ||
+
+                (product.description || "")
+
+                    .toLowerCase()
+
+                    .includes(query)
+
+                ||
+
+                (product.category || "")
+
+                    .toLowerCase()
+
+                    .includes(query)
+
+            );
+
         });
-    });
+
+    renderProducts();
+
+}
+// ==========================================================
+// CATEGORY FILTER
+// ==========================================================
+
+function filterCategory(category) {
+
+    if (category === "All") {
+
+        filteredProducts = [...products];
+
+    }
+
+    else {
+
+        filteredProducts = products.filter(product =>
+
+            (product.category || "").toLowerCase() ===
+
+            category.toLowerCase()
+
+        );
+
+    }
+
+    renderProducts();
+
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    loadProducts();
-    refreshCartBadge();
-    setupCategoryButtons();
+// ==========================================================
+// CART BADGE
+// ==========================================================
 
-    const search = document.getElementById("searchInput");
-    if(search){
-        search.addEventListener("input", searchProducts);
+function updateCartBadge() {
+
+    const badge =
+
+        document.getElementById("cartCount");
+
+    if (!badge) return;
+
+    let cart = [];
+
+    try {
+
+        cart = JSON.parse(
+
+            localStorage.getItem("cart")
+
+        ) || [];
+
     }
-});
+
+    catch {
+
+        cart = [];
+
+    }
+
+    const totalItems =
+
+        cart.reduce(
+
+            (sum, item) =>
+
+                sum + item.quantity,
+
+            0
+
+        );
+
+    badge.textContent = totalItems;
+
+}
+
+// ==========================================================
+// CATEGORY BUTTONS
+// ==========================================================
+
+function setupCategoryButtons() {
+
+    const buttons =
+
+        document.querySelectorAll(".category");
+
+    buttons.forEach(button => {
+
+        button.addEventListener(
+
+            "click",
+
+            () => {
+
+                buttons.forEach(btn =>
+
+                    btn.classList.remove("active")
+
+                );
+
+                button.classList.add("active");
+
+                filterCategory(
+
+                    button.dataset.category
+
+                );
+
+            }
+
+        );
+
+    });
+
+}
+
+// ==========================================================
+// PRODUCT BUTTON EVENTS
+// ==========================================================
+
+function setupProductEvents() {
+
+    const grid =
+
+        document.getElementById("products");
+
+    if (!grid) return;
+
+    grid.addEventListener("click", event => {
+
+        const button =
+
+            event.target.closest(".primaryBtn");
+
+        if (!button) return;
+
+        addProductToCart(
+
+            button.dataset.id
+
+        );
+
+    });
+
+}
+
+// ==========================================================
+// SEARCH EVENTS
+// ==========================================================
+
+function setupSearch() {
+
+    const search =
+
+        document.getElementById(
+
+            "searchInput"
+
+        );
+
+    if (!search) return;
+
+    search.addEventListener(
+
+        "input",
+
+        searchProducts
+
+    );
+
+}
+
+// ==========================================================
+// SHOP NOW
+// ==========================================================
+
+function setupHeroButton() {
+
+    const shopNow =
+
+        document.getElementById(
+
+            "shopNow"
+
+        );
+
+    if (!shopNow) return;
+
+    shopNow.addEventListener(
+
+        "click",
+
+        () => {
+
+            document
+
+                .getElementById("products")
+
+                .scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+        }
+
+    );
+
+}
+
+// ==========================================================
+// PAGE INIT
+// ==========================================================
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    async () => {
+
+        await loadProducts();
+
+        updateCartBadge();
+
+        setupSearch();
+
+        setupCategoryButtons();
+
+        setupProductEvents();
+
+        setupHeroButton();
+
+    }
+
+);
