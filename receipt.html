@@ -1,219 +1,187 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
+<meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>
+<title>Receipt | Tech Solutions</title>
 
-Submit Receipt | Tech Solutions
-
-</title>
-
-<link
-rel="icon"
+<link rel="icon"
 href="assets/logo/favicon.png">
 
-<link
-rel="stylesheet"
-href="css/global.css">
+<link rel="stylesheet"
+href="CSS/global.css">
 
-<link
-rel="stylesheet"
-href="css/receipt.css">
+<link rel="stylesheet"
+href="CSS/receipt.css">
 
-<link
-rel="stylesheet"
-href="css/mobile.css">
+<link rel="stylesheet"
+href="CSS/mobile.css">
 
-<link
-rel="stylesheet"
+<link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- ========================= -->
-<!-- NAVBAR -->
-<!-- ========================= -->
-
 <nav>
 
-<a
-href="index.html"
-class="logo">
+<a href="index.html" class="logo">
 
-<span>
-
-Tech Solutions
-
-</span>
+<span>Tech Solutions</span>
 
 </a>
 
+<div class="navButtons">
+
+<a href="index.html">
+<i class="fa-solid fa-house"></i>
+Home
+</a>
+
+<a href="track.html">
+<i class="fa-solid fa-truck-fast"></i>
+Track Order
+</a>
+
+</div>
+
 </nav>
 
-<!-- ========================= -->
-<!-- HEADER -->
-<!-- ========================= -->
+<section class="receiptContainer">
 
-<section class="pageHeader">
+<div class="successIcon">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
 
 <h1>
 
-Submit Payment Receipt
+Payment Successful
 
 </h1>
 
 <p>
 
-Enter your M-Pesa confirmation code below.
+Your order has been received successfully.
 
 </p>
-
-</section>
-
-<!-- ========================= -->
-<!-- RECEIPT CARD -->
-<!-- ========================= -->
-
-<section class="receiptContainer">
 
 <div class="receiptCard">
 
-<i class="fa-solid fa-receipt receiptIcon"></i>
-
 <h2>
 
-Payment Confirmation
+Payment Receipt
 
 </h2>
 
-<p>
+<div class="receiptRow">
 
-After completing your M-Pesa payment,
-enter the confirmation code exactly
-as received.
+<span>Order Number</span>
 
-</p>
-
-<div class="inputGroup">
-
-<label>
-
-M-Pesa Confirmation Code
-
-</label>
-
-<input
-
-type="text"
-
-id="receiptCode"
-
-placeholder="Example: QJD8A6P4KX"
-
-autocomplete="off">
+<strong id="orderNumber">-</strong>
 
 </div>
 
-<div class="inputGroup">
+<div class="receiptRow">
 
-<label>
+<span>M-Pesa Receipt</span>
 
-Phone Number Used
-
-</label>
-
-<input
-
-type="tel"
-
-id="receiptPhone"
-
-placeholder="07XXXXXXXX">
+<strong id="mpesaReceipt">-</strong>
 
 </div>
 
-<button
-id="submitReceiptBtn">
+<div class="receiptRow">
 
-Submit Receipt
+<span>Customer</span>
 
-</button>
+<strong id="customerName">-</strong>
 
 </div>
 
-<!-- ========================= -->
-<!-- PAYMENT REMINDER -->
-<!-- ========================= -->
+<div class="receiptRow">
 
-<div class="paymentReminder">
+<span>Phone</span>
+
+<strong id="customerPhone">-</strong>
+
+</div>
+
+<div class="receiptRow">
+
+<span>Email</span>
+
+<strong id="customerEmail">-</strong>
+
+</div>
+
+<div class="receiptRow">
+
+<span>County</span>
+
+<strong id="customerCounty">-</strong>
+
+</div>
+
+<div class="receiptRow">
+
+<span>Town</span>
+
+<strong id="customerTown">-</strong>
+
+</div>
+
+<hr>
 
 <h3>
 
-Payment Details
+Items Purchased
 
 </h3>
 
-<div class="reminderRow">
+<div id="receiptItems">
 
-<span>
+</div>
 
-Paybill
+<hr>
 
-</span>
+<div class="receiptRow">
+
+<span>Subtotal</span>
 
 <strong>
 
-247247
+KES <span id="subtotal">0</span>
 
 </strong>
 
 </div>
 
-<div class="reminderRow">
+<div class="receiptRow">
 
-<span>
-
-Account
-
-</span>
-
-<strong
-id="receiptAccount">
-
-ORDER-00001
-
-</strong>
-
-</div>
-
-<div class="reminderRow">
-
-<span>
-
-Amount
-
-</span>
+<span>Delivery</span>
 
 <strong>
 
-KES
+KES <span id="delivery">0</span>
 
-<span
-id="receiptAmount">
+</strong>
 
-0
+</div>
 
-</span>
+<div class="receiptRow total">
+
+<span>Total Paid</span>
+
+<strong>
+
+KES <span id="total">0</span>
 
 </strong>
 
@@ -221,133 +189,35 @@ id="receiptAmount">
 
 </div>
 
-</section>
+<div class="receiptButtons">
 
-<!-- ========================= -->
-<!-- LOADER -->
-<!-- ========================= -->
-
-<div
-id="receiptLoader"
-class="receiptLoader">
-
-<div class="loader"></div>
-
-<p>
-
-Verifying your payment...
-
-</p>
-
-</div>
-<!-- ========================= -->
-<!-- SUCCESS MESSAGE -->
-<!-- ========================= -->
-
-<div
-id="receiptSuccess"
-class="receiptSuccess">
-
-<i class="fa-solid fa-circle-check"></i>
-
-<h2>
-
-Payment Confirmed
-
-</h2>
-
-<p>
-
-Thank you!
-
-Your payment has been verified successfully.
-
-</p>
-
-<button
-id="trackOrderBtn">
+<button id="trackOrder">
 
 Track My Order
 
 </button>
 
+<button id="continueShopping">
+
+Continue Shopping
+
+</button>
+
 </div>
 
-<!-- ========================= -->
-<!-- FOOTER -->
-<!-- ========================= -->
+</section>
 
 <footer>
 
 <div class="footerContainer">
 
-<div>
+<div class="footerBrand">
 
-<h2>
-
-Tech Solutions
-
-</h2>
+<h2>Tech Solutions</h2>
 
 <p>
 
-Reliable electronics delivered nationwide.
-
-</p>
-
-</div>
-
-<div>
-
-<h3>
-
-Quick Links
-
-</h3>
-
-<a href="index.html">
-
-Home
-
-</a>
-
-<a href="cart.html">
-
-Cart
-
-</a>
-
-<a href="checkout.html">
-
-Checkout
-
-</a>
-
-<a href="track.html">
-
-Track Order
-
-</a>
-
-</div>
-
-<div>
-
-<h3>
-
-Support
-
-</h3>
-
-<p>
-
-support@techsolutions.co.ke
-
-</p>
-
-<p>
-
-+254 700 000 000
+Premium electronics delivered across Kenya.
 
 </p>
 
@@ -363,111 +233,8 @@ support@techsolutions.co.ke
 
 </footer>
 
-<!-- ========================= -->
-<!-- MOBILE NAVIGATION -->
-<!-- ========================= -->
-
-<div class="mobileNav">
-
-<a href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-<span>
-
-Home
-
-</span>
-
-</a>
-
-<a href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<span>
-
-Cart
-
-</span>
-
-</a>
-
-<a href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-<span>
-
-Track
-
-</span>
-
-</a>
-
-</div>
-
-<!-- ========================= -->
-<!-- JAVASCRIPT -->
-<!-- ========================= -->
-
-<script src="js/config.js"></script>
-
-<script src="js/api.js"></script>
-
-<script src="js/receipt.js"></script>
-
-<script>
-
-document
-
-.getElementById("submitReceiptBtn")
-
-.addEventListener(
-
-"click",
-
-submitReceipt
-
-);
-
-document
-
-.getElementById("trackOrderBtn")
-
-.addEventListener(
-
-"click",
-
-()=>{
-
-window.location.href="track.html";
-
-}
-
-);
-
-document
-
-.getElementById("receiptCode")
-
-.addEventListener(
-
-"keypress",
-
-function(e){
-
-if(e.key==="Enter"){
-
-submitReceipt();
-
-}
-
-}
-
-);
-
-</script>
+<script src="Js/config.js"></script>
+<script src="Js/receipt.js"></script>
 
 </body>
 

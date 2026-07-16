@@ -200,6 +200,28 @@ transition:.3s;
 
 }
 
+.timelineStep.active .circle{
+
+animation:pulse 1.2s infinite;
+
+}
+
+@keyframes pulse{
+
+0%, 100% {
+
+transform: scale(1);
+
+}
+
+50% {
+
+transform: scale(1.05);
+
+}
+
+}
+
 .timelineStep p{
 
 font-size:14px;

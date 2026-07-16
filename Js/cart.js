@@ -43,6 +43,10 @@ function getCartTotal() {
 return cart.reduce((sum, item) => sum + (Number(item.price) * item.quantity), 0);
 }
 
+function getCartItems() {
+return cart;
+}
+
 function addToCart(product) {
 if (!product) return;
 const existing = cart.find(item => item.id === product.id);

@@ -1,4 +1,6 @@
 function orderReceived(order) {
+    const trackUrl = order.tracking_url || `http://localhost:8000/track.html?tracking=${encodeURIComponent(order.tracking_id)}`;
+
     return {
         subject: "Order Received - Gadget Finds",
         html: `
@@ -9,6 +11,8 @@ function orderReceived(order) {
             <p><strong>Tracking ID:</strong> ${order.tracking_id}</p>
 
             <p><strong>Payment Status:</strong> ${order.payment_status}</p>
+
+            <p><a href="${trackUrl}" target="_blank" rel="noopener noreferrer">Track your order here</a></p>
 
             <p>Please keep your tracking ID safe.</p>
         `

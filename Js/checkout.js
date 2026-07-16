@@ -1,113 +1,451 @@
 // ==========================================================
 // CHECKOUT.JS
+// PART 1
 // ==========================================================
 
-let checkoutItems = JSON.parse(localStorage.getItem(STORAGE.cart)) || [];
+let checkoutCart = [];
+let checkoutData = {};
+let isContinuingToPayment = false;
 
-function calculateTotal(){
-return checkoutItems.reduce((total,item)=> total + (item.price*item.quantity), 0);
-}
+const deliveryZones = {
+    "Nairobi": [
+        "Westlands",
+        "CBD",
+        "Kilimani",
+        "Karen",
+        "Roysambu",
+        "Embakasi",
+        "South B",
+        "South C",
+        "Kasarani",
+        "Ruaka"
+    ],
 
-function renderCheckoutItems(){
-const container = document.getElementById("checkoutItems");
-const total = document.getElementById("checkoutTotal");
-const count = document.getElementById("checkoutItemsCount");
-const subtotal = document.getElementById("checkoutSubtotal");
+    "Kiambu": [
+        "Thika",
+        "Ruiru",
+        "Kiambu Town",
+        "Juja",
+        "Limuru",
+        "Kikuyu"
+    ],
 
-if(!container) return;
+    "Nakuru": [
+        "Nakuru CBD",
+        "Naivasha",
+        "Molo",
+        "Gilgil"
+    ],
 
-container.innerHTML="";
+    "Mombasa": [
+        "Nyali",
+        "Bamburi",
+        "Likoni",
+        "Mtwapa"
+    ],
 
-checkoutItems.forEach(item=>{
-container.innerHTML+=`
-<div class="checkoutItem">
-<img src="${item.image}" alt="${item.name}">
-<div class="checkoutItemInfo">
-<div class="checkoutItemName">${item.name}</div>
-<div>Qty: ${item.quantity}</div>
-<div class="checkoutItemPrice">KES ${formatKES(item.price)}</div>
-</div>
-</div>
-`;
-});
+    "Kisumu": [
+        "Milimani",
+        "Kondele",
+        "Manyatta"
+    ],
 
-if(total) total.textContent = formatKES(calculateTotal());
-if(subtotal) subtotal.textContent = formatKES(calculateTotal());
-if(count) count.textContent = checkoutItems.reduce((t,i)=>t+i.quantity,0);
-}
+    "Machakos": [
+        "Machakos Town",
+        "Athi River",
+        "Mlolongo"
+    ],
 
-function getCheckoutData(){
-return{
-customer_name: document.getElementById("customerName").value.trim(),
-phone: document.getElementById("customerPhone").value.trim(),
-county: document.getElementById("county").value.trim(),
-town: document.getElementById("town").value.trim(),
-landmark: document.getElementById("landmark").value.trim(),
-items: checkoutItems,
-total: calculateTotal()
+    "Nyeri": [
+        "Nyeri Town",
+        "Othaya",
+        "Karatina"
+    ],
+
+    "Uasin Gishu": [
+        "Eldoret",
+        "Burnt Forest"
+    ]
 };
-}
 
-function validateCheckout(data){
-if(!data.customer_name || !data.phone || !data.county || !data.town || !data.landmark){
-showError("Please fill in all fields.");
-return false;
-}
-return true;
-}
+function calculateDeliveryFee(county, town = "") {
 
-async function continuePayment(){
-const data = getCheckoutData();
+    if (!county) return 0;
 
-if(!validateCheckout(data)) return;
+    const fees = {
+        "Nairobi": 300,
+        "Kiambu": 350,
+        "Machakos": 400,
+        "Kajiado": 450,
+        "Nakuru": 500,
+        "Nyeri": 550,
+        "Kisumu": 700,
+        "Mombasa": 800,
+        "Uasin Gishu": 700
+    };
 
-try{
-showLoader("checkoutLoader");
+    if (county === "Nairobi" && town) {
+        return 300;
+    }
 
-const order = await createOrder(data);
-
-localStorage.setItem(STORAGE.currentOrder, JSON.stringify(order));
-localStorage.setItem(STORAGE.trackingNumber, order.tracking_number);
-localStorage.setItem(STORAGE.paymentAmount, data.total);
-
-hideLoader("checkoutLoader");
-
-window.location.href="payment.html";
+    return fees[county] || 900;
 
 }
-catch(error){
-hideLoader("checkoutLoader");
-showError(error.message);
+
+function renderCheckoutSummary() {
+
+    const subtotalEl = document.getElementById("checkoutSubtotal");
+    const deliveryEl = document.getElementById("checkoutDelivery");
+    const totalEl = document.getElementById("checkoutTotal");
+    const countyEl = document.getElementById("county");
+    const townEl = document.getElementById("town");
+
+    if (!subtotalEl || !deliveryEl || !totalEl) return;
+
+    const subtotal = checkoutCart.reduce((sum, item) => {
+        return sum + (Number(item.price) * item.quantity);
+    }, 0);
+
+    const county = countyEl?.value || "";
+    const town = townEl?.value || "";
+    const deliveryFee = calculateDeliveryFee(county, town);
+    const total = subtotal + deliveryFee;
+
+    subtotalEl.textContent = formatKES(subtotal);
+    deliveryEl.textContent = formatKES(deliveryFee);
+    totalEl.textContent = formatKES(total);
+
 }
+
+// ==========================================================
+// LOAD CART
+// ==========================================================
+
+function loadCheckoutCart() {
+
+    loadCart();
+
+    checkoutCart = Array.isArray(getCartItems()) ? [...getCartItems()] : [];
+
+    renderCheckoutItems();
+
 }
 
-function restoreCheckout(){
-const saved = JSON.parse(localStorage.getItem(STORAGE.checkoutForm));
-if(!saved) return;
+// ==========================================================
+// RENDER ORDER
+// ==========================================================
 
-document.getElementById("customerName").value = saved.customer_name || "";
-document.getElementById("customerPhone").value = saved.phone || "";
-document.getElementById("county").value = saved.county || "";
-document.getElementById("town").value = saved.town || "";
-document.getElementById("landmark").value = saved.landmark || "";
+function renderCheckoutItems() {
+
+    const container =
+        document.getElementById("checkoutItems");
+
+    const itemCount =
+        document.getElementById("checkoutItemsCount");
+
+    const subtotal =
+        document.getElementById("checkoutSubtotal");
+
+    const total =
+        document.getElementById("checkoutTotal");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (checkoutCart.length === 0) {
+
+        container.innerHTML = `
+
+        <div class="emptyCheckout">
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <p>Your cart is empty.</p>
+
+        </div>
+
+        `;
+
+        itemCount.textContent = "0";
+        subtotal.textContent = "0";
+        total.textContent = "0";
+        const deliveryEl = document.getElementById("checkoutDelivery");
+        if (deliveryEl) deliveryEl.textContent = "0";
+
+        return;
+
+    }
+
+    let totalItems = 0;
+    let grandTotal = 0;
+
+    checkoutCart.forEach(item => {
+
+        totalItems += item.quantity;
+
+        grandTotal +=
+            Number(item.price) *
+            item.quantity;
+
+        container.innerHTML += `
+
+        <div class="checkoutItem">
+
+            <img
+                src="${item.image}"
+                alt="${item.name}"
+                onerror="this.src='assets/images/no-image.png'">
+
+            <div class="checkoutInfo">
+
+                <h3>${item.name}</h3>
+
+                <p>
+
+                    Qty:
+                    ${item.quantity}
+
+                </p>
+
+                <strong>
+
+                    KES ${formatKES(item.price)}
+
+                </strong>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    itemCount.textContent = totalItems;
+
+    subtotal.textContent =
+        formatKES(grandTotal);
+
+    total.textContent =
+        formatKES(grandTotal);
+
+    renderCheckoutSummary();
+
 }
 
-function saveCheckoutForm(){
-const data = getCheckoutData();
-localStorage.setItem(STORAGE.checkoutForm, JSON.stringify(data));
+// ==========================================================
+// POPULATE TOWNS
+// ==========================================================
+
+function populateTownDropdown() {
+
+    const county =
+        document.getElementById("county");
+
+    const town =
+        document.getElementById("town");
+
+    if (!county || !town) return;
+
+    county.addEventListener("change", () => {
+
+        town.innerHTML =
+            `<option value="">Select Town</option>`;
+
+        const selected =
+            deliveryZones[county.value];
+
+        if (!selected) {
+            renderCheckoutSummary();
+            return;
+        }
+
+        selected.forEach(location => {
+
+            town.innerHTML += `
+
+            <option value="${location}">
+
+                ${location}
+
+            </option>
+
+            `;
+
+        });
+
+        renderCheckoutSummary();
+
+    });
+
+    town.addEventListener("change", () => {
+        renderCheckoutSummary();
+    });
+
+}
+// ==========================================================
+// VALIDATE FORM
+// ==========================================================
+
+function validateCheckout() {
+
+    const name =
+        document.getElementById("customerName").value.trim();
+
+    const phone =
+        document.getElementById("customerPhone").value.trim();
+
+    const county =
+        document.getElementById("county").value;
+
+    const town =
+        document.getElementById("town").value;
+
+    if (!name) {
+        alert("Please enter your full name.");
+        return false;
+    }
+
+    if (!/^0\d{9}$/.test(phone)) {
+        alert("Enter a valid Safaricom phone number.");
+        return false;
+    }
+
+    if (!county) {
+        alert("Please select your county.");
+        return false;
+    }
+
+    if (!town) {
+        alert("Please select your town.");
+        return false;
+    }
+
+    return true;
+
 }
 
-document.addEventListener("DOMContentLoaded", ()=>{
-renderCheckoutItems();
-restoreCheckout();
+// ==========================================================
+// SAVE CHECKOUT
+// ==========================================================
 
-const formInputs = document.querySelectorAll("input, textarea, select");
-formInputs.forEach(input=>{
-input.addEventListener("input", saveCheckoutForm);
-});
+function saveCheckoutData() {
 
-const paymentBtn = document.getElementById("continuePayment");
-if(paymentBtn){
-paymentBtn.addEventListener("click", continuePayment);
+    const customer = {
+
+        name:
+            document.getElementById("customerName").value.trim(),
+
+        phone:
+            document.getElementById("customerPhone").value.trim(),
+
+        email:
+            document.getElementById("customerEmail").value.trim(),
+
+        county:
+            document.getElementById("county").value,
+
+        town:
+            document.getElementById("town").value,
+
+        address:
+            document.getElementById("address").value.trim(),
+
+        landmark:
+            document.getElementById("landmark").value.trim(),
+
+        notes:
+            document.getElementById("notes").value.trim()
+
+    };
+
+    const subtotal = getCartTotal();
+    const deliveryFee = calculateDeliveryFee(customer.county, customer.town);
+    const total = subtotal + deliveryFee;
+
+    checkoutData = {
+
+        ...customer,
+
+        customer,
+
+        order: checkoutCart,
+
+        items: getTotalItems(),
+
+        subtotal,
+
+        deliveryFee,
+
+        total,
+
+        createdAt: new Date().toISOString()
+
+    };
+
+    localStorage.setItem(
+        "checkoutData",
+        JSON.stringify(checkoutData)
+    );
+
 }
+
+// ==========================================================
+// CONTINUE TO PAYMENT
+// ==========================================================
+
+function continueToPayment(event) {
+
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    if (isContinuingToPayment) return;
+
+    if (checkoutCart.length === 0) {
+
+        alert("Your cart is empty.");
+
+        window.location.href = "cart.html";
+
+        return;
+
+    }
+
+    if (!validateCheckout()) return;
+
+    isContinuingToPayment = true;
+
+    saveCheckoutData();
+
+    window.location.href = "payment.html";
+
+}
+
+// ==========================================================
+// INITIALIZE
+// ==========================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadCheckoutCart();
+
+    populateTownDropdown();
+
+    const button =
+        document.getElementById("continueToPayment");
+
+    if (button) {
+
+        button.type = "button";
+
+        button.addEventListener(
+            "click",
+            continueToPayment
+        );
+
+    }
+
 });

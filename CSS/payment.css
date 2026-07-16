@@ -1,0 +1,389 @@
+/* ==========================================================
+   PAYMENT.CSS
+========================================================== */
+
+.paymentContainer{
+
+    max-width:1200px;
+
+    margin:40px auto;
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:30px;
+
+    padding:0 20px;
+
+}
+
+/* ==========================================================
+   PAYMENT CARD
+========================================================== */
+
+.paymentCard{
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    padding:30px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.paymentCard h2{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+    color:#0f172a;
+
+}
+
+.paymentCard p{
+
+    color:#64748b;
+
+    margin-bottom:30px;
+
+}
+
+/* ==========================================================
+   PAYMENT METHOD
+========================================================== */
+
+.paymentMethod{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:20px;
+
+    border:2px solid #e2e8f0;
+
+    border-radius:12px;
+
+    margin-bottom:25px;
+
+    transition:.3s;
+
+}
+
+.paymentMethod:hover{
+
+    border-color:#16a34a;
+
+}
+
+.paymentMethod img{
+
+    width:60px;
+
+    height:60px;
+
+    object-fit:contain;
+
+}
+
+.paymentMethod h3{
+
+    margin-bottom:5px;
+
+    color:#0f172a;
+
+}
+
+.paymentMethod span{
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+/* ==========================================================
+   INPUTS
+========================================================== */
+
+.inputGroup{
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-bottom:20px;
+
+}
+
+.inputGroup label{
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#1e293b;
+
+}
+
+.inputGroup input{
+
+    padding:14px 16px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    transition:.25s;
+
+}
+
+.inputGroup input:focus{
+
+    outline:none;
+
+    border-color:#2563eb;
+
+}
+
+/* ==========================================================
+   STK BUTTON
+========================================================== */
+
+.payButton{
+
+    width:100%;
+
+    border:none;
+
+    cursor:pointer;
+
+    padding:16px;
+
+    border-radius:12px;
+
+    background:#16a34a;
+
+    color:#fff;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    transition:.25s;
+
+}
+
+.payButton:hover{
+
+    background:#15803d;
+
+}
+
+/* ==========================================================
+   SUMMARY
+========================================================== */
+
+.summaryCard{
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    height:fit-content;
+
+}
+
+.summaryCard h2{
+
+    margin-bottom:20px;
+
+}
+
+.summaryItem{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:14px;
+
+    color:#475569;
+
+}
+
+.summaryTotal{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:25px;
+
+    padding-top:20px;
+
+    border-top:1px solid #e2e8f0;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+   PAYMENT STATUS
+========================================================== */
+
+.paymentStatus{
+
+    margin-top:25px;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    display:none;
+
+    text-align:center;
+
+    font-weight:600;
+
+}
+
+.paymentStatus.success{
+
+    display:block;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+.paymentStatus.error{
+
+    display:block;
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+.paymentStatus.pending{
+
+    display:block;
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+/* ==========================================================
+   LOADER
+========================================================== */
+
+.paymentLoader{
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+.paymentLoader.active{
+
+    display:flex;
+
+}
+
+.spinner{
+
+    width:24px;
+
+    height:24px;
+
+    border:3px solid #dbeafe;
+
+    border-top-color:#2563eb;
+
+    border-radius:50%;
+
+    animation:spin .8s linear infinite;
+
+}
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media(max-width:900px){
+
+.paymentContainer{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.paymentCard{
+
+padding:20px;
+
+}
+
+.summaryCard{
+
+padding:20px;
+
+}
+
+.paymentMethod{
+
+flex-direction:column;
+
+text-align:center;
+
+}
+
+.payButton{
+
+font-size:16px;
+
+}
+
+}

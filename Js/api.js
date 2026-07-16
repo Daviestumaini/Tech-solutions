@@ -111,7 +111,7 @@ async function submitReceiptApi(data){
 }
 
 async function trackOrder(trackingNumber){
-    return await apiRequest(`/track/${trackingNumber}`);
+    return await apiRequest(`/orders/${trackingNumber}`);
 }
 
 async function getDeliveryStatus(trackingNumber){

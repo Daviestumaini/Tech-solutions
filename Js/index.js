@@ -289,35 +289,11 @@ function updateCartBadge() {
 
     if (!badge) return;
 
-    let cart = [];
-
-    try {
-
-        cart = JSON.parse(
-
-            localStorage.getItem("cart")
-
-        ) || [];
-
-    }
-
-    catch {
-
-        cart = [];
-
-    }
+    loadCart();
 
     const totalItems =
 
-        cart.reduce(
-
-            (sum, item) =>
-
-                sum + item.quantity,
-
-            0
-
-        );
+        getTotalItems();
 
     badge.textContent = totalItems;
 

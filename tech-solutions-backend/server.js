@@ -13,6 +13,11 @@ app.use(
     require("./routes/products")
 );
 
+app.use(
+    "/api/orders",
+    require("./routes/orders")
+);
+
 app.get("/", (req, res) => {
 
     res.json({

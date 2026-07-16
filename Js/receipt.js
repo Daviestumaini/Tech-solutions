@@ -2,78 +2,168 @@
 // RECEIPT.JS
 // ==========================================================
 
-let currentOrder = load(STORAGE.currentOrder);
+let order = null;
 
-function loadReceiptPage(){
-if(!currentOrder){
-window.location.href = "cart.html";
-return;
+// ==========================================================
+// LOAD ORDER
+// ==========================================================
+
+function loadReceipt() {
+
+    const savedOrder =
+        localStorage.getItem("lastOrder");
+
+    if (!savedOrder) {
+
+        alert("No completed order found.");
+
+        window.location.href = "index.html";
+
+        return;
+
+    }
+
+    order = JSON.parse(savedOrder);
+
+    renderReceipt();
+
 }
 
-const amount = document.getElementById("receiptAmount");
-const account = document.getElementById("receiptAccount");
+// ==========================================================
+// RENDER RECEIPT
+// ==========================================================
 
-if(amount) amount.textContent = formatKES(currentOrder.total);
-if(account) account.textContent = currentOrder.tracking_number;
+function renderReceipt() {
+
+    const customer = order.customer || {};
+
+    document.getElementById("orderNumber").textContent =
+        order.orderNumber || order.trackingId || "-";
+
+    document.getElementById("mpesaReceipt").textContent =
+        order.mpesaReceipt || "-";
+
+    document.getElementById("customerName").textContent =
+        customer.name || "-";
+
+    document.getElementById("customerPhone").textContent =
+        customer.phone || "-";
+
+    document.getElementById("customerEmail").textContent =
+        customer.email || order.customer?.email || "-";
+
+    document.getElementById("customerCounty").textContent =
+        customer.county || "-";
+
+    document.getElementById("customerTown").textContent =
+        customer.town || "-";
+
+    document.getElementById("subtotal").textContent =
+        formatKES(order.subtotal || 0);
+
+    document.getElementById("delivery").textContent =
+        formatKES(order.deliveryFee || order.delivery || 0);
+
+    document.getElementById("total").textContent =
+        formatKES(order.total || 0);
+
+    renderItems();
+
 }
 
-function getReceiptData(){
-return{
-tracking_number: currentOrder.tracking_number,
-receipt: document.getElementById("receiptCode").value.trim().toUpperCase(),
-phone: document.getElementById("receiptPhone").value.trim()
-};
+// ==========================================================
+// ITEMS
+// ==========================================================
+
+function renderItems() {
+
+    const container =
+        document.getElementById("receiptItems");
+
+    container.innerHTML = "";
+
+    order.cart.forEach(item => {
+
+        container.innerHTML += `
+
+<div class="receiptItem">
+
+<img
+src="${item.image}"
+alt="${item.name}"
+class="receiptImage">
+
+<div class="receiptInfo">
+
+<h4>${item.name}</h4>
+
+<p>
+
+KES ${formatKES(item.price)}
+
+</p>
+
+<span>
+
+Quantity : ${item.quantity}
+
+</span>
+
+</div>
+
+</div>
+
+`;
+
+    });
+
 }
 
-function validateReceipt(data){
-if(!data.receipt || !data.phone){
-showError("Please fill in all fields.");
-return false;
-}
-return true;
-}
+// ==========================================================
+// BUTTONS
+// ==========================================================
 
-async function handleReceiptSubmit(){
-const data = getReceiptData();
+function trackOrder() {
 
-if(!validateReceipt(data)) return;
+    const trackingId =
+        order?.trackingId ||
+        order?.orderNumber ||
+        "";
 
-try{
-showLoader("receiptLoader");
+    const target = trackingId
+        ? `track.html?tracking=${encodeURIComponent(trackingId)}`
+        : "track.html";
 
-const result = await submitReceiptApi(data);
+    window.location.href = target;
 
-hideLoader("receiptLoader");
-
-save(STORAGE.currentOrder, result.order);
-save(STORAGE.trackingNumber, result.order.tracking_number);
-
-const success = document.getElementById("receiptSuccess");
-if(success) success.style.display="block";
-
-const form = document.querySelector(".receiptContainer");
-if(form) form.style.display="none";
-}
-catch(error){
-hideLoader("receiptLoader");
-showError(error.message);
-}
 }
 
-function goToTracking(){
-window.location.href = "track.html";
+function continueShopping() {
+
+    window.location.href = "index.html";
+
 }
 
-document.addEventListener("DOMContentLoaded", ()=>{
-loadReceiptPage();
+// ==========================================================
+// INIT
+// ==========================================================
 
-const submitBtn = document.getElementById("submitReceiptBtn");
-if(submitBtn){
-submitBtn.addEventListener("click", handleReceiptSubmit);
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-const trackBtn = document.getElementById("trackOrderBtn");
-if(trackBtn){
-trackBtn.addEventListener("click", goToTracking);
-}
+    loadReceipt();
+
+    document
+        .getElementById("trackOrder")
+        .addEventListener(
+            "click",
+            trackOrder
+        );
+
+    document
+        .getElementById("continueShopping")
+        .addEventListener(
+            "click",
+            continueShopping
+        );
+
 });

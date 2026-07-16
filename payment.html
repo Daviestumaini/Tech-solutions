@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -10,27 +9,17 @@
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>
+<meta
+name="description"
+content="Secure M-Pesa Payment | Tech Solutions">
 
-Payment | Tech Solutions
+<title>Payment | Tech Solutions</title>
 
-</title>
+<link rel="icon" href="assets/logo/favicon.png">
 
-<link
-rel="icon"
-href="assets/logo/favicon.png">
-
-<link
-rel="stylesheet"
-href="css/global.css">
-
-<link
-rel="stylesheet"
-href="css/payment.css">
-
-<link
-rel="stylesheet"
-href="css/mobile.css">
+<link rel="stylesheet" href="CSS/global.css">
+<link rel="stylesheet" href="CSS/payment.css">
+<link rel="stylesheet" href="CSS/mobile.css">
 
 <link
 rel="stylesheet"
@@ -41,24 +30,30 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <body>
 
 <!-- ========================= -->
-<!-- NAVBAR -->
+<!-- NAVIGATION -->
 <!-- ========================= -->
 
 <nav>
 
-<a
-href="index.html"
-class="logo">
+<a href="index.html" class="logo">
 
-<span>
+<img
+src="assets/logo/logo.png"
+alt="Tech Solutions">
 
-Tech Solutions
-
-</span>
+<span>Tech Solutions</span>
 
 </a>
 
 <div class="navButtons">
+
+<a href="index.html">
+
+<i class="fa-solid fa-house"></i>
+
+Home
+
+</a>
 
 <a href="cart.html">
 
@@ -72,7 +67,7 @@ Cart
 
 <i class="fa-solid fa-truck-fast"></i>
 
-Track
+Track Order
 
 </a>
 
@@ -81,20 +76,16 @@ Track
 </nav>
 
 <!-- ========================= -->
-<!-- PAGE HEADER -->
+<!-- HEADER -->
 <!-- ========================= -->
 
 <section class="pageHeader">
 
-<h1>
-
-Complete Payment
-
-</h1>
+<h1>Complete Your Payment</h1>
 
 <p>
 
-Finish your M-Pesa payment to confirm your order.
+Your order is almost complete.
 
 </p>
 
@@ -106,161 +97,205 @@ Finish your M-Pesa payment to confirm your order.
 
 <section class="paymentContainer">
 
+<!-- LEFT -->
+
 <div class="paymentCard">
 
-<h2>
+<h2>M-Pesa Payment</h2>
 
-M-Pesa Payment
+<p>
 
-</h2>
-
-<div class="paymentInfo">
-
-<div class="infoRow">
-
-<span>
-
-Paybill
-
-</span>
-
-<strong
-id="paybillNumber">
-
-123456
-
-</strong>
-
-</div>
-
-<div class="infoRow">
-
-<span>
-
-Account Number
-
-</span>
-
-<strong
-id="accountNumber">
-
-ORDER-0001
-
-</strong>
-
-</div>
-
-<div class="infoRow">
-
-<span>
-
-Amount
-
-</span>
-
-<strong>
-
-KES
-
-<span id="paymentAmount">
-
-0
-
-</span>
-
-</strong>
-
-</div>
-
-</div>
-
-<p class="instructions">
-
-Open your M-Pesa app, make the payment using the details above, then enter the confirmation code below.
+An STK Push will be sent to your Safaricom phone.
 
 </p>
 
-<div class="inputGroup">
+<div class="paymentMethod">
 
-<label>
+<i class="fa-solid fa-mobile-screen-button"></i>
 
-M-Pesa Confirmation Code
+<div>
 
-</label>
+<h3>Safaricom M-Pesa</h3>
 
-<input
-
-type="text"
-
-id="receiptCode"
-
-placeholder="e.g. QJD8A6P4KX"
-
-autocomplete="off">
+<span>Secure STK Push Payment</span>
 
 </div>
-
-<button
-id="verifyPaymentBtn">
-
-Verify Payment
-
-</button>
-
-</div>
-
-<!-- ========================= -->
-<!-- ORDER SUMMARY -->
-<!-- ========================= -->
-
-<div class="summaryCard">
-
-<h2>
-
-Order Summary
-
-</h2>
-
-<div
-id="paymentItems">
-
-<!-- Loaded by JS -->
 
 </div>
 
 <hr>
 
-<div class="summaryRow">
+<h3>Delivery Information</h3>
+
+<div class="deliveryInfo">
+
+<p>
+
+<strong>Name:</strong>
+
+<span id="customerNameDisplay">-</span>
+
+</p>
+
+<p>
+
+<strong>Phone:</strong>
+
+<span id="customerPhoneDisplay">-</span>
+
+</p>
+
+<p>
+
+<strong>County:</strong>
+
+<span id="customerCountyDisplay">-</span>
+
+</p>
+
+<p>
+
+<strong>Town:</strong>
+
+<span id="customerTownDisplay">-</span>
+
+</p>
+
+</div>
+
+<div class="inputGroup">
+
+<label>
+
+Confirm M-Pesa Number
+
+</label>
+
+<input
+
+type="tel"
+
+id="paymentPhone"
+
+placeholder="07XXXXXXXX"
+
+maxlength="10">
+
+</div>
+
+<button
+
+id="payButton"
+
+class="payButton"
+
+type="button">
+
+<i class="fa-solid fa-mobile-screen-button"></i>
+
+Pay With M-Pesa
+
+</button>
+
+<div
+
+id="paymentLoader"
+
+class="paymentLoader"
+
+style="display:none;">
+
+<div class="spinner"></div>
 
 <span>
 
-Items
-
-</span>
-
-<span
-id="paymentItemsCount">
-
-0
+Waiting For M-Pesa Confirmation...
 
 </span>
 
 </div>
 
-<div class="summaryTotal">
+<div
 
-<span>
+id="paymentStatus"
 
-Total
+class="paymentStatus">
 
-</span>
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="summaryCard">
+
+<h2>Order Summary</h2>
+
+<div
+
+id="paymentItems">
+
+<!-- payment.js -->
+
+</div>
+
+<hr>
+
+<div class="summaryItem">
+
+<span>Items</span>
+
+<span id="paymentItemsCount">0</span>
+
+</div>
+
+<div class="summaryItem">
+
+<span>Subtotal</span>
 
 <span>
 
 KES
 
-<span
-id="paymentTotal">
+<span id="paymentSubtotal">
+
+0
+
+</span>
+
+</span>
+
+</div>
+
+<div class="summaryItem">
+
+<span>Delivery Fee</span>
+
+<span>
+
+KES
+
+<span id="deliveryFee">
+
+0
+
+</span>
+
+</span>
+
+</div>
+
+<hr>
+
+<div class="summaryTotal">
+
+<span>Total</span>
+
+<span>
+
+KES
+
+<span id="paymentTotal">
 
 0
 
@@ -273,54 +308,6 @@ id="paymentTotal">
 </div>
 
 </section>
-
-<!-- ========================= -->
-<!-- LOADING OVERLAY -->
-<!-- ========================= -->
-
-<div
-id="paymentLoader"
-class="paymentLoader">
-
-<div class="loader"></div>
-
-<p>
-
-Verifying your payment...
-
-</p>
-
-</div>
-<!-- ========================= -->
-<!-- PAYMENT SUCCESS -->
-<!-- ========================= -->
-
-<div
-id="paymentSuccess"
-class="paymentSuccess">
-
-<i class="fa-solid fa-circle-check"></i>
-
-<h2>
-
-Payment Verified
-
-</h2>
-
-<p>
-
-Your order has been received successfully.
-
-</p>
-
-<button
-id="trackOrderBtn">
-
-Track My Order
-
-</button>
-
-</div>
 
 <!-- ========================= -->
 <!-- FOOTER -->
@@ -340,7 +327,7 @@ Tech Solutions
 
 <p>
 
-Trusted electronics store in Kenya.
+Premium electronics delivered safely across Kenya.
 
 </p>
 
@@ -354,29 +341,13 @@ Quick Links
 
 </h3>
 
-<a href="index.html">
+<a href="index.html">Home</a>
 
-Home
+<a href="cart.html">Cart</a>
 
-</a>
+<a href="checkout.html">Checkout</a>
 
-<a href="cart.html">
-
-Cart
-
-</a>
-
-<a href="checkout.html">
-
-Checkout
-
-</a>
-
-<a href="track.html">
-
-Track Order
-
-</a>
+<a href="track.html">Track Order</a>
 
 </div>
 
@@ -413,7 +384,7 @@ support@techsolutions.co.ke
 </footer>
 
 <!-- ========================= -->
-<!-- MOBILE NAVIGATION -->
+<!-- MOBILE NAV -->
 <!-- ========================= -->
 
 <div class="mobileNav">
@@ -422,11 +393,7 @@ support@techsolutions.co.ke
 
 <i class="fa-solid fa-house"></i>
 
-<span>
-
-Home
-
-</span>
+<span>Home</span>
 
 </a>
 
@@ -434,11 +401,7 @@ Home
 
 <i class="fa-solid fa-cart-shopping"></i>
 
-<span>
-
-Cart
-
-</span>
+<span>Cart</span>
 
 </a>
 
@@ -446,11 +409,7 @@ Cart
 
 <i class="fa-solid fa-truck-fast"></i>
 
-<span>
-
-Track
-
-</span>
+<span>Track</span>
 
 </a>
 
@@ -460,43 +419,15 @@ Track
 <!-- SCRIPTS -->
 <!-- ========================= -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="js/config.js"></script>
 
 <script src="js/api.js"></script>
 
+<script src="js/cart.js"></script>
+
 <script src="js/payment.js"></script>
-
-<script>
-
-document
-
-.getElementById("trackOrderBtn")
-
-.addEventListener(
-
-"click",
-
-()=>{
-
-window.location.href="track.html";
-
-}
-
-);
-
-document
-
-.getElementById("verifyPaymentBtn")
-
-.addEventListener(
-
-"click",
-
-verifyPayment
-
-);
-
-</script>
 
 </body>
 
