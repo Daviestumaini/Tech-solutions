@@ -9,64 +9,35 @@ let isContinuingToPayment = false;
 
 const deliveryZones = {
     "Nairobi": [
-        "Westlands",
-        "CBD",
-        "Kilimani",
-        "Karen",
-        "Roysambu",
-        "Embakasi",
-        "South B",
-        "South C",
-        "Kasarani",
-        "Ruaka"
+        "Westlands", "CBD", "Kilimani", "Karen", "Roysambu",
+        "Embakasi", "South B", "South C", "Kasarani", "Ruaka"
     ],
-
     "Kiambu": [
-        "Thika",
-        "Ruiru",
-        "Kiambu Town",
-        "Juja",
-        "Limuru",
-        "Kikuyu"
+        "Thika", "Ruiru", "Kiambu Town", "Juja", "Limuru", "Kikuyu"
     ],
-
     "Nakuru": [
-        "Nakuru CBD",
-        "Naivasha",
-        "Molo",
-        "Gilgil"
+        "Nakuru CBD", "Naivasha", "Molo", "Gilgil"
     ],
-
     "Mombasa": [
-        "Nyali",
-        "Bamburi",
-        "Likoni",
-        "Mtwapa"
+        "Nyali", "Bamburi", "Likoni", "Mtwapa"
     ],
-
     "Kisumu": [
-        "Milimani",
-        "Kondele",
-        "Manyatta"
+        "Milimani", "Kondele", "Manyatta"
     ],
-
     "Machakos": [
-        "Machakos Town",
-        "Athi River",
-        "Mlolongo"
+        "Machakos Town", "Athi River", "Mlolongo"
     ],
-
     "Nyeri": [
-        "Nyeri Town",
-        "Othaya",
-        "Karatina"
+        "Nyeri Town", "Othaya", "Karatina"
     ],
-
     "Uasin Gishu": [
-        "Eldoret",
-        "Burnt Forest"
+        "Eldoret", "Burnt Forest"
     ]
 };
+
+// ==========================================================
+// DELIVERY FEE
+// ==========================================================
 
 function calculateDeliveryFee(county, town = "") {
 
@@ -91,6 +62,10 @@ function calculateDeliveryFee(county, town = "") {
     return fees[county] || 900;
 
 }
+
+// ==========================================================
+// LIVE SUMMARY (recalculates the moment county/town changes)
+// ==========================================================
 
 function renderCheckoutSummary() {
 
@@ -137,17 +112,11 @@ function loadCheckoutCart() {
 
 function renderCheckoutItems() {
 
-    const container =
-        document.getElementById("checkoutItems");
-
-    const itemCount =
-        document.getElementById("checkoutItemsCount");
-
-    const subtotal =
-        document.getElementById("checkoutSubtotal");
-
-    const total =
-        document.getElementById("checkoutTotal");
+    const container = document.getElementById("checkoutItems");
+    const itemCount = document.getElementById("checkoutItemsCount");
+    const subtotalEl = document.getElementById("checkoutSubtotal");
+    const totalEl = document.getElementById("checkoutTotal");
+    const deliveryEl = document.getElementById("checkoutDelivery");
 
     if (!container) return;
 
@@ -156,21 +125,15 @@ function renderCheckoutItems() {
     if (checkoutCart.length === 0) {
 
         container.innerHTML = `
-
         <div class="emptyCheckout">
-
             <i class="fa-solid fa-cart-shopping"></i>
-
             <p>Your cart is empty.</p>
-
         </div>
-
         `;
 
         itemCount.textContent = "0";
-        subtotal.textContent = "0";
-        total.textContent = "0";
-        const deliveryEl = document.getElementById("checkoutDelivery");
+        subtotalEl.textContent = "0";
+        totalEl.textContent = "0";
         if (deliveryEl) deliveryEl.textContent = "0";
 
         return;
@@ -178,103 +141,54 @@ function renderCheckoutItems() {
     }
 
     let totalItems = 0;
-    let grandTotal = 0;
 
     checkoutCart.forEach(item => {
 
         totalItems += item.quantity;
 
-        grandTotal +=
-            Number(item.price) *
-            item.quantity;
-
         container.innerHTML += `
-
         <div class="checkoutItem">
-
-            <img
-                src="${item.image}"
-                alt="${item.name}"
-                onerror="this.src='assets/images/no-image.png'">
-
+            <img src="${item.image}" alt="${item.name}" onerror="this.src='assets/images/no-image.png'">
             <div class="checkoutInfo">
-
                 <h3>${item.name}</h3>
-
-                <p>
-
-                    Qty:
-                    ${item.quantity}
-
-                </p>
-
-                <strong>
-
-                    KES ${formatKES(item.price)}
-
-                </strong>
-
+                <p>Qty: ${item.quantity}</p>
+                <strong>KES ${formatKES(item.price)}</strong>
             </div>
-
         </div>
-
         `;
 
     });
 
     itemCount.textContent = totalItems;
 
-    subtotal.textContent =
-        formatKES(grandTotal);
-
-    total.textContent =
-        formatKES(grandTotal);
-
     renderCheckoutSummary();
 
 }
 
 // ==========================================================
-// POPULATE TOWNS
+// POPULATE TOWNS (this is what makes delivery cost live-update)
 // ==========================================================
 
 function populateTownDropdown() {
 
-    const county =
-        document.getElementById("county");
-
-    const town =
-        document.getElementById("town");
+    const county = document.getElementById("county");
+    const town = document.getElementById("town");
 
     if (!county || !town) return;
 
     county.addEventListener("change", () => {
 
-        town.innerHTML =
-            `<option value="">Select Town</option>`;
+        town.innerHTML = `<option value="">Select Town</option>`;
 
-        const selected =
-            deliveryZones[county.value];
+        const selected = deliveryZones[county.value];
 
-        if (!selected) {
-            renderCheckoutSummary();
-            return;
+        if (selected) {
+            selected.forEach(location => {
+                town.innerHTML += `<option value="${location}">${location}</option>`;
+            });
         }
 
-        selected.forEach(location => {
-
-            town.innerHTML += `
-
-            <option value="${location}">
-
-                ${location}
-
-            </option>
-
-            `;
-
-        });
-
+        // Delivery fee updates immediately, even before a town is picked
         renderCheckoutSummary();
 
     });
@@ -284,23 +198,26 @@ function populateTownDropdown() {
     });
 
 }
+
+// ==========================================================
+// EMAIL VALIDATION
+// ==========================================================
+
+function validEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 // ==========================================================
 // VALIDATE FORM
 // ==========================================================
 
 function validateCheckout() {
 
-    const name =
-        document.getElementById("customerName").value.trim();
-
-    const phone =
-        document.getElementById("customerPhone").value.trim();
-
-    const county =
-        document.getElementById("county").value;
-
-    const town =
-        document.getElementById("town").value;
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const email = document.getElementById("customerEmail").value.trim();
+    const county = document.getElementById("county").value;
+    const town = document.getElementById("town").value;
 
     if (!name) {
         alert("Please enter your full name.");
@@ -309,6 +226,12 @@ function validateCheckout() {
 
     if (!/^0\d{9}$/.test(phone)) {
         alert("Enter a valid Safaricom phone number.");
+        return false;
+    }
+
+    // Email is required now — it's how the receipt gets sent after payment
+    if (!validEmail(email)) {
+        alert("Enter a valid email address — your receipt will be sent there.");
         return false;
     }
 
@@ -333,31 +256,14 @@ function validateCheckout() {
 function saveCheckoutData() {
 
     const customer = {
-
-        name:
-            document.getElementById("customerName").value.trim(),
-
-        phone:
-            document.getElementById("customerPhone").value.trim(),
-
-        email:
-            document.getElementById("customerEmail").value.trim(),
-
-        county:
-            document.getElementById("county").value,
-
-        town:
-            document.getElementById("town").value,
-
-        address:
-            document.getElementById("address").value.trim(),
-
-        landmark:
-            document.getElementById("landmark").value.trim(),
-
-        notes:
-            document.getElementById("notes").value.trim()
-
+        name: document.getElementById("customerName").value.trim(),
+        phone: document.getElementById("customerPhone").value.trim(),
+        email: document.getElementById("customerEmail").value.trim(),
+        county: document.getElementById("county").value,
+        town: document.getElementById("town").value,
+        address: document.getElementById("address").value.trim(),
+        landmark: document.getElementById("landmark").value.trim(),
+        notes: document.getElementById("notes").value.trim()
     };
 
     const subtotal = getCartTotal();
@@ -365,29 +271,21 @@ function saveCheckoutData() {
     const total = subtotal + deliveryFee;
 
     checkoutData = {
-
-        ...customer,
-
         customer,
-
         order: checkoutCart,
-
-        items: getTotalItems(),
-
+        cart: checkoutCart,
+        items: checkoutCart,
         subtotal,
-
         deliveryFee,
-
-        total,
-
-        createdAt: new Date().toISOString()
-
+        total
     };
 
-    localStorage.setItem(
-        "checkoutData",
-        JSON.stringify(checkoutData)
-    );
+    // NOTE: trackingId is no longer generated here.
+    // It's generated by the backend when the order row is created on the
+    // payment page, so it's guaranteed unique against Supabase, not just
+    // against Date.now() collisions in the browser.
+
+    localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
 
 }
 
@@ -405,13 +303,9 @@ function continueToPayment(event) {
     if (isContinuingToPayment) return;
 
     if (checkoutCart.length === 0) {
-
         alert("Your cart is empty.");
-
         window.location.href = "cart.html";
-
         return;
-
     }
 
     if (!validateCheckout()) return;
@@ -434,18 +328,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     populateTownDropdown();
 
-    const button =
-        document.getElementById("continueToPayment");
+    const button = document.getElementById("continueToPayment");
 
     if (button) {
-
         button.type = "button";
-
-        button.addEventListener(
-            "click",
-            continueToPayment
-        );
-
+        button.addEventListener("click", continueToPayment);
     }
 
 });

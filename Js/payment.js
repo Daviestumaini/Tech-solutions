@@ -1,6 +1,6 @@
 // ==========================================================
 // PAYMENT.JS
-// PART 1
+// PART 1 — STATE + DATA LOADING
 // ==========================================================
 
 let cart = [];
@@ -9,45 +9,47 @@ let subtotal = 0;
 let deliveryFee = 0;
 let total = 0;
 
+let currentOrderId = null;     // Supabase orders.id (uuid)
+let currentTrackingId = null;  // human-facing tracking id, e.g. TS-...
+let checkoutRequestId = null;  // Daraja's CheckoutRequestID for this attempt
+
+let isCreatingOrder = false;
+let isPaying = false;
+let pollTimer = null;
+let pollAttempts = 0;
+
+const POLL_INTERVAL_MS = 3000;
+const MAX_POLL_ATTEMPTS = 20; // ~60 seconds, matches the STK Push PIN-entry window
+
 // ==========================================================
-// LOAD DATA
+// LOAD DATA (from checkout.html's handoff)
 // ==========================================================
 
 function loadData() {
 
-    cart = JSON.parse(
-        localStorage.getItem(STORAGE.cart)
-    ) || [];
+    try {
 
-    checkoutData = JSON.parse(
-        localStorage.getItem("checkoutData")
-    ) || {};
+        const savedCheckout = JSON.parse(localStorage.getItem("checkoutData")) || {};
 
-}
+        checkoutData = savedCheckout;
+        cart = Array.isArray(savedCheckout.cart) ? savedCheckout.cart : [];
 
-// ==========================================================
-// DELIVERY COST
-// ==========================================================
+        if (!checkoutData.customer) {
+            // Defensive fallback in case older checkoutData shape sneaks in
+            checkoutData.customer = {
+                name: savedCheckout.name || "",
+                phone: savedCheckout.phone || "",
+                email: savedCheckout.email || "",
+                county: savedCheckout.county || "",
+                town: savedCheckout.town || ""
+            };
+        }
 
-function calculateDelivery(county) {
-
-    if (!county) return 0;
-
-    const fees = {
-
-        "Nairobi": 300,
-        "Kiambu": 350,
-        "Machakos": 400,
-        "Kajiado": 450,
-        "Nakuru": 500,
-        "Nyeri": 550,
-        "Kisumu": 700,
-        "Mombasa": 800,
-        "Uasin Gishu": 700
-
-    };
-
-    return fees[county] || 900;
+    } catch (error) {
+        console.error("Payment loadData error:", error);
+        cart = [];
+        checkoutData = {};
+    }
 
 }
 
@@ -57,32 +59,14 @@ function calculateDelivery(county) {
 
 function renderCustomer() {
 
-    const customer =
-        checkoutData.customer || checkoutData;
+    const customer = checkoutData.customer || {};
 
-    document.getElementById(
-        "customerNameDisplay"
-    ).textContent =
-        customer.name || "-";
+    document.getElementById("customerNameDisplay").textContent = customer.name || "-";
+    document.getElementById("customerPhoneDisplay").textContent = customer.phone || "-";
+    document.getElementById("customerCountyDisplay").textContent = customer.county || "-";
+    document.getElementById("customerTownDisplay").textContent = customer.town || "-";
 
-    document.getElementById(
-        "customerPhoneDisplay"
-    ).textContent =
-        customer.phone || "-";
-
-    document.getElementById(
-        "customerCountyDisplay"
-    ).textContent =
-        customer.county || "-";
-
-    document.getElementById(
-        "customerTownDisplay"
-    ).textContent =
-        customer.town || "-";
-
-    document.getElementById(
-        "paymentPhone"
-    ).value =
+    document.getElementById("paymentPhone").value =
         customer.phone || "";
 
 }
@@ -93,158 +77,137 @@ function renderCustomer() {
 
 function renderOrder() {
 
-    const container =
-        document.getElementById(
-            "paymentItems"
-        );
+    const container = document.getElementById("paymentItems");
 
     if (!container) return;
 
     container.innerHTML = "";
 
     subtotal = 0;
-
     let itemCount = 0;
 
     cart.forEach(item => {
 
-        subtotal +=
-            item.price * item.quantity;
+        const unitPrice = Number(item.price || 0);
+        const quantity = Number(item.quantity || 1);
 
-        itemCount +=
-            item.quantity;
+        subtotal += unitPrice * quantity;
+        itemCount += quantity;
 
         container.innerHTML += `
-
-<div class="paymentItem">
-
-<img
-src="${item.image}"
-alt="${item.name}"
-class="paymentImage">
-
-<div class="paymentInfo">
-
-<h4>${item.name}</h4>
-
-<p>
-
-KES ${formatKES(item.price)}
-
-</p>
-
-<span>
-
-Qty : ${item.quantity}
-
-</span>
-
-</div>
-
-</div>
-
-`;
+        <div class="paymentItem">
+            <img src="${item.image || ''}" alt="${item.name || 'Product'}" class="paymentImage">
+            <div class="paymentInfo">
+                <h4>${item.name || 'Product'}</h4>
+                <p>KES ${formatKES(unitPrice)}</p>
+                <span>Qty : ${quantity}</span>
+            </div>
+        </div>
+        `;
 
     });
 
-    const savedDeliveryFee = Number(checkoutData.deliveryFee || 0);
+    deliveryFee = Number(checkoutData.deliveryFee || 0);
+    total = subtotal + deliveryFee;
 
-    deliveryFee =
-        savedDeliveryFee > 0
-            ? savedDeliveryFee
-            : calculateDelivery(
-                checkoutData.county || checkoutData.customer?.county || ""
-            );
-
-    total =
-        subtotal +
-        deliveryFee;
-
-    document.getElementById(
-        "paymentItemsCount"
-    ).textContent =
-        itemCount;
-
-    document.getElementById(
-        "paymentSubtotal"
-    ).textContent =
-        formatKES(subtotal);
-
-    document.getElementById(
-        "deliveryFee"
-    ).textContent =
-        formatKES(deliveryFee);
-
-    document.getElementById(
-        "paymentTotal"
-    ).textContent =
-        formatKES(total);
+    document.getElementById("paymentItemsCount").textContent = itemCount;
+    document.getElementById("paymentSubtotal").textContent = formatKES(subtotal);
+    document.getElementById("deliveryFee").textContent = formatKES(deliveryFee);
+    document.getElementById("paymentTotal").textContent = formatKES(total);
 
 }
 // ==========================================================
 // PAYMENT.JS
-// PART 2
+// PART 2 — ORDER CREATION (happens BEFORE payment, not after)
 // ==========================================================
 
+// Creating the order first means the tracking ID is real and unique
+// (checked against Supabase) before Daraja is ever contacted, and the
+// order exists in "Pending Payment" state even if the user abandons
+// the STK prompt.
+
+async function createPendingOrder() {
+
+    if (isCreatingOrder || currentOrderId) return;
+
+    if (cart.length === 0) {
+        showStatus("Your cart is empty.");
+        window.location.href = "cart.html";
+        return;
+    }
+
+    isCreatingOrder = true;
+
+    try {
+
+        const response = await fetch(`${API_URL}/orders/create`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                customer: checkoutData.customer,
+                cart,
+                subtotal,
+                deliveryFee,
+                total
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.order) {
+            throw new Error(result.message || "Could not start your order. Please try again.");
+        }
+
+        currentOrderId = result.order.id;
+        currentTrackingId = result.order.trackingId;
+
+        const refDisplay = document.getElementById("orderRefDisplay");
+        if (refDisplay) refDisplay.textContent = currentTrackingId;
+
+        document.getElementById("payButton").disabled = false;
+
+    } catch (error) {
+        console.error("Order creation error:", error);
+        showStatus(error.message || "Could not start your order. Refresh and try again.");
+    } finally {
+        isCreatingOrder = false;
+    }
+
+}
+
 // ==========================================================
-// SHOW STATUS
+// SHOW STATUS / LOADER
 // ==========================================================
 
 function showStatus(message, success = false) {
 
-    const status =
-        document.getElementById(
-            "paymentStatus"
-        );
+    const status = document.getElementById("paymentStatus");
 
     if (!status) return;
 
     status.textContent = message;
-
-    status.className =
-        success
-            ? "paymentStatus success"
-            : "paymentStatus error";
+    status.className = success ? "paymentStatus success" : "paymentStatus error";
 
 }
 
-// ==========================================================
-// LOADER
-// ==========================================================
+function toggleLoader(show, label) {
 
-function toggleLoader(show) {
-
-    const loader =
-        document.getElementById(
-            "paymentLoader"
-        );
-
-    const button =
-        document.getElementById(
-            "payButton"
-        );
+    const loader = document.getElementById("paymentLoader");
+    const loaderText = loader ? loader.querySelector("span") : null;
+    const button = document.getElementById("payButton");
 
     if (!loader || !button) return;
 
-    loader.style.display =
-        show
-            ? "flex"
-            : "none";
-
+    loader.style.display = show ? "flex" : "none";
     button.disabled = show;
+
+    if (loaderText && label) loaderText.textContent = label;
 
 }
 
-// ==========================================================
-// PHONE VALIDATION
-// ==========================================================
-
 function validPhone(phone) {
-
     phone = phone.replace(/\s+/g, "");
-
     return /^(07|01)\d{8}$/.test(phone);
-
 }
 
 // ==========================================================
@@ -253,273 +216,157 @@ function validPhone(phone) {
 
 async function payNow() {
 
-    const phone =
-        document
-            .getElementById("paymentPhone")
-            .value
-            .trim();
+    if (isPaying) return; // double-click protection
 
-    if (!validPhone(phone)) {
-
-        showStatus(
-            "Enter a valid Safaricom phone number."
-        );
-
+    if (!currentOrderId) {
+        showStatus("Your order isn't ready yet — give it a second and try again.");
         return;
-
     }
 
-    toggleLoader(true);
+    const phone = document.getElementById("paymentPhone").value.trim();
 
+    if (!validPhone(phone)) {
+        showStatus("Enter a valid Safaricom phone number.");
+        return;
+    }
+
+    isPaying = true;
     showStatus("");
+    toggleLoader(true, "Sending payment request to your phone...");
 
     try {
 
-        const response =
-            await fetch(
-                `${API_URL}/payments/stkpush`,
-                {
+        const response = await fetch(`${API_URL}/payments/stkpush`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                orderId: currentOrderId,
+                phone,
+                amount: total
+            })
+        });
 
-                    method: "POST",
+        const result = await response.json();
 
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body: JSON.stringify({
-
-                        phone,
-
-                        amount: total,
-
-                        cart,
-
-                        customer: checkoutData
-
-                    })
-
-                }
-            );
-
-        const result =
-            await response.json();
-
-        if (!response.ok) {
-
-            throw new Error(
-                result.message ||
-                "Payment failed."
-            );
-
+        if (!response.ok || !result.checkoutRequestId) {
+            throw new Error(result.message || "Could not start the M-Pesa payment.");
         }
 
-        showStatus(
-            "STK Push sent. Check your phone.",
-            true
-        );
+        checkoutRequestId = result.checkoutRequestId;
 
-        // ==================================================
-        // SAVE ORDER
-        // ==================================================
+        showStatus(result.customerMessage || "Enter your M-Pesa PIN on your phone to complete payment.", true);
+        toggleLoader(true, "Waiting for M-Pesa confirmation...");
 
-        await saveOrder(result);
+        pollAttempts = 0;
+        pollPaymentStatus();
 
-    }
-
-    catch (error) {
-
+    } catch (error) {
         console.error(error);
-
-        showStatus(
-            error.message
-        );
-
-    }
-
-    finally {
-
+        showStatus(error.message);
         toggleLoader(false);
-
+        isPaying = false;
     }
 
 }
 
 // ==========================================================
-// SAVE ORDER
+// POLL FOR PAYMENT RESULT
 // ==========================================================
 
-async function saveOrder(paymentData) {
+function pollPaymentStatus() {
 
-    let orderRecord = null;
+    clearTimeout(pollTimer);
 
-    try {
+    pollTimer = setTimeout(async () => {
 
-        const customer =
-            checkoutData.customer || checkoutData;
+        pollAttempts++;
 
-        const trackingId = `TS-${Date.now()}-${String(customer.phone || "0000").slice(-4)}`;
+        try {
 
-        const response = await fetch(
+            const response = await fetch(
+                `${API_URL}/payments/status/${checkoutRequestId}`
+            );
 
-            `${API_URL}/orders/create`,
+            const result = await response.json();
 
-            {
+            if (result.status === "completed") {
 
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json"
-
-                },
-
-                body: JSON.stringify({
-
-                    customer,
-
-                    trackingId,
-
-                    cart,
-
-                    subtotal: checkoutData.subtotal || subtotal,
-
-                    deliveryFee: checkoutData.deliveryFee || deliveryFee,
-
-                    total: checkoutData.total || total,
-
-                    payment: paymentData
-
-                })
+                toggleLoader(false);
+                showStatus("Payment confirmed! Redirecting...", true);
+                finishOrder(result);
+                return;
 
             }
 
-        );
+            if (result.status === "failed" || result.status === "cancelled") {
 
-        const result = await response.json();
+                toggleLoader(false);
+                isPaying = false;
+                showStatus(
+                    result.message ||
+                    "Payment was not completed. You can try again."
+                );
+                return;
 
-        orderRecord = {
+            }
 
-            orderNumber:
-                result?.order?.tracking_id ||
-                result?.order?.orderNumber ||
-                trackingId,
+            // still pending
+            if (pollAttempts >= MAX_POLL_ATTEMPTS) {
 
-            trackingId:
-                result?.order?.tracking_id ||
-                result?.order?.orderNumber ||
-                trackingId,
+                toggleLoader(false);
+                isPaying = false;
+                showStatus(
+                    "This is taking longer than expected. If you completed the M-Pesa prompt, " +
+                    "your order will still confirm automatically and a receipt will be emailed to you. " +
+                    "You can also check its status on the Track Order page."
+                );
+                return;
 
-            mpesaReceipt:
-                paymentData?.receipt ||
-                paymentData?.transactionId ||
-                paymentData?.MerchantRequestID ||
-                "Pending",
+            }
 
-            customer,
+            pollPaymentStatus();
 
-            cart,
+        } catch (error) {
+            console.error("Status poll error:", error);
+            // network hiccup — keep trying up to the cap rather than failing immediately
+            if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+                toggleLoader(false);
+                isPaying = false;
+                showStatus("Couldn't confirm payment status. Check the Track Order page shortly.");
+                return;
+            }
+            pollPaymentStatus();
+        }
 
-            subtotal,
+    }, POLL_INTERVAL_MS);
 
-            deliveryFee,
+}
 
-            total,
+// ==========================================================
+// FINISH — payment confirmed, hand off to receipt page
+// ==========================================================
 
-            status: result?.order?.status || "In Store",
+function finishOrder(statusResult) {
 
-            shipmentStatus: result?.order?.shipment_status || "In Store",
+    const orderRecord = {
+        orderNumber: currentTrackingId,
+        trackingId: currentTrackingId,
+        mpesaReceipt: statusResult.mpesaReceipt || "Pending",
+        customer: checkoutData.customer,
+        cart,
+        subtotal,
+        deliveryFee,
+        total,
+        status: "Paid",
+        shipmentStatus: "In Store",
+        createdAt: new Date().toISOString()
+    };
 
-            trackUrl:
-                result?.order?.trackUrl ||
-                "",
+    localStorage.setItem("lastOrder", JSON.stringify(orderRecord));
+    localStorage.removeItem(STORAGE.cart);
+    localStorage.removeItem("checkoutData");
 
-            createdAt: new Date().toISOString()
-
-        };
-
-        localStorage.setItem(
-            "lastOrder",
-            JSON.stringify(orderRecord)
-        );
-
-        localStorage.setItem(
-            STORAGE.trackingNumber,
-            orderRecord.trackingId
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Order Save Error:",
-            error
-        );
-
-        orderRecord = {
-
-            orderNumber: `TS-${Date.now()}-${String((checkoutData.customer || checkoutData).phone || "0000").slice(-4)}`,
-
-            trackingId: `TS-${Date.now()}-${String((checkoutData.customer || checkoutData).phone || "0000").slice(-4)}`,
-
-            mpesaReceipt:
-                paymentData?.receipt ||
-                paymentData?.transactionId ||
-                paymentData?.MerchantRequestID ||
-                "Pending",
-
-            customer: checkoutData.customer || checkoutData,
-
-            cart,
-
-            subtotal,
-
-            deliveryFee,
-
-            total,
-
-            status: "In Store",
-
-            shipmentStatus: "In Store",
-
-            createdAt: new Date().toISOString()
-
-        };
-
-        localStorage.setItem(
-            "lastOrder",
-            JSON.stringify(orderRecord)
-        );
-
-        localStorage.setItem(
-            STORAGE.trackingNumber,
-            orderRecord.trackingId
-        );
-
-    }
-
-    // ==================================================
-    // CLEAR CART
-    // ==================================================
-
-    localStorage.removeItem(
-        STORAGE.cart
-    );
-
-    localStorage.removeItem(
-        "checkoutData"
-    );
-
-    // ==================================================
-    // REDIRECT
-    // ==================================================
-
-    window.location.href =
-        "receipt.html";
+    window.location.href = `receipt.html?tracking=${encodeURIComponent(currentTrackingId)}`;
 
 }
 
@@ -527,30 +374,25 @@ async function saveOrder(paymentData) {
 // INITIALIZE
 // ==========================================================
 
-document.addEventListener(
+function initPaymentPage() {
 
-    "DOMContentLoaded",
+    loadData();
+    renderCustomer();
+    renderOrder();
 
-    () => {
+    const payButton = document.getElementById("payButton");
 
-        loadData();
-
-        renderCustomer();
-
-        renderOrder();
-
-        document
-            .getElementById(
-                "payButton"
-            )
-            .addEventListener(
-
-                "click",
-
-                payNow
-
-            );
-
+    if (payButton) {
+        payButton.disabled = true; // enabled once the order exists
+        payButton.addEventListener("click", payNow);
     }
 
-);
+    createPendingOrder();
+
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPaymentPage);
+} else {
+    initPaymentPage();
+}

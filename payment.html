@@ -4,94 +4,44 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<meta
-name="description"
-content="Secure M-Pesa Payment | Tech Solutions">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Secure M-Pesa Payment | Tech Solutions">
 
 <title>Payment | Tech Solutions</title>
 
 <link rel="stylesheet" href="CSS/global.css">
 <link rel="stylesheet" href="CSS/payment.css">
 <link rel="stylesheet" href="CSS/mobile.css">
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- ========================= -->
 <!-- NAVIGATION -->
-<!-- ========================= -->
 
 <nav>
 
 <a href="index.html" class="logo">
-
-<img
-src="assets/logo/logo.png"
-alt="Tech Solutions">
-
-<span>Tech Solutions</span>
-
+<img src="assets/images/logo.jpg" alt="Tech Solutions">
 </a>
 
 <div class="navButtons">
-
-<a href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-Home
-
-</a>
-
-<a href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-Cart
-
-</a>
-
-<a href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-Track Order
-
-</a>
-
+<a href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+<a href="cart.html"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
 </div>
 
 </nav>
 
-<!-- ========================= -->
 <!-- HEADER -->
-<!-- ========================= -->
 
 <section class="pageHeader">
-
 <h1>Complete Your Payment</h1>
-
-<p>
-
-Your order is almost complete.
-
-</p>
-
+<p>Your order is almost complete.</p>
 </section>
 
-<!-- ========================= -->
 <!-- PAYMENT -->
-<!-- ========================= -->
 
 <section class="paymentContainer">
 
@@ -100,25 +50,18 @@ Your order is almost complete.
 <div class="paymentCard">
 
 <h2>M-Pesa Payment</h2>
+<p>An STK Push will be sent to your Safaricom phone.</p>
 
-<p>
-
-An STK Push will be sent to your Safaricom phone.
-
+<p class="orderRefNote">
+Order Ref: <strong id="orderRefDisplay">Creating order...</strong>
 </p>
 
 <div class="paymentMethod">
-
 <i class="fa-solid fa-mobile-screen-button"></i>
-
 <div>
-
 <h3>Safaricom M-Pesa</h3>
-
 <span>Secure STK Push Payment</span>
-
 </div>
-
 </div>
 
 <hr>
@@ -126,100 +69,28 @@ An STK Push will be sent to your Safaricom phone.
 <h3>Delivery Information</h3>
 
 <div class="deliveryInfo">
-
-<p>
-
-<strong>Name:</strong>
-
-<span id="customerNameDisplay">-</span>
-
-</p>
-
-<p>
-
-<strong>Phone:</strong>
-
-<span id="customerPhoneDisplay">-</span>
-
-</p>
-
-<p>
-
-<strong>County:</strong>
-
-<span id="customerCountyDisplay">-</span>
-
-</p>
-
-<p>
-
-<strong>Town:</strong>
-
-<span id="customerTownDisplay">-</span>
-
-</p>
-
+<p><strong>Name:</strong> <span id="customerNameDisplay">-</span></p>
+<p><strong>Phone:</strong> <span id="customerPhoneDisplay">-</span></p>
+<p><strong>County:</strong> <span id="customerCountyDisplay">-</span></p>
+<p><strong>Town:</strong> <span id="customerTownDisplay">-</span></p>
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Confirm M-Pesa Number
-
-</label>
-
-<input
-
-type="tel"
-
-id="paymentPhone"
-
-placeholder="07XXXXXXXX"
-
-maxlength="10">
-
+<label>Confirm M-Pesa Number</label>
+<input type="tel" id="paymentPhone" placeholder="07XXXXXXXX" maxlength="10">
 </div>
 
-<button
-
-id="payButton"
-
-class="payButton"
-
-type="button">
-
+<button id="payButton" class="payButton" type="button" disabled>
 <i class="fa-solid fa-mobile-screen-button"></i>
-
 Pay With M-Pesa
-
 </button>
 
-<div
-
-id="paymentLoader"
-
-class="paymentLoader"
-
-style="display:none;">
-
+<div id="paymentLoader" class="paymentLoader" style="display:none;">
 <div class="spinner"></div>
-
-<span>
-
-Waiting For M-Pesa Confirmation...
-
-</span>
-
+<span>Waiting For M-Pesa Confirmation...</span>
 </div>
 
-<div
-
-id="paymentStatus"
-
-class="paymentStatus">
-
-</div>
+<div id="paymentStatus" class="paymentStatus"></div>
 
 </div>
 
@@ -229,203 +100,68 @@ class="paymentStatus">
 
 <h2>Order Summary</h2>
 
-<div
-
-id="paymentItems">
-
-<!-- payment.js -->
-
-</div>
+<div id="paymentItems"><!-- payment.js --></div>
 
 <hr>
 
-<div class="summaryItem">
-
-<span>Items</span>
-
-<span id="paymentItemsCount">0</span>
-
-</div>
-
-<div class="summaryItem">
-
-<span>Subtotal</span>
-
-<span>
-
-KES
-
-<span id="paymentSubtotal">
-
-0
-
-</span>
-
-</span>
-
-</div>
-
-<div class="summaryItem">
-
-<span>Delivery Fee</span>
-
-<span>
-
-KES
-
-<span id="deliveryFee">
-
-0
-
-</span>
-
-</span>
-
-</div>
+<div class="summaryItem"><span>Items</span><span id="paymentItemsCount">0</span></div>
+<div class="summaryItem"><span>Subtotal</span><span>KES <span id="paymentSubtotal">0</span></span></div>
+<div class="summaryItem"><span>Delivery Fee</span><span>KES <span id="deliveryFee">0</span></span></div>
 
 <hr>
 
-<div class="summaryTotal">
-
-<span>Total</span>
-
-<span>
-
-KES
-
-<span id="paymentTotal">
-
-0
-
-</span>
-
-</span>
-
-</div>
+<div class="summaryTotal"><span>Total</span><span>KES <span id="paymentTotal">0</span></span></div>
 
 </div>
 
 </section>
 
-<!-- ========================= -->
 <!-- FOOTER -->
-<!-- ========================= -->
 
 <footer>
 
 <div class="footerContainer">
 
 <div class="footerBrand">
-
-<h2>
-
-Tech Solutions
-
-</h2>
-
-<p>
-
-Premium electronics delivered safely across Kenya.
-
-</p>
-
+<h2>Tech Solutions</h2>
+<p>Premium electronics delivered safely across Kenya.</p>
 </div>
 
 <div class="footerLinks">
-
-<h3>
-
-Quick Links
-
-</h3>
-
+<h3>Quick Links</h3>
 <a href="index.html">Home</a>
-
 <a href="cart.html">Cart</a>
-
 <a href="checkout.html">Checkout</a>
-
 <a href="track.html">Track Order</a>
-
 </div>
 
 <div class="footerSupport">
-
-<h3>
-
-Support
-
-</h3>
-
-<p>
-
-support@techsolutions.co.ke
-
-</p>
-
-<p>
-
-+254 700 000 000
-
-</p>
-
+<h3>Support</h3>
+<p>support@techsolutions.co.ke</p>
+<p>+254 700 000 000</p>
 </div>
 
 </div>
 
-<div class="copyright">
-
-© 2026 Tech Solutions. All Rights Reserved.
-
-</div>
+<div class="copyright">© 2026 Tech Solutions. All Rights Reserved.</div>
 
 </footer>
 
-<!-- ========================= -->
 <!-- MOBILE NAV -->
-<!-- ========================= -->
 
 <div class="mobileNav">
-
-<a href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-<span>Home</span>
-
-</a>
-
-<a href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<span>Cart</span>
-
-</a>
-
-<a href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-<span>Track</span>
-
-</a>
-
+<a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+<a href="cart.html"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i><span>Track</span></a>
 </div>
 
-<!-- ========================= -->
 <!-- SCRIPTS -->
-<!-- ========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="js/config.js"></script>
-
-<script src="js/api.js"></script>
-
-<script src="js/cart.js"></script>
-
-<script src="js/payment.js"></script>
+<script src="Js/config.js"></script>
+<script src="Js/api.js"></script>
+<script src="Js/cart.js"></script>
+<script src="Js/payment.js"></script>
 
 </body>
 

@@ -43,7 +43,10 @@ router.post("/create", async (req, res) => {
             shipment_status: shipmentStatus,
             status,
             created_at: new Date().toISOString(),
-            tracking_url: trackUrl
+            tracking_url: trackUrl,
+            payment_reference: payload.payment?.MerchantRequestID || payload.payment?.CheckoutRequestID || payload.payment?.receipt || payload.payment?.transactionId || "",
+            merchant_request_id: payload.payment?.MerchantRequestID || "",
+            checkout_request_id: payload.payment?.CheckoutRequestID || ""
         };
 
         let createdOrder = null;

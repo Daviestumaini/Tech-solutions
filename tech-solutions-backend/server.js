@@ -18,6 +18,11 @@ app.use(
     require("./routes/orders")
 );
 
+app.use(
+    "/api/payments",
+    require("./routes/payments")
+);
+
 app.get("/", (req, res) => {
 
     res.json({
@@ -58,13 +63,15 @@ error
 });
 
 });
-app.listen(PORT, () => {
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(
+            `Server running on port ${PORT}`
+        );
+    });
+}
 
-    console.log(
-        `Server running on port ${PORT}`
-    );
-
-});
+module.exports = { app };
 app.get("/debug-users", async (req, res) => {
 
     const supabase = require("./config/supabase");

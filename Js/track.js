@@ -27,6 +27,15 @@ async function handleTrackOrder(code = getTrackingCodeFromUrl()) {
     const input = document.getElementById("trackingInput");
     const trackingCode = code || (input ? input.value.trim() : "");
 
+    const fallbackOrder = load("lastOrder") || load(STORAGE.currentOrder || "gf_current_order") || load("checkoutData");
+    if (!trackingCode && fallbackOrder) {
+        const fallbackCode = fallbackOrder.trackingId || fallbackOrder.orderNumber || fallbackOrder.tracking_id || "";
+        if (fallbackCode) {
+            if (input) input.value = fallbackCode;
+            return handleTrackOrder(fallbackCode);
+        }
+    }
+
     if (!trackingCode) {
         showError("Enter your tracking number.");
         return;
@@ -174,10 +183,10 @@ document.addEventListener("DOMContentLoaded", () => {
         handleTrackOrder(saved);
     }
 
-    const lastOrder = load("lastOrder");
+    const lastOrder = load("lastOrder") || load(STORAGE.currentOrder || "gf_current_order") || load("checkoutData");
     if (lastOrder && !saved && input) {
-        input.value = lastOrder.trackingId || lastOrder.orderNumber || "";
-        handleTrackOrder(lastOrder.trackingId || lastOrder.orderNumber || "");
+        input.value = lastOrder.trackingId || lastOrder.orderNumber || lastOrder.tracking_id || "";
+        handleTrackOrder(lastOrder.trackingId || lastOrder.orderNumber || lastOrder.tracking_id || "");
     }
 
 });

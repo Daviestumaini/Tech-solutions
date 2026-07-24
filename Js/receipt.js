@@ -10,8 +10,7 @@ let order = null;
 
 function loadReceipt() {
 
-    const savedOrder =
-        localStorage.getItem("lastOrder");
+    const savedOrder = localStorage.getItem("lastOrder") || localStorage.getItem(STORAGE.currentOrder || "gf_current_order") || localStorage.getItem("checkoutData");
 
     if (!savedOrder) {
 
@@ -24,6 +23,20 @@ function loadReceipt() {
     }
 
     order = JSON.parse(savedOrder);
+
+    if (!order.customer && order.customer_name) {
+        order.customer = {
+            name: order.customer_name,
+            phone: order.customer_phone,
+            email: order.customer_email,
+            county: order.county,
+            town: order.town
+        };
+    }
+
+    if (!order.cart && Array.isArray(order.order)) {
+        order.cart = order.order;
+    }
 
     renderReceipt();
 

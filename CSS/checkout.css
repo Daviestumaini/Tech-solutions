@@ -16,13 +16,13 @@ button {
     transition: all 0.2s ease-in-out;
 }
 button.primaryButton {
-    background-color: #4CAF50;
+    background-color: #060055;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
 }
 button.primaryButton:hover {
-    background-color: #45a049;
+    background-color: #060055;
 }
 nav {
     display: flex;
@@ -42,7 +42,9 @@ nav .logo {
     font-size: 18px;
 }
 nav .logo img {
-    height: 32px;
+    height: 52px;
+    width: auto;
+    max-width: 180px;
 }
 nav .navButtons {
     display: flex;

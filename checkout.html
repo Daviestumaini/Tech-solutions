@@ -1,40 +1,18 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Checkout - Tech Solutions">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+<title>Checkout | Tech Solutions</title>
 
-<meta
-name="description"
-content="Checkout - Tech Solutions">
-
-<title>
-
-Checkout | Tech Solutions
-
-</title>
-
-<link
-rel="stylesheet"
-href="CSS/global.css">
-
-<link
-rel="stylesheet"
-href="CSS/checkout.css">
-
-<link
-rel="stylesheet"
-href="CSS/mobile.css">
-
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="CSS/global.css">
+<link rel="stylesheet" href="CSS/checkout.css">
+<link rel="stylesheet" href="CSS/mobile.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
@@ -46,36 +24,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <nav>
 
-<a
-href="index.html"
-class="logo">
-
-<span>
-
-Tech Solutions
-
-</span>
-
+<a href="index.html" class="logo">
+<img src="assets/images/logo.jpg" alt="Tech Solutions">
 </a>
 
 <div class="navButtons">
-
-<a href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-Cart
-
-</a>
-
-<a href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-Track Order
-
-</a>
-
+<a href="cart.html"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i> Track Order</a>
 </div>
 
 </nav>
@@ -85,19 +40,8 @@ Track Order
 <!-- ========================= -->
 
 <section class="pageHeader">
-
-<h1>
-
-Checkout
-
-</h1>
-
-<p>
-
-Complete your delivery information before payment.
-
-</p>
-
+<h1>Checkout</h1>
+<p>Complete your delivery information before payment.</p>
 </section>
 
 <!-- ========================= -->
@@ -106,312 +50,106 @@ Complete your delivery information before payment.
 
 <section class="checkoutContainer">
 
-<!-- ========================= -->
 <!-- DELIVERY FORM -->
-<!-- ========================= -->
 
 <div class="checkoutForm">
 
-<h2>
-
-Delivery Information
-
-</h2>
+<h2>Delivery Information</h2>
 
 <form id="checkoutForm">
 
 <div class="inputGroup">
-
-<label>
-
-Full Name
-
-</label>
-
-<input
-type="text"
-id="customerName"
-placeholder="John Doe"
-required>
-
+<label>Full Name</label>
+<input type="text" id="customerName" placeholder="John Doe" required>
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Phone Number
-
-</label>
-
-<input
-type="tel"
-id="customerPhone"
-placeholder="07XXXXXXXX"
-required>
-
+<label>Phone Number</label>
+<input type="tel" id="customerPhone" placeholder="07XXXXXXXX" required>
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Email 
-
-</label>
-
-<input
-type="email"
-id="customerEmail"
-placeholder="example@email.com">
-
+<label>Email <span class="requiredNote">(your receipt is sent here)</span></label>
+<input type="email" id="customerEmail" placeholder="example@email.com" required>
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-County
-
-</label>
-
-<select
-id="county"
-required>
-
-<option value="">
-
-Select County
-
-</option>
-
-<option value="Nairobi">
-
-Nairobi
-
-</option>
-
-<option value="Kiambu">
-
-Kiambu
-
-</option>
-
-<option value="Machakos">
-
-Machakos
-
-</option>
-
-<option value="Nakuru">
-
-Nakuru
-
-</option>
-
-<option value="Mombasa">
-
-Mombasa
-
-</option>
-
-<option value="Kisumu">
-
-Kisumu
-
-</option>
-
-<option value="Nyeri">
-
-Nyeri
-
-</option>
-
-<option value="Uasin Gishu">
-
-Uasin Gishu
-
-</option>
-
+<label>County</label>
+<select id="county" required>
+<option value="">Select County</option>
+<option value="Nairobi">Nairobi</option>
+<option value="Kiambu">Kiambu</option>
+<option value="Machakos">Machakos</option>
+<option value="Nakuru">Nakuru</option>
+<option value="Mombasa">Mombasa</option>
+<option value="Kisumu">Kisumu</option>
+<option value="Nyeri">Nyeri</option>
+<option value="Uasin Gishu">Uasin Gishu</option>
 </select>
-
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Town / Estate
-
-</label>
-
-<select
-id="town"
-required>
-
-<option value="">
-
-Select Town
-
-</option>
-
+<label>Town / Estate</label>
+<select id="town" required>
+<option value="">Select Town</option>
 </select>
-
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Street / Apartment
-
-</label>
-
-<input
-type="text"
-id="address"
-placeholder="Apartment / House Number">
-
+<label>Street / Apartment</label>
+<input type="text" id="address" placeholder="Apartment / House Number">
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Nearest Landmark
-
-</label>
-
-<textarea
-id="landmark"
-rows="3"
-placeholder="Near ABC Mall"></textarea>
-
+<label>Nearest Landmark</label>
+<textarea id="landmark" rows="3" placeholder="Near ABC Mall"></textarea>
 </div>
 
 <div class="inputGroup">
-
-<label>
-
-Delivery Notes (Optional)
-
-</label>
-
-<textarea
-id="notes"
-rows="3"
-placeholder="Optional delivery instructions"></textarea>
-
+<label>Delivery Notes (Optional)</label>
+<textarea id="notes" rows="3" placeholder="Optional delivery instructions"></textarea>
 </div>
 
 </form>
 
 </div>
 
-<!-- ========================= -->
 <!-- ORDER SUMMARY -->
-<!-- ========================= -->
 
 <div class="summaryCard">
 
-<h2>
+<h2>Your Order</h2>
 
-Your Order
-
-</h2>
-
-<div
-id="checkoutItems"
-class="checkoutItems">
-
+<div id="checkoutItems" class="checkoutItems">
 <!-- checkout.js loads products here -->
-
 </div>
 
 <hr>
 
 <div class="summaryRow">
-
-<span>
-
-Items
-
-</span>
-
-<span id="checkoutItemsCount">
-
-0
-
-</span>
-
+<span>Items</span>
+<span id="checkoutItemsCount">0</span>
 </div>
 
 <div class="summaryRow">
-
-<span>
-
-Subtotal
-
-</span>
-
-<span>
-
-KES
-
-<span id="checkoutSubtotal">
-
-0
-
-</span>
-
-</span>
-
+<span>Subtotal</span>
+<span>KES <span id="checkoutSubtotal">0</span></span>
 </div>
 
 <div class="summaryRow">
-
-<span>
-
-Delivery
-
-</span>
-
-<span>
-
-KES <span id="checkoutDelivery">0</span>
-
-</span>
-
+<span>Delivery</span>
+<span>KES <span id="checkoutDelivery">0</span></span>
 </div>
 
 <hr>
 
 <div class="summaryTotal">
-
-<span>
-
-Estimated Total
-
-</span>
-
-<span>
-
-KES
-
-<span id="checkoutTotal">
-
-0
-
-</span>
-
-</span>
-
+<span>Estimated Total</span>
+<span>KES <span id="checkoutTotal">0</span></span>
 </div>
 
-<button
-id="continueToPayment"
-class="primaryButton">
-continue to Payment
+<button id="continueToPayment" class="primaryButton">
+Continue to Payment
 </button>
 
 </div>
@@ -427,147 +165,46 @@ continue to Payment
 <div class="footerContainer">
 
 <div class="footerBrand">
-
-<h2>
-
-Tech Solutions
-
-</h2>
-
-<p>
-
-Premium electronics delivered safely across Kenya.
-
-</p>
-
+<h2>Tech Solutions</h2>
+<p>Premium electronics delivered safely across Kenya.</p>
 </div>
 
 <div class="footerLinks">
-
-<h3>
-
-Quick Links
-
-</h3>
-
-<a href="index.html">
-
-Home
-
-</a>
-
-<a href="cart.html">
-
-Cart
-
-</a>
-
-<a href="payment.html">
-
-Payment
-
-</a>
-
-<a href="track.html">
-
-Track Order
-
-</a>
-
+<h3>Quick Links</h3>
+<a href="index.html">Home</a>
+<a href="cart.html">Cart</a>
+<a href="payment.html">Payment</a>
+<a href="track.html">Track Order</a>
 </div>
 
 <div class="footerSupport">
-
-<h3>
-
-Support
-
-</h3>
-
-<p>
-
-support@techsolutions.co.ke
-
-</p>
-
-<p>
-
-+254 700 000 000
-
-</p>
-
+<h3>Support</h3>
+<p>support@techsolutions.co.ke</p>
+<p>+254 700 000 000</p>
 </div>
 
 </div>
 
-<div class="copyright">
-
-© 2026 Tech Solutions. All Rights Reserved.
-
-</div>
+<div class="copyright">© 2026 Tech Solutions. All Rights Reserved.</div>
 
 </footer>
 
-<!-- ========================= -->
 <!-- MOBILE NAV -->
-<!-- ========================= -->
 
 <div class="mobileNav">
-
-<a href="index.html">
-
-<i class="fa-solid fa-house"></i>
-
-<span>
-
-Home
-
-</span>
-
-</a>
-
-<a href="cart.html">
-
-<i class="fa-solid fa-cart-shopping"></i>
-
-<span>
-
-Cart
-
-</span>
-
-</a>
-
-<a href="track.html">
-
-<i class="fa-solid fa-truck-fast"></i>
-
-<span>
-
-Track
-
-</span>
-
-</a>
-
+<a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+<a href="cart.html"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+<a href="track.html"><i class="fa-solid fa-truck-fast"></i><span>Track</span></a>
 </div>
 
-<!-- ========================= -->
 <!-- SCRIPTS -->
-<!-- ========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="Js/config.js"></script>
-
 <script src="Js/api.js"></script>
-
 <script src="Js/cart.js"></script>
-
 <script src="Js/checkout.js"></script>
-
 
 </body>
 
 </html>
-```
