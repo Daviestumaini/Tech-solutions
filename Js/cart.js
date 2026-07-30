@@ -105,7 +105,7 @@ updateCartBadge();
 
 function imageFallback(img) {
 img.onerror = null;
-img.src = "assets/images/no-image.png";
+img.src = "assets/images/image.jpeg";
 }
 
 function renderCart() {
