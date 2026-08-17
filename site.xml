@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<name>Tech Solutions Link</name>
+	<link>https://tech-solutions.vercel.app</link>
+	<description>Simple XML with link and example fetch in CDATA</description>
+	<script><![CDATA[
+		// Example fetch to the linked URL
+		fetch("https://tech-solutions.vercel.app")
+			.then(response => {
+				if (!response.ok) throw new Error('Network response was not ok: ' + response.status);
+				return response.text();
+			})
+			.then(text => console.log('Fetched site length:', text.length))
+			.catch(err => console.error('Fetch error:', err));
+	]]></script>
+</site>
+
